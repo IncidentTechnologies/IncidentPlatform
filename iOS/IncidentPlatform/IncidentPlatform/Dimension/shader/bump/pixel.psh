@@ -1,0 +1,81 @@
+// PHONG SHADER
+// 
+
+// Pixel shader input structure
+struct PS_INPUT
+{
+    float4 Position		: POSITION1;
+    float2 TexCoord		: TEXCOORD0;
+    float3 Normal     	: TEXCOORD1;	// vertex normal
+    float3 Tangent     	: TEXCOORD2;	// vertex tangent
+    float3 View			: TEXCOORD3;	// view vector
+    float3 light0		: TEXCOORD4;	// light0 vector
+    float4 Diffuse		: COLOR0;
+};
+
+// Pixel shader output structure
+struct PS_OUTPUT
+{
+    float4 Color   : COLOR;
+};
+
+
+// Global variables
+sampler2D Tex0 = sampler_state
+{
+	Texture = <g_Tex0>;
+	MipFilter = LINEAR;
+	MinFilter = PYRAMIDALQUAD;
+	MagFilter = GAUSSIANQUAD;
+};
+
+
+sampler2D Tex1 = sampler_state
+{
+	Texture = <g_Tex1>;
+	MipFilter = GAUSSIANQUAD;
+	MinFilter = PYRAMIDALQUAD;
+	MagFilter = GAUSSIANQUAD;
+};
+
+float g_Multiplier;
+
+float g_Ambient;
+
+// Name: Simple Pixel Shader
+// Type: Pixel shader
+// Desc: Fetch texture and blend with constant color
+//
+PS_OUTPUT ps_main( in PS_INPUT In )
+{
+    PS_OUTPUT Out;                             //create an output pixel
+	
+	// Look up texture bump
+    float4 BumpNormal = float4(tex2D(Tex1, In.TexCoord).r - 0.5,		// red - x
+                               tex2D(Tex1, In.TexCoord).g - 0.5,		// green - y
+                               tex2D(Tex1, In.TexCoord).b - 0.5,		// blue - z
+                               0.5f);
+
+	BumpNormal *= 2.0f;                                
+                               
+	//BumpNormal = float4(0.0f, 0.0f, 1.0f, 1.0f); 
+	normalize(BumpNormal);
+	
+	
+	float3 LightVector = normalize(In.light0);
+	
+	float3 ViewVector = normalize(In.View);                            
+	
+	float light = max(0, dot(LightVector, BumpNormal));
+	   
+	float4 DiffuseColor  = tex2D(Tex0, In.TexCoord) * In.Diffuse;
+	//DiffuseColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	
+	float3 Halfway = normalize(LightVector + ViewVector);	
+	float Specular = pow(max(0, dot(Halfway, BumpNormal)), 4*50.0f);
+	
+	// Main Color Calculation
+	Out.Color = (DiffuseColor) * (0.5f + light * 0.5f) + Specular * 0.5f;
+
+    return Out;                                //return output pixel
+}

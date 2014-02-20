@@ -1,0 +1,13 @@
+<a idan="50" attrib2="5">
+  CONTENT IS AWESOME
+  <b>
+    <c>5</c>
+    <d>7</d>
+  </b>
+  <e>
+    content content e1 content content e1 
+    <empty emptyattribute="125" emptyattribute2="253" emptyattribute5="54"/>
+    content content e2 content content e2 
+  </e>
+  <empty2/>
+</a>  

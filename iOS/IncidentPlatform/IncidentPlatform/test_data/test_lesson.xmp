@@ -1,0 +1,64 @@
+<xmp>
+  <lesson>
+    <header>
+      <description>This is a test lesson</description>
+      <author>Idan</author>
+      <title>The High E string</title>
+    </header>
+    <content>
+      <chapter title="Getting High-E">
+        <var name="var1">5</var>
+        <text>Welcome to the gTar tutorial, we're going to take a look at the high E string</text>
+        <ledout>
+          <guitarposition string="hiE" fret="0"/>
+        </ledout> 
+        <input block="T">
+          <continuebutton/>
+        </input>
+        <text>
+          When the entire string lights up, that means you should play the open string. This 
+          means you don't put any fingers down on the fretboard and pluck the string a few inches
+          above the bridge. Try doing it a couple of times now! 
+        </text>
+        <loop condition="4">
+          <ledout>
+            <guitarposition string="hiE" fret="0"/>
+          </ledout> 
+          <input block="true">
+            <note value="E5"/>
+          </input>
+        </loop>
+        <text>Good job!  Lets learn a couple of notes in the next chapter</text>
+      </chapter>
+      <chapter title="Playing Some Notes">
+        <text>Now that you know how to play the open string, lets try to learn a couple of notes on the high E string</text>
+        <ledout>
+          <guitarposition string="hiE" fret="1"/>
+        </ledout>
+        <text>This note is called F, and it's located on the first fret of the high E string.  Try playing it a couple of times</text>
+          <loop condition="2">
+            <ledout>
+              <guitarposition string="hiE" fret="1"/>
+            </ledout> 
+            <input block="true">
+              <note value="F5"/>
+            </input>
+          </loop>
+          
+        <text>This next note is called F, and it's located on the third fret of the high E string.  Try playing it a couple of times</text>
+          <loop condition="2">
+            <ledout>
+              <guitarposition string="hiE" fret="3"/>
+            </ledout> 
+            <input block="true">
+              <note value="G5"/>
+            </input>
+          </loop>
+
+        <text>Good Job! The next chapter will combine the notes we just learned together!</text>
+
+      </chapter>
+    </content>
+  </lesson>
+</xmp>
+
