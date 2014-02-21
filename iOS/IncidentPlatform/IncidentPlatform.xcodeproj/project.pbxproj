@@ -79,6 +79,7 @@
 		2610F15518AD9125003F5CEB /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F15318AD9125003F5CEB /* CADebugPrintf.cpp */; };
 		2610F15C18AD9B08003F5CEB /* AUNodeNetwork.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F15B18AD9B08003F5CEB /* AUNodeNetwork.mm */; };
 		2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77C18B55208001F7224 /* SamplerNode.h */; };
+		2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */; };
 		26478FEE186929130077987F /* XMPNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801018691DE800F6668F /* XMPNode.h */; };
 		26478FEF1869291D0077987F /* dss_list.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26057FFD18691DE800F6668F /* dss_list.h */; };
 		26478FF0186929280077987F /* EHM.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26057FFF18691DE800F6668F /* EHM.h */; };
@@ -173,6 +174,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */,
 				2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */,
 				264EC77A18B4581B001F7224 /* AudioNodeNetwork.h in CopyFiles */,
 				264EC77618B44FD6001F7224 /* Parameter.h in CopyFiles */,
@@ -353,6 +355,7 @@
 		2610F15418AD9125003F5CEB /* CADebugPrintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugPrintf.h; sourceTree = "<group>"; };
 		2610F15A18AD9B08003F5CEB /* AUNodeNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUNodeNetwork.h; sourceTree = "<group>"; };
 		2610F15B18AD9B08003F5CEB /* AUNodeNetwork.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AUNodeNetwork.mm; sourceTree = "<group>"; };
+		2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioNodeCommon.h; sourceTree = "<group>"; };
 		26478FF818692B8C0077987F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		26478FFA18692B910077987F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		26478FFD18692BA50077987F /* blit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blit.h; sourceTree = "<group>"; };
@@ -797,6 +800,7 @@
 				264EC77818B456E6001F7224 /* AudioNodeNetwork.h */,
 				264EC77B18B55208001F7224 /* SamplerNode.cpp */,
 				264EC77C18B55208001F7224 /* SamplerNode.h */,
+				2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */,
 			);
 			name = AudioNode;
 			sourceTree = "<group>";
