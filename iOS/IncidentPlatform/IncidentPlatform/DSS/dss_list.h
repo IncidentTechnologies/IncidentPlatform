@@ -306,7 +306,7 @@ Error:
 		return r;
 	}
 
-	RESULT GetNode(listNode<T> * &node, void *pLocation, get_by_type gbt) {
+	RESULT GetNode(listNode<T>* &node, void *pLocation, get_by_type gbt) {
 		RESULT r = R_SUCCESS;
 		if(Empty() == 1) {
 			// Cannot retrieve anything out of an empty list
@@ -340,7 +340,7 @@ Error:
                 case GET_BY_POSITION: {
                     for(int i = 0; i < *((int*)(pLocation)); i++)
                         node = node->m_pNextItem;
-                }
+                } break;
 
                 case GET_BY_ITERATOR: {
                     node = reinterpret_cast<listNode<T>*>(pLocation);
@@ -369,13 +369,13 @@ public:
     
     T& operator[](const int& i) {
         listNode<T> *node = NULL;
-        this->GetNode(node, (void*)(i), GET_BY_POSITION);
+        this->GetNode(node, (void*)(&i), GET_BY_POSITION);
         return node->m_Item;
     }
     
     const T& operator[](const int& i) const {
         listNode<T> *node = NULL;
-        this->GetNode(node, (void*)(i), GET_BY_POSITION);
+        this->GetNode(node, (void*)(&i), GET_BY_POSITION);
         return node->m_Item;
     }
 

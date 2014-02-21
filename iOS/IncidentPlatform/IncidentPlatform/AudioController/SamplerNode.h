@@ -23,9 +23,10 @@ public:
     ~SamplerBankNode();
     
     RESULT TriggerSample(int sample);
-    RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode *outSample);
+    RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
     
-    SampleNode* operator[](const int& i);
+public:
+    SampleNode*& operator[](const int& i);
     
 public:
     list<SampleNode*> m_samples;
@@ -37,10 +38,11 @@ public:
     ~SamplerNode();
     
     RESULT TriggerBankSample(int bank, int sample);
-    RESULT CreateNewBank(SamplerBankNode *outBank);
-    RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode *outSampleNode);
+    RESULT CreateNewBank(SamplerBankNode* &outBank);
+    RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
     
-    SamplerBankNode* operator[](const int& i);
+public:
+    SamplerBankNode*& operator[](const int& i);
     
 public:
     list<SamplerBankNode*> m_banks;

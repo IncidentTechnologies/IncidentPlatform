@@ -74,7 +74,8 @@ float AudioNodeConnection::GetNextSample(unsigned long int timestamp) {
 // Audio Node
 /******************************************************/
 AudioNode::AudioNode() :
-    m_channel_n(0),
+    m_channel_in_n(0),
+    m_channel_out_n(0),
     m_SampleRate(DEFAULT_SAMPLE_RATE),
     m_inputs(NULL),
     m_outputs(NULL)
@@ -85,7 +86,7 @@ AudioNode::AudioNode() :
 float AudioNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
-    for(int i = 0; i < m_channel_n; i++) {
+    for(int i = 0; i < m_channel_in_n; i++) {
         retVal += m_inputs[i]->GetNextSample(timestamp);
     }
     
@@ -96,10 +97,12 @@ RESULT AudioNode::DeleteAndDisconnect(CONN_TYPE type) {
     RESULT r = R_SUCCESS;
     
     AudioNodeConnection** connList = ((type == CONN_IN) ? m_inputs : m_outputs);
+    int channels = ((type == CONN_IN) ? m_channel_in_n : m_channel_out_n);
+    
     CBRM((type < CONN_INV), "Only input and output allowed connection types");
     
     if(connList != NULL) {
-        for(int i = 0; i < m_channel_n; i++) {
+        for(int i = 0; i < channels; i++) {
             connList[i]->Disconnect();
             delete connList[i];
             connList[i] = NULL;
@@ -121,11 +124,12 @@ AudioNode::~AudioNode() {
 RESULT AudioNode::SetChannelCount(int channel_n, CONN_TYPE type) {
     RESULT r = R_SUCCESS;
     AudioNodeConnection** connList = ((type == CONN_IN) ? m_inputs : m_outputs);
+    int channels = ((type == CONN_IN) ? m_channel_in_n : m_channel_out_n);
     
     CBRM((type < CONN_INV), "Only input and output allowed connection types");
     
     if(connList != NULL) {
-        for(int i = 0; i < m_channel_n; i++) {
+        for(int i = 0; i < channels; i++) {
             connList[i]->Disconnect();
             delete connList[i];
             connList[i] = NULL;
@@ -152,7 +156,11 @@ RESULT AudioNode::SetChannelCount(int channel_n, CONN_TYPE type) {
     else
         return R_ERROR;
     
-    m_channel_n = channel_n;
+    //m_channel_n = channel_n;
+    if(type == CONN_IN)
+        m_channel_in_n = channel_n;
+    else if(type == CONN_OUT)
+        m_channel_out_n = channel_n;
     
     // Set everything to zero, provide channel id
     for(int i = 0; i < channel_n; i++) {
@@ -167,13 +175,18 @@ Error:
 }
 
 AudioNodeConnection* AudioNode::GetChannel(int chan, CONN_TYPE type) {
-    if(chan >= m_channel_n)
-        return NULL;
-    
-    if(type == CONN_OUT)
-        return (m_outputs[chan]);
-    else if(type == CONN_IN)
-        return (m_inputs[chan]);
+    if(type == CONN_OUT) {
+        if(chan >= m_channel_out_n)
+            return NULL;
+        else
+            return (m_outputs[chan]);
+    }
+    else if(type == CONN_IN) {
+        if(chan >= m_channel_in_n)
+            return NULL;
+        else
+            return (m_inputs[chan]);
+    }
     else
         return NULL;
 }

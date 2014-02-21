@@ -33,7 +33,7 @@ Error:
     return r;
 }
 
-RESULT SamplerBankNode::LoadSampleIntoBank(char *pszFilepath, SampleNode *outSample) {
+RESULT SamplerBankNode::LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample) {
     RESULT r = R_SUCCESS;
     
     SampleNode *newSample = new SampleNode(pszFilepath);
@@ -41,10 +41,10 @@ RESULT SamplerBankNode::LoadSampleIntoBank(char *pszFilepath, SampleNode *outSam
     // Check, connect, and push the new sample
     CNRM(newSample, "SamplerBankNode: Failed to create sample");
     CRM(m_outputNode->ConnectInput(0, newSample, 0), "SamplerBankNode: Failed to connect new sample node to output");
-    CRM(m_samples.Push(newSample), "SamplerBankNode: Failed to add sample to bank");
+    CRM(m_samples.Append(newSample), "SamplerBankNode: Failed to add sample to bank");
     
     // pass out the sample
-    *outSample = *(newSample);
+    outSample = newSample;
     
     return r;
     
@@ -65,11 +65,13 @@ float SamplerBankNode::GetNextSample(unsigned long int timestamp) {
     return m_outputNode->GetNextSample(timestamp);
 }*/
 
-SampleNode* SamplerBankNode::operator[](const int& i) {
+SampleNode*& SamplerBankNode::operator[](const int& i) {
+    SampleNode *retVal = NULL;
+    
     if(i < m_samples.length())
-        return m_samples[i];
-    else
-        return NULL;
+        retVal = m_samples[i];
+    
+    return retVal;
 }
 
 /******************************/
@@ -86,26 +88,30 @@ SamplerNode::~SamplerNode() {
     /* empty stub */
 }
 
-RESULT SamplerNode::CreateNewBank(SamplerBankNode *outBank){
+RESULT SamplerNode::CreateNewBank(SamplerBankNode* &outBank){
     RESULT r = R_SUCCESS;
     
     SamplerBankNode *newBank = new SamplerBankNode();
     CNRM(newBank, "SamplerNode: Failed to allocate new bank");
     CRM(m_outputNode->ConnectInput(0, newBank, 0), "SamplerNode: Failed to connect bank output to Sampler output");
-    CRM(m_banks.Push(newBank), "SamplerNode: Failed to add bank to sampler");
+    CRM(m_banks.Append(newBank), "SamplerNode: Failed to add bank to sampler");
     
     // Pass it out
-    *outBank = *(newBank);
+    outBank = newBank;
     
 Error:
     return r;
 }
 
-RESULT SamplerNode::LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode *outSampleNode) {
+RESULT SamplerNode::LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode) {
     RESULT r = R_SUCCESS;
+    SamplerBankNode *tempBank = NULL;
     
     CBRM((bank < m_banks.length()), "SamplerNode: Can't add sample to non-existent bank");
-    CRM(m_banks[bank]->LoadSampleIntoBank(pszFilepath, outSampleNode), "SamplerNode: Failed to add sample with path %s", pszFilepath);
+    
+    tempBank = m_banks[bank];
+    
+    CRM(tempBank->LoadSampleIntoBank(pszFilepath, outSampleNode), "SamplerNode: Failed to add sample with path %s", pszFilepath);
     
 Error:
     return r;
@@ -121,11 +127,13 @@ Error:
     return r;
 }
 
-SamplerBankNode* SamplerNode::operator[](const int& i) {
+SamplerBankNode*& SamplerNode::operator[](const int& i) {
+    SamplerBankNode *retVal = NULL;
+    
     if(i < m_banks.length())
-        return m_banks[i];
-    else
-        return NULL;
+        retVal = m_banks[i];
+    
+    return retVal;
 }
 
 /*

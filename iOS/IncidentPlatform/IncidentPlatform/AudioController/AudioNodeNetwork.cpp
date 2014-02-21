@@ -20,6 +20,7 @@ AudioNodeNetwork::AudioNodeNetwork() :
     // Create output node with one output channel
     m_outputNode = new AudioNode();
     m_outputNode->SetChannelCount(1, CONN_OUT);
+    m_outputNode->SetChannelCount(1, CONN_IN);
     this->ConnectInput(0, m_outputNode, 0);             // Connect our ouput node to the output of the network
     
     // Input?
