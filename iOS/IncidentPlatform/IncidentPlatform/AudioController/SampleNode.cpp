@@ -25,7 +25,7 @@ bool SampleBuffer::SampleDone() {
 }
 
 RESULT SampleBuffer::ResetSampleCounter() {
-    m_pBuffer_c = 0;
+    m_pBuffer_c = m_pBuffer_start;
     return R_SUCCESS;
 }
 
@@ -41,7 +41,7 @@ float SampleBuffer::GetNextSample(unsigned long int timestamp) {
 }
 
 float SampleBuffer::GetSampleBufferLengthMS() {
-    return ((float)m_pBuffer_n / (1000.0f * (float)m_SampleRate));
+    return ((float)m_pBuffer_n / (float)m_SampleRate) * 1000.0f;
 }
 
 RESULT SampleBuffer::SetStart(float msStart) {
@@ -54,7 +54,7 @@ RESULT SampleBuffer::SetStart(float msStart) {
     CBRM((msStart < sampleLengthMs), "SampleBuffer: Sample start cannot be longer than sample");
     
     newStart = (msStart / 1000.0f) * (float)m_SampleRate;
-    SetStartSample(newStart);
+    CRM(SetStartSample(newStart), "SampleBuffer: SetStartSample failed");
     
 Error:
     return r;
@@ -70,7 +70,7 @@ RESULT SampleBuffer::SetEnd(float msEnd){
     CBRM((msEnd <= sampleLengthMs), "SampleBuffer: Sample end cannot be longer than sample");
     
     newEnd = (msEnd / 1000.0f) * (float)m_SampleRate;
-    SetEndSample(newEnd);
+    CRM(SetEndSample(newEnd), "SampleBuffer: SetEndSample failed");
     
 Error:
     return r;
@@ -80,6 +80,8 @@ RESULT SampleBuffer::SetStartSample(unsigned long start) {
     RESULT r = R_SUCCESS;
     
     CBRM((start < m_pBuffer_n), "SampleBuffer: Sample start sample cannot be more than buffer length");
+    CBRM((start < m_pBuffer_end), "SampleBuffer: Sample start after sample end");
+    
     m_pBuffer_start = start;
     
 Error:
@@ -90,6 +92,8 @@ RESULT SampleBuffer::SetEndSample(unsigned long end) {
     RESULT r = R_SUCCESS;
     
     CBRM((end < m_pBuffer_n), "SampleBuffer: Sample end sample cannot be more than buffer length");
+    CBRM((end > m_pBuffer_start), "SampleBuffer: Sample end before sample start");
+    
     m_pBuffer_end = end;
     
 Error:
@@ -195,6 +199,11 @@ Error:
     return r;
 }
 
+
+/*************************************/
+// SampleNode
+/*************************************/
+
 SampleNode::SampleNode(char *pszFilenamePath) :
     m_pSampleBuffer(NULL),
     m_fPlaying(FALSE)
@@ -234,5 +243,17 @@ float SampleNode::GetNextSample(unsigned long int timestamp) {
     }
 
     return retVal;
+}
+
+float SampleNode::GetLength() {
+    return m_pSampleBuffer->GetSampleBufferLengthMS();
+}
+
+RESULT SampleNode::SetStart(float msStart) {
+    return m_pSampleBuffer->SetStart(msStart);
+}
+
+RESULT SampleNode::SetEnd(float msEnd) {
+    return m_pSampleBuffer->SetEnd(msEnd);
 }
 

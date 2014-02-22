@@ -23,6 +23,8 @@ public:
     ~SamplerBankNode();
     
     RESULT TriggerSample(int sample);
+    SampleNode *GetSample(int sample);
+    
     RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
     
 public:
@@ -38,6 +40,8 @@ public:
     ~SamplerNode();
     
     RESULT TriggerBankSample(int bank, int sample);
+    SampleNode *GetBankSample(int bank, int sample);
+    
     RESULT CreateNewBank(SamplerBankNode* &outBank);
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
     

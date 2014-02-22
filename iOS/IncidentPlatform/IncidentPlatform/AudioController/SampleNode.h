@@ -57,6 +57,11 @@ public:
     RESULT Trigger();
     RESULT Stop();
     
+    // All these are in ms
+    float GetLength();
+    RESULT SetStart(float msStart);
+    RESULT SetEnd(float msEnd);
+    
 public:
     SampleBuffer *m_pSampleBuffer;
     bool m_fPlaying;

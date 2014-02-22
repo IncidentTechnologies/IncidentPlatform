@@ -33,6 +33,13 @@ Error:
     return r;
 }
 
+SampleNode* SamplerBankNode::GetSample(int sample) {
+    if(sample < m_samples.length())
+        return m_samples[sample];
+    else
+        return NULL;
+}
+
 RESULT SamplerBankNode::LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample) {
     RESULT r = R_SUCCESS;
     
@@ -125,6 +132,13 @@ RESULT SamplerNode::TriggerBankSample(int bank, int sample) {
     
 Error:
     return r;
+}
+
+SampleNode* SamplerNode::GetBankSample(int bank, int sample) {
+    if(bank < m_banks.length())
+        return m_banks[bank]->GetSample(sample);
+    else
+        return NULL;
 }
 
 SamplerBankNode*& SamplerNode::operator[](const int& i) {
