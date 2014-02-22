@@ -22,16 +22,27 @@ public:
     RESULT ResetSampleCounter();
     bool SampleDone();
     
+    float GetSampleBufferLengthMS();
+    RESULT SetStart(float msStart);
+    RESULT SetEnd(float msEnd);
+    
+private:
+    RESULT SetStartSample(unsigned long start);
+    RESULT SetEndSample(unsigned long end);
+    
 private:
     AudioStreamBasicDescription GetClientFormatDescription(bool fStereo);
     RESULT LoadSampleBufferFromPath(char *pszPath);
     
 private:
-    unsigned long int m_pBuffer_c;
+    int m_SampleRate;
     
+    unsigned long int m_pBuffer_c;
     float *m_pBuffer;
     unsigned long int m_pBuffer_n;
-    int m_SampleRate;
+
+    unsigned long int m_pBuffer_start;
+    unsigned long int m_pBuffer_end;
 };
 
 

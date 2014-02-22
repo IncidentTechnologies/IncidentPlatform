@@ -55,12 +55,13 @@ static OSStatus renderNetwork(void *inRefCon, AudioUnitRenderActionFlags *ioActi
                                UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
     
-    AUNodeNetwork *net = (AUNodeNetwork*)CFBridgingRelease(inRefCon);
+    AUNodeNetwork *net = (__bridge AUNodeNetwork*)(inRefCon);
     
 	AudioSampleType *outA = (AudioSampleType*)ioData->mBuffers[0].mData;
     
 	for(UInt32 i = 0; i < inNumberFrames; i++) {
-        outA[i] = (SInt16)([net GetNextSample] * 32767.0f);
+        SInt16 nextSample = (SInt16)([net GetNextSample] * 32767.0f);
+        outA[i] = nextSample;
     }
     
 	return noErr;

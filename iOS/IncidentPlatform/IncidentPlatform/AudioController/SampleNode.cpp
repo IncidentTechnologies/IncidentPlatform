@@ -13,13 +13,15 @@ SampleBuffer::SampleBuffer(char *pszFilenamePath) :
     m_pBuffer_c(0),
     m_pBuffer(NULL),
     m_pBuffer_n(0),
-    m_SampleRate(DEFAULT_SAMPLE_RATE)
+    m_SampleRate(DEFAULT_SAMPLE_RATE),
+    m_pBuffer_start(0),
+    m_pBuffer_end(0)
 {
     LoadSampleBufferFromPath(pszFilenamePath);
 }
 
 bool SampleBuffer::SampleDone() {
-    return (m_pBuffer_c >= m_pBuffer_n);
+    return (m_pBuffer_c >= m_pBuffer_end);
 }
 
 RESULT SampleBuffer::ResetSampleCounter() {
@@ -30,12 +32,68 @@ RESULT SampleBuffer::ResetSampleCounter() {
 float SampleBuffer::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
-    if(m_pBuffer != NULL && m_pBuffer_n > 0 && m_pBuffer_c < m_pBuffer_n) {
+    if(m_pBuffer != NULL && m_pBuffer_n > 0 && m_pBuffer_end > 0 && m_pBuffer_c < m_pBuffer_end) {
         retVal = m_pBuffer[m_pBuffer_c];
         m_pBuffer_c++;
     }
     
     return retVal;
+}
+
+float SampleBuffer::GetSampleBufferLengthMS() {
+    return ((float)m_pBuffer_n / (1000.0f * (float)m_SampleRate));
+}
+
+RESULT SampleBuffer::SetStart(float msStart) {
+    RESULT r = R_SUCCESS;
+    
+    float sampleLengthMs = GetSampleBufferLengthMS();
+    unsigned long newStart;
+    
+    CBRM((msStart > 0.0f), "SampleBuffer: Sample start cannot be negative");
+    CBRM((msStart < sampleLengthMs), "SampleBuffer: Sample start cannot be longer than sample");
+    
+    newStart = (msStart / 1000.0f) * (float)m_SampleRate;
+    SetStartSample(newStart);
+    
+Error:
+    return r;
+}
+
+RESULT SampleBuffer::SetEnd(float msEnd){
+    RESULT r = R_SUCCESS;
+    
+    float sampleLengthMs = GetSampleBufferLengthMS();
+    unsigned long newEnd;
+    
+    CBRM((msEnd > 0.0f), "SampleBuffer: Sample end cannot be negative");
+    CBRM((msEnd <= sampleLengthMs), "SampleBuffer: Sample end cannot be longer than sample");
+    
+    newEnd = (msEnd / 1000.0f) * (float)m_SampleRate;
+    SetEndSample(newEnd);
+    
+Error:
+    return r;
+}
+
+RESULT SampleBuffer::SetStartSample(unsigned long start) {
+    RESULT r = R_SUCCESS;
+    
+    CBRM((start < m_pBuffer_n), "SampleBuffer: Sample start sample cannot be more than buffer length");
+    m_pBuffer_start = start;
+    
+Error:
+    return r;
+}
+
+RESULT SampleBuffer::SetEndSample(unsigned long end) {
+    RESULT r = R_SUCCESS;
+    
+    CBRM((end < m_pBuffer_n), "SampleBuffer: Sample end sample cannot be more than buffer length");
+    m_pBuffer_end = end;
+    
+Error:
+    return r;
 }
 
 // TODO: Add Stereo
@@ -67,7 +125,7 @@ RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
                                                           cfstrPath,
                                                           kCFURLPOSIXPathStyle,
                                                           false);
-    CFRelease(cfstrPath);
+    //CFRelease(cfstrPath);
     OSStatus status = ExtAudioFileOpenURL(inputFileURL, &fileRef);
     
     // Source Format
@@ -88,6 +146,9 @@ RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
                                       );
     // Set up the buffer from the length
     m_pBuffer_n = (unsigned long int)(totalFramesInFile);
+    m_pBuffer_start = 0;
+    m_pBuffer_end = m_pBuffer_n;
+    
     AudioSampleType *pAudioSampleBuffer;
     pAudioSampleBuffer = (AudioSampleType*)malloc(sizeof(AudioSampleType) * m_pBuffer_n);
     
