@@ -61,15 +61,15 @@
 		2610F13718AD6A31003F5CEB /* Effect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10A18AD6A31003F5CEB /* Effect.mm */; };
 		2610F13818AD6A31003F5CEB /* EnvelopeFollower.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10C18AD6A31003F5CEB /* EnvelopeFollower.mm */; };
 		2610F13918AD6A31003F5CEB /* EnvelopeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10D18AD6A31003F5CEB /* EnvelopeNode.cpp */; };
-		2610F13A18AD6A31003F5CEB /* FirstOrderFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11018AD6A31003F5CEB /* FirstOrderFilter.mm */; };
+		2610F13A18AD6A31003F5CEB /* FirstOrderFilterNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11018AD6A31003F5CEB /* FirstOrderFilterNode.cpp */; };
 		2610F13B18AD6A31003F5CEB /* FuzzExpDistortion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11218AD6A31003F5CEB /* FuzzExpDistortion.mm */; };
 		2610F13C18AD6A31003F5CEB /* GeneratorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11318AD6A31003F5CEB /* GeneratorNode.cpp */; };
 		2610F13D18AD6A31003F5CEB /* HardCutOffDistortion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11618AD6A31003F5CEB /* HardCutOffDistortion.mm */; };
 		2610F13E18AD6A31003F5CEB /* KSObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11818AD6A31003F5CEB /* KSObject.mm */; };
-		2610F13F18AD6A31003F5CEB /* LocalMax.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11A18AD6A31003F5CEB /* LocalMax.mm */; };
+		2610F13F18AD6A31003F5CEB /* LocalMax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11A18AD6A31003F5CEB /* LocalMax.cpp */; };
 		2610F14018AD6A31003F5CEB /* Overdrive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11C18AD6A31003F5CEB /* Overdrive.mm */; };
 		2610F14118AD6A31003F5CEB /* Parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F11E18AD6A31003F5CEB /* Parameter.cpp */; };
-		2610F14218AD6A31003F5CEB /* Reverb.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F12018AD6A31003F5CEB /* Reverb.mm */; };
+		2610F14218AD6A31003F5CEB /* ReverbNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F12018AD6A31003F5CEB /* ReverbNode.cpp */; };
 		2610F14318AD6A31003F5CEB /* Sampler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F12218AD6A31003F5CEB /* Sampler.mm */; };
 		2610F14418AD6A31003F5CEB /* SoftClippingOverdrive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F12418AD6A31003F5CEB /* SoftClippingOverdrive.mm */; };
 		2610F14518AD6A31003F5CEB /* TanhDistortion.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F12618AD6A31003F5CEB /* TanhDistortion.mm */; };
@@ -143,12 +143,17 @@
 		264EC77918B456E6001F7224 /* AudioNodeNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 264EC77718B456E6001F7224 /* AudioNodeNetwork.cpp */; };
 		264EC77A18B4581B001F7224 /* AudioNodeNetwork.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77818B456E6001F7224 /* AudioNodeNetwork.h */; };
 		264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 264EC77B18B55208001F7224 /* SamplerNode.cpp */; };
+		2652382618C4C51900E38BA5 /* XMPSample.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 266A221918BEE7A9007027C1 /* XMPSample.h */; };
+		266A221B18BEE7A9007027C1 /* XMPSample.mm in Sources */ = {isa = PBXBuildFile; fileRef = 266A221A18BEE7A9007027C1 /* XMPSample.mm */; };
 		26A5131518873B1700478200 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26A5131418873B1700478200 /* Cocoa.framework */; };
 		26A5131F18873B1700478200 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26A5131D18873B1700478200 /* InfoPlist.strings */; };
 		26A5132418873B5500478200 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 26A512FA188734CF00478200 /* fragment.glsl */; };
 		26A5132518873B5500478200 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 26A512FB188734CF00478200 /* vertex.glsl */; };
 		26A5132D18875EE500478200 /* MeshObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26A5132B18875EE500478200 /* MeshObj.cpp */; };
 		26A5132F188762E600478200 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26A5132E188762C200478200 /* teapot.obj */; };
+		26CC24A518BDC24000716750 /* DiffusionTankNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10518AD6A31003F5CEB /* DiffusionTankNode.h */; };
+		26CC24A618BDC67000716750 /* ReverbNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11F18AD6A31003F5CEB /* ReverbNode.h */; };
+		26CC24A718BDC7A200716750 /* FirstOrderFilterNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10F18AD6A31003F5CEB /* FirstOrderFilterNode.h */; };
 		26EBC39418ADB5260068BEC6 /* AUNodeNetwork.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F15A18AD9B08003F5CEB /* AUNodeNetwork.h */; };
 		26EBC39518ADB5950068BEC6 /* AudioNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F0F118AD6A31003F5CEB /* AudioNode.h */; };
 		26EBC39618ADB5950068BEC6 /* AUAudioNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F0E918AD6A31003F5CEB /* AUAudioNode.h */; };
@@ -174,6 +179,10 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				2652382618C4C51900E38BA5 /* XMPSample.h in CopyFiles */,
+				26CC24A718BDC7A200716750 /* FirstOrderFilterNode.h in CopyFiles */,
+				26CC24A618BDC67000716750 /* ReverbNode.h in CopyFiles */,
+				26CC24A518BDC24000716750 /* DiffusionTankNode.h in CopyFiles */,
 				2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */,
 				2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */,
 				264EC77A18B4581B001F7224 /* AudioNodeNetwork.h in CopyFiles */,
@@ -323,8 +332,8 @@
 		2610F10C18AD6A31003F5CEB /* EnvelopeFollower.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EnvelopeFollower.mm; sourceTree = "<group>"; };
 		2610F10D18AD6A31003F5CEB /* EnvelopeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnvelopeNode.cpp; sourceTree = "<group>"; };
 		2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = EnvelopeNode.h; sourceTree = "<group>"; };
-		2610F10F18AD6A31003F5CEB /* FirstOrderFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstOrderFilter.h; sourceTree = "<group>"; };
-		2610F11018AD6A31003F5CEB /* FirstOrderFilter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FirstOrderFilter.mm; sourceTree = "<group>"; };
+		2610F10F18AD6A31003F5CEB /* FirstOrderFilterNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstOrderFilterNode.h; sourceTree = "<group>"; };
+		2610F11018AD6A31003F5CEB /* FirstOrderFilterNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirstOrderFilterNode.cpp; sourceTree = "<group>"; };
 		2610F11118AD6A31003F5CEB /* FuzzExpDistortion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuzzExpDistortion.h; sourceTree = "<group>"; };
 		2610F11218AD6A31003F5CEB /* FuzzExpDistortion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FuzzExpDistortion.mm; sourceTree = "<group>"; };
 		2610F11318AD6A31003F5CEB /* GeneratorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeneratorNode.cpp; sourceTree = "<group>"; };
@@ -334,13 +343,13 @@
 		2610F11718AD6A31003F5CEB /* KSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSObject.h; sourceTree = "<group>"; };
 		2610F11818AD6A31003F5CEB /* KSObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KSObject.mm; sourceTree = "<group>"; };
 		2610F11918AD6A31003F5CEB /* LocalMax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalMax.h; sourceTree = "<group>"; };
-		2610F11A18AD6A31003F5CEB /* LocalMax.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LocalMax.mm; sourceTree = "<group>"; };
+		2610F11A18AD6A31003F5CEB /* LocalMax.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalMax.cpp; sourceTree = "<group>"; };
 		2610F11B18AD6A31003F5CEB /* Overdrive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Overdrive.h; sourceTree = "<group>"; };
 		2610F11C18AD6A31003F5CEB /* Overdrive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Overdrive.mm; sourceTree = "<group>"; };
 		2610F11D18AD6A31003F5CEB /* Parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parameter.h; sourceTree = "<group>"; };
 		2610F11E18AD6A31003F5CEB /* Parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parameter.cpp; sourceTree = "<group>"; };
-		2610F11F18AD6A31003F5CEB /* Reverb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reverb.h; sourceTree = "<group>"; };
-		2610F12018AD6A31003F5CEB /* Reverb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Reverb.mm; sourceTree = "<group>"; };
+		2610F11F18AD6A31003F5CEB /* ReverbNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReverbNode.h; sourceTree = "<group>"; };
+		2610F12018AD6A31003F5CEB /* ReverbNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReverbNode.cpp; sourceTree = "<group>"; };
 		2610F12118AD6A31003F5CEB /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
 		2610F12218AD6A31003F5CEB /* Sampler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Sampler.mm; sourceTree = "<group>"; };
 		2610F12318AD6A31003F5CEB /* SoftClippingOverdrive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftClippingOverdrive.h; sourceTree = "<group>"; };
@@ -493,6 +502,8 @@
 		264EC77818B456E6001F7224 /* AudioNodeNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioNodeNetwork.h; sourceTree = "<group>"; };
 		264EC77B18B55208001F7224 /* SamplerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SamplerNode.cpp; sourceTree = "<group>"; };
 		264EC77C18B55208001F7224 /* SamplerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamplerNode.h; sourceTree = "<group>"; };
+		266A221918BEE7A9007027C1 /* XMPSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPSample.h; sourceTree = "<group>"; };
+		266A221A18BEE7A9007027C1 /* XMPSample.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPSample.mm; sourceTree = "<group>"; };
 		26A512FA188734CF00478200 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		26A512FB188734CF00478200 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		26A5131318873B1600478200 /* IncidentPlatformBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncidentPlatformBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -681,6 +692,8 @@
 		2605801118691DE800F6668F /* XMPObject */ = {
 			isa = PBXGroup;
 			children = (
+				266A221918BEE7A9007027C1 /* XMPSample.h */,
+				266A221A18BEE7A9007027C1 /* XMPSample.mm */,
 				2605801218691DE800F6668F /* XMPGtarNote.h */,
 				2605801318691DE800F6668F /* XMPGtarNote.mm */,
 				2605801418691DE800F6668F /* XMPInput.h */,
@@ -773,16 +786,21 @@
 		2610F14918AD6A75003F5CEB /* AudioNode */ = {
 			isa = PBXGroup;
 			children = (
+				266A221818BDDA13007027C1 /* Utility */,
 				2610F10518AD6A31003F5CEB /* DiffusionTankNode.h */,
 				2610F10618AD6A31003F5CEB /* DiffusionTankNode.cpp */,
+				2610F10F18AD6A31003F5CEB /* FirstOrderFilterNode.h */,
+				2610F11018AD6A31003F5CEB /* FirstOrderFilterNode.cpp */,
+				2610F11F18AD6A31003F5CEB /* ReverbNode.h */,
+				2610F12018AD6A31003F5CEB /* ReverbNode.cpp */,
+				264EC77B18B55208001F7224 /* SamplerNode.cpp */,
+				264EC77C18B55208001F7224 /* SamplerNode.h */,
 				264EC77118B43CC9001F7224 /* EffectNode.cpp */,
 				264EC77218B43CC9001F7224 /* EffectNode.h */,
 				2610F10918AD6A31003F5CEB /* Effect.h */,
 				2610F10A18AD6A31003F5CEB /* Effect.mm */,
 				2610F10318AD6A31003F5CEB /* DelayNode.h */,
 				2610F10418AD6A31003F5CEB /* DelayNode.cpp */,
-				2610F11D18AD6A31003F5CEB /* Parameter.h */,
-				2610F11E18AD6A31003F5CEB /* Parameter.cpp */,
 				2610F14A18AD6A88003F5CEB /* Effects */,
 				2610F10D18AD6A31003F5CEB /* EnvelopeNode.cpp */,
 				2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */,
@@ -798,8 +816,6 @@
 				264EC76B18B30741001F7224 /* AudioNodeFactory.mm */,
 				264EC77718B456E6001F7224 /* AudioNodeNetwork.cpp */,
 				264EC77818B456E6001F7224 /* AudioNodeNetwork.h */,
-				264EC77B18B55208001F7224 /* SamplerNode.cpp */,
-				264EC77C18B55208001F7224 /* SamplerNode.h */,
 				2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */,
 			);
 			name = AudioNode;
@@ -816,16 +832,10 @@
 				2610F11618AD6A31003F5CEB /* HardCutOffDistortion.mm */,
 				2610F11718AD6A31003F5CEB /* KSObject.h */,
 				2610F11818AD6A31003F5CEB /* KSObject.mm */,
-				2610F11918AD6A31003F5CEB /* LocalMax.h */,
-				2610F11A18AD6A31003F5CEB /* LocalMax.mm */,
 				2610F11B18AD6A31003F5CEB /* Overdrive.h */,
 				2610F11C18AD6A31003F5CEB /* Overdrive.mm */,
-				2610F11F18AD6A31003F5CEB /* Reverb.h */,
-				2610F12018AD6A31003F5CEB /* Reverb.mm */,
 				2610F10B18AD6A31003F5CEB /* EnvelopeFollower.h */,
 				2610F10C18AD6A31003F5CEB /* EnvelopeFollower.mm */,
-				2610F10F18AD6A31003F5CEB /* FirstOrderFilter.h */,
-				2610F11018AD6A31003F5CEB /* FirstOrderFilter.mm */,
 				2610F11118AD6A31003F5CEB /* FuzzExpDistortion.h */,
 				2610F11218AD6A31003F5CEB /* FuzzExpDistortion.mm */,
 				2610F0FF18AD6A31003F5CEB /* ChorusEffect.h */,
@@ -1065,6 +1075,17 @@
 			path = TestData;
 			sourceTree = "<group>";
 		};
+		266A221818BDDA13007027C1 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				2610F11D18AD6A31003F5CEB /* Parameter.h */,
+				2610F11E18AD6A31003F5CEB /* Parameter.cpp */,
+				2610F11918AD6A31003F5CEB /* LocalMax.h */,
+				2610F11A18AD6A31003F5CEB /* LocalMax.cpp */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
 		26A5131618873B1700478200 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1249,6 +1270,7 @@
 				264790A9187681990077987F /* WindowFactory.cpp in Sources */,
 				2647907918692BA50077987F /* DX9Text.cpp in Sources */,
 				26057F4818691C7800F6668F /* IncidentPlatform.m in Sources */,
+				266A221B18BEE7A9007027C1 /* XMPSample.mm in Sources */,
 				264790A11869304C0077987F /* NPAPIWin32Interface.cpp in Sources */,
 				264790A01869304C0077987F /* IncidentMainWindow.cpp in Sources */,
 				2610F13D18AD6A31003F5CEB /* HardCutOffDistortion.mm in Sources */,
@@ -1258,7 +1280,7 @@
 				2647907218692BA50077987F /* DimensionImpDX9.cpp in Sources */,
 				2605803E18691DE800F6668F /* SmartBuffer.cpp in Sources */,
 				2647907418692BA50077987F /* DX9Camera.cpp in Sources */,
-				2610F14218AD6A31003F5CEB /* Reverb.mm in Sources */,
+				2610F14218AD6A31003F5CEB /* ReverbNode.cpp in Sources */,
 				2647906F18692BA50077987F /* cmnPriv.cpp in Sources */,
 				2610F13C18AD6A31003F5CEB /* GeneratorNode.cpp in Sources */,
 				2605805418691DE800F6668F /* XMPTree.cpp in Sources */,
@@ -1267,7 +1289,7 @@
 				2605804918691DE800F6668F /* XMPLoop.mm in Sources */,
 				2605805018691DE800F6668F /* XMPTrack.mm in Sources */,
 				2605805618691DE800F6668F /* Console.cpp in Sources */,
-				2610F13F18AD6A31003F5CEB /* LocalMax.mm in Sources */,
+				2610F13F18AD6A31003F5CEB /* LocalMax.cpp in Sources */,
 				2647908118692BA50077987F /* MIDICommon.cpp in Sources */,
 				2605803F18691DE800F6668F /* valid.cpp in Sources */,
 				2605805318691DE800F6668F /* XMPTokenizer.cpp in Sources */,
@@ -1313,7 +1335,7 @@
 				2647907A18692BA50077987F /* DX9Translator.cpp in Sources */,
 				2610F13718AD6A31003F5CEB /* Effect.mm in Sources */,
 				264790A31869304C0077987F /* WindowWin32.cpp in Sources */,
-				2610F13A18AD6A31003F5CEB /* FirstOrderFilter.mm in Sources */,
+				2610F13A18AD6A31003F5CEB /* FirstOrderFilterNode.cpp in Sources */,
 				264EC76718B30343001F7224 /* SampleNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

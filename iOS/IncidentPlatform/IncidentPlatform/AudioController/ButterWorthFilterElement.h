@@ -9,8 +9,7 @@
 #ifndef gTarAudioController_ButterWorthFilterElement_h
 #define gTarAudioController_ButterWorthFilterElement_h
 
-class ButterWorthFilterElement
-{
+class ButterWorthFilterElement {
 public:
     
     // This will calculate the coefficients for the given order, k, cutoff, and sampling frequency provided

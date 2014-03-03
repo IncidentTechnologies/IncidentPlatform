@@ -11,8 +11,9 @@
 #ifndef gTarAudioController_LocalMax_h
 #define gTarAudioController_LocalMax_h
 
-class LocalMax
-{
+#include "RESULT.h"
+
+class LocalMax {
 public:
     LocalMax(double SamplingFrequency);
     

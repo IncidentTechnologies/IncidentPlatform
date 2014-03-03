@@ -25,10 +25,21 @@ public:
     float GetSampleBufferLengthMS();
     RESULT SetStart(float msStart);
     RESULT SetEnd(float msEnd);
+    float GetStart();
+    float GetEnd();
+    
+    RESULT SetTime(float msTime);
+    
+    int GetSampleRate();
+    
+    unsigned long int GetByteSize();
+    void *GetBufferArray();
     
 private:
     RESULT SetStartSample(unsigned long start);
     RESULT SetEndSample(unsigned long end);
+    RESULT SetSample(unsigned long sample);
+    unsigned long GetSampleCount();
     
 private:
     AudioStreamBasicDescription GetClientFormatDescription(bool fStereo);
@@ -56,11 +67,15 @@ public:
     
     RESULT Trigger();
     RESULT Stop();
+    RESULT Resume();
+    RESULT SetTime(float msTime);
     
     // All these are in ms
     float GetLength();
     RESULT SetStart(float msStart);
     RESULT SetEnd(float msEnd);
+    
+    SampleBuffer *GetSampleBuffer();
     
 public:
     SampleBuffer *m_pSampleBuffer;

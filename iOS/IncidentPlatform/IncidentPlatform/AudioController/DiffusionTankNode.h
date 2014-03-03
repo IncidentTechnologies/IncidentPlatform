@@ -25,6 +25,8 @@ public:
     double InputSample(double sample);
     double GetSample(long offset);
     
+    float GetNextSample(unsigned long int timestamp);
+    
 private:
     double m_OutputSumSign;
     long m_delayedSampleIndex;

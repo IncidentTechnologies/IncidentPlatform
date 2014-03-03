@@ -76,6 +76,23 @@ Error:
     return r;
 }
 
+float SampleBuffer::GetStart() {
+    return ((float)m_pBuffer_start * 1000.0f) / (float)m_SampleRate;
+}
+
+float SampleBuffer::GetEnd() {
+    return ((float)m_pBuffer_end * 1000.0f) / (float)m_SampleRate;
+}
+
+int SampleBuffer::GetSampleRate() {
+    return m_SampleRate;
+}
+
+RESULT SampleBuffer::SetTime(float msTime) {
+    float newTimeSample = (msTime / 1000.0f) * (float)m_SampleRate;
+    return SetSample(newTimeSample);
+}
+
 RESULT SampleBuffer::SetStartSample(unsigned long start) {
     RESULT r = R_SUCCESS;
     
@@ -98,6 +115,32 @@ RESULT SampleBuffer::SetEndSample(unsigned long end) {
     
 Error:
     return r;
+}
+
+RESULT SampleBuffer::SetSample(unsigned long sample) {
+    RESULT r = R_SUCCESS;
+    
+    CBRM((sample < m_pBuffer_n), "SampleBuffer: Sample cannot be more than buffer length");
+    CBRM((sample > m_pBuffer_start), "SampleBuffer: Sample before sample start");
+    CBRM((sample < m_pBuffer_end), "SampleBuffer: Sample after sample section end");
+    
+    m_pBuffer_c = sample;
+    
+Error:
+    return r;
+}
+
+unsigned long int SampleBuffer::GetByteSize() {
+    unsigned long int byteSize = m_pBuffer_n * sizeof(float);
+    return byteSize;
+}
+
+void* SampleBuffer::GetBufferArray() {
+    return (void*)m_pBuffer;
+}
+
+unsigned long SampleBuffer::GetSampleCount() {
+    return m_pBuffer_n;
 }
 
 // TODO: Add Stereo
@@ -225,6 +268,12 @@ RESULT SampleNode::Stop() {
     return R_SUCCESS;
 }
 
+// Resume doesn't reset the counter
+RESULT SampleNode::Resume() {
+    m_fPlaying = true;
+    return R_SUCCESS;
+}
+
 RESULT SampleNode::Trigger() {
     m_pSampleBuffer->ResetSampleCounter();
     m_fPlaying = true;
@@ -245,6 +294,10 @@ float SampleNode::GetNextSample(unsigned long int timestamp) {
     return retVal;
 }
 
+SampleBuffer* SampleNode::GetSampleBuffer() {
+    return m_pSampleBuffer;
+}
+
 float SampleNode::GetLength() {
     return m_pSampleBuffer->GetSampleBufferLengthMS();
 }
@@ -255,5 +308,9 @@ RESULT SampleNode::SetStart(float msStart) {
 
 RESULT SampleNode::SetEnd(float msEnd) {
     return m_pSampleBuffer->SetEnd(msEnd);
+}
+
+RESULT SampleNode::SetTime(float msTime) {
+    return m_pSampleBuffer->SetTime(msTime);
 }
 

@@ -9,18 +9,16 @@
 #ifndef gTarAudioController_Reverb_h
 #define gTarAudioController_Reverb_h
 
-#include "Effect.h"
-//#include "DiffusionTank.h"
+#include "EffectNode.h"
 #include "DiffusionTankNode.h"
-#include "FirstOrderFilter.h"
+#include "FirstOrderFilterNode.h"
 
 // Reverberator. Design taken from Jon Datorro's "Effective Design Part 1: 
 // Reverberator and Other Filters". https://ccrma.stanford.edu/~dattorro/EffectDesignPart1.pdf
-class Reverb :
-public Effect
+class ReverbNode : public EffectNode
 {
 public:
-    Reverb(double wet, double SamplingFrequency);
+    ReverbNode(double wet);
     
     inline double InputSample(double sample);
     
@@ -42,12 +40,14 @@ public:
     bool setPrimaryParam(float value);
     bool setSecondaryParam(float value);
     
+    float GetNextSample(unsigned long int timestamp);
+    
     Parameter& getPrimaryParam();
     Parameter& getSecondaryParam();
     Parameter& getLFO();
     Parameter& getExcursion();
     
-    ~Reverb();
+    ~ReverbNode();
     
 private:
     // Input Diffusers
@@ -87,11 +87,11 @@ private:
     double m_decayDiffusion2;
     
     // Filters
-    FirstOrderFilter* m_pBandWidthFilter;
+    FirstOrderFilterNode* m_pBandWidthFilter;
     Parameter *m_pBandwidth;
     float m_currentBandwidth;
-    FirstOrderFilter* m_pDampingFilterL;
-    FirstOrderFilter* m_pDampingFilterR;
+    FirstOrderFilterNode* m_pDampingFilterL;
+    FirstOrderFilterNode* m_pDampingFilterR;
     double m_damping;
     
     // Delay lines

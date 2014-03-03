@@ -1,5 +1,4 @@
 
-
 #include "DiffusionTankNode.h"
 
 DiffusionTankNode::DiffusionTankNode(double msDelayTime, double feedback, bool posOutputSum, double wet):
@@ -19,8 +18,10 @@ double DiffusionTankNode::InputSample(double sample)
         return sample;
     
     m_delayedSampleIndex = m_pDelayLine_c - m_pDelayLine_l;
+    
     if(m_delayedSampleIndex < 0)
         m_delayedSampleIndex = m_delayedSampleIndex + m_pDelayLine_n;
+    
     float delayedSample = m_pDelayLine[m_delayedSampleIndex];
     
     // feedback and feedforward
@@ -44,4 +45,11 @@ double DiffusionTankNode::GetSample(long offset)
         index -= m_pDelayLine_n;
     
     return m_pDelayLine[index];
+}
+
+// Passes the AudioNode::GetNextSample to InputSample which calculates the next output sample
+// and returns it
+float DiffusionTankNode::GetNextSample(unsigned long int timestamp) {
+    float inVal = AudioNode::GetNextSample(timestamp);  // will get the input from all incoming nodes
+    return InputSample(inVal);
 }

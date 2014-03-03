@@ -1,4 +1,6 @@
 #include "LocalMax.h"
+#include <math.h>
+#include <string>
 
 LocalMax::LocalMax(double SamplingFrequency):
     m_SamplingFrequency(SamplingFrequency),
@@ -50,8 +52,7 @@ double LocalMax::GetLocalMax(double sample)
     return m_currentMaxAge;
 }
 
-LocalMax::~LocalMax()
-{
+LocalMax::~LocalMax() {
     delete m_pSampleBuffer;
     m_pSampleBuffer = NULL;
 }

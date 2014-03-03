@@ -9,20 +9,20 @@
 #ifndef gTarAudioController_FirstOrderFilter_h
 #define gTarAudioController_FirstOrderFilter_h
 
-#include "Effect.h"
+#include "EffectNode.h"
 
 /*
  A simple filter that feeds back the previous sample times
  a feedback factor and adds it to the current sample.
  */
-class FirstOrderFilter :
-public Effect
-{
+class FirstOrderFilterNode : public EffectNode {
 public:
-    FirstOrderFilter(double feedback, double wet, double SamplingFrequency);
+    FirstOrderFilterNode(double feedback, double wet);
     
     inline double InputSample(double sample);
     bool SetFeedback(double feedback);
+    
+    float GetNextSample(unsigned long int timestamp);
     
 private:
     double m_previousSample;

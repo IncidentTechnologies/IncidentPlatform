@@ -15,8 +15,14 @@
 #include "EnvelopeNode.h"
 #include "SampleNode.h"
 #include "EffectNode.h"
-#include "DelayNode.h"
+
 #include "AudioNodeNetwork.h"
 #include "SamplerNode.h"
+
+// Effects
+#include "DelayNode.h"
+#include "DiffusionTankNode.h"
+#include "FirstOrderFilterNode.h"
+#include "ReverbNode.h"
 
 #endif

@@ -10,8 +10,7 @@ using namespace dss;
 
 class XMPNode {
 public:
-    XMPNode(char *pszName, XMPNode *Parent = NULL, char *pszContent = NULL, void *pDataBuffer = NULL, long int DataBuffer_s = 0); 
-
+    XMPNode(char *pszName, XMPNode *Parent = NULL, char *pszContent = NULL, void *pDataBuffer = NULL, long int DataBuffer_s = 0);
     ~XMPNode();
 
     RESULT AddChild(XMPNode *child);
