@@ -155,7 +155,8 @@ RESULT XMPParser::ExtractAttributes( char* pszToken, list<XMPElement*> *plistEle
                 }
                 else if(xetTemp == XMP_INVALID)
                 {
-                    xetTemp = XMP_END_TAG;
+                    if(pszToken[i + 1] == '>')  // Doubt this will be an issue, but ensures that we only close a tag when / is followed by >
+                        xetTemp = XMP_END_TAG;
                 }                    
                 else if(xetTemp == XMP_START_TAG)
                 {
@@ -163,12 +164,11 @@ RESULT XMPParser::ExtractAttributes( char* pszToken, list<XMPElement*> *plistEle
                 }
                 else
                 {
-                    printf("Error!\n");
+                    printf("Warn '\\' char found where it doesn't belong! \n");
                 }
             } break;   
 
-        default:
-            {
+        default: {
                 *pTokenBuffer += CurChar;
             } break;
         }
@@ -211,8 +211,7 @@ Error:
     return pszReturn;
 }
 
-char * XMPParser::RemoveWhitespacePads( char* &dr_pszSrc )
-{
+char * XMPParser::RemoveWhitespacePads( char* &dr_pszSrc ) {
     int FirstChar = 0;
     int LastChar = 0;
     char *pszReturn = NULL;

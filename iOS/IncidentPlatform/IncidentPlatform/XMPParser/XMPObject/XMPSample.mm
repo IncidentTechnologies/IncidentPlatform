@@ -15,19 +15,32 @@
 -(id) initWithXMPNode:(XMPNode*)xmpNode {
     RESULT r = R_SUCCESS;
     
-    XMPValue xmpValString;
-    XMPValue xmpValFret;
-    NSString *tempString = NULL;
-    
     m_xmpNode = xmpNode;
     CPRM((self = [self init]), "initWithParentLesson: Failed to init");
     m_type = XMP_OBJECT_SAMPLE;
     
-    // Create the sample buffer here from the data (base64 encoding)
+    [self ConstructSample];
     
     return self;
 Error:
     return NULL;
+}
+
+-(RESULT)ConstructSample {
+    RESULT r = R_SUCCESS;
+    
+    float starttime, endtime;
+    int samplerate;
+    
+    [self GetXMPValueOfChild:@"starttime" withAttribute:@"value"].GetValueDouble((double*)(&starttime));
+    [self GetXMPValueOfChild:@"endtime" withAttribute:@"value"].GetValueDouble((double*)(&endtime));
+    [self GetXMPValueOfChild:@"samplerate" withAttribute:@"value"].GetValueInt((long*)(&samplerate));
+    
+    //XMPObject *tempData = [self GetChildWithName:@"data"];
+    //int a = 5;
+    
+Error:
+    return r;
 }
 
 -(id) initWithSampleBuffer:(SampleBuffer*)sampleBuffer {
@@ -73,16 +86,19 @@ Error:
     xmpTree->NavigateToChildName("samplerate");
     xmpTree->AddAttributeByNameValue("value", (char *)[[NSString stringWithFormat:@"%d", m_SampleBuffer->GetSampleRate()] UTF8String]);
     xmpTree->NavigateToParent();
+
+    // push over the data
+    NSData *bufferData = [NSData dataWithBytes:m_SampleBuffer->GetBufferArray() length:m_SampleBuffer->GetByteSize()];
+    NSString *strData = [bufferData base64EncodedStringWithOptions:0];
     
     // Create the data
     xmpTree->AddChildByName("data");
     xmpTree->NavigateToChildName("data");
     xmpTree->AddAttributeByNameValue("datasize", (char *)[[NSString stringWithFormat:@"%lu", m_SampleBuffer->GetByteSize()] UTF8String]);
     xmpTree->AddAttributeByNameValue("dataencoding", "base64");
-
-    // push over the data
-    NSData *bufferData = [NSData dataWithBytes:m_SampleBuffer->GetBufferArray() length:m_SampleBuffer->GetByteSize()];
-    xmpTree->AppendContent((char *)[[bufferData base64EncodedStringWithOptions:0] UTF8String]);
+    xmpTree->AddAttributeByNameValue("length", (char *)[[NSString stringWithFormat:@"%d", [strData length]] UTF8String]);
+    
+    xmpTree->AppendContent((char *) [strData UTF8String]);
     xmpTree->NavigateToParent();
     
     xmpTree->PrintXMPTree();

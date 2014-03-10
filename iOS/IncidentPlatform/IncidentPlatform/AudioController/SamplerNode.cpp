@@ -33,6 +33,16 @@ Error:
     return r;
 }
 
+RESULT SamplerBankNode::SetSampleGain(int sample, float gain) {
+    RESULT r = R_SUCCESS;
+    
+    CBRM((sample < m_samples.length()), "SamplerBankNode: Not that many samples!");
+    m_samples[sample]->SetChannelGain(gain, CONN_OUT);
+    
+Error:
+    return r;
+}
+
 SampleNode* SamplerBankNode::GetSample(int sample) {
     if(sample < m_samples.length())
         return m_samples[sample];
@@ -129,6 +139,16 @@ RESULT SamplerNode::TriggerBankSample(int bank, int sample) {
     
     CBRM((bank < m_banks.length()), "SamplerNode: Not that many banks!");
     CRM(m_banks[bank]->TriggerSample(sample), "SamplerNode: Failed to trigger sample in bank");
+    
+Error:
+    return r;
+}
+
+RESULT SamplerNode::SetBankGain(int bank, float gain) {
+    RESULT r = R_SUCCESS;
+    
+    CBRM((bank < m_banks.length()), "SamplerNode: Not that many banks!");
+    m_banks[bank]->SetChannelGain(gain, CONN_OUT);
     
 Error:
     return r;

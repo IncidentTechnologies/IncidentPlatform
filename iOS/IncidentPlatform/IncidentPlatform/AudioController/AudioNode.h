@@ -53,6 +53,9 @@ public:
     RESULT ConnectInput(int inputChannel, AudioNode *inputNode, int outputChannel);
     
     RESULT DeleteAndDisconnect(CONN_TYPE type);
+    
+    RESULT SetChannelGain(int chan, float gain, CONN_TYPE type);
+    RESULT SetChannelGain(float gain, CONN_TYPE type);
    
 public:
     int m_SampleRate;

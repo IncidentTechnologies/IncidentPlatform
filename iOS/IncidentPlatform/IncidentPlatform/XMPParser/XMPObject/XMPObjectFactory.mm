@@ -25,6 +25,9 @@
 #import "XMPNote.h"
 #import "XMPMeasure.h"
 
+#import "XMPSample.h"
+#import "XMPData.h"
+
 @implementation XMPObjectFactory
 
 /*
@@ -95,6 +98,12 @@ Error:
     }
     else if(strcmp(pszName, (char*)"song") == 0) {
         retObj = [[XMPSong alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"sample") == 0) {
+        retObj = [[XMPSample alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"data") == 0) {
+        retObj = [[XMPData alloc] initWithXMPNode:xmpNode];
     }
     else {
         retObj = [[XMPObject alloc] initWithXMPNode:xmpNode];

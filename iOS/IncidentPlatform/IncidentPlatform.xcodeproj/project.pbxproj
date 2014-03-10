@@ -144,6 +144,9 @@
 		264EC77A18B4581B001F7224 /* AudioNodeNetwork.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77818B456E6001F7224 /* AudioNodeNetwork.h */; };
 		264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 264EC77B18B55208001F7224 /* SamplerNode.cpp */; };
 		2652382618C4C51900E38BA5 /* XMPSample.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 266A221918BEE7A9007027C1 /* XMPSample.h */; };
+		2652382918C4D25B00E38BA5 /* XMPParser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605802D18691DE800F6668F /* XMPParser.h */; };
+		2652382A18C4D25B00E38BA5 /* XMPTokenizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605803118691DE800F6668F /* XMPTokenizer.h */; };
+		2652382B18C4D27200E38BA5 /* valid.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605800818691DE800F6668F /* valid.h */; };
 		266A221B18BEE7A9007027C1 /* XMPSample.mm in Sources */ = {isa = PBXBuildFile; fileRef = 266A221A18BEE7A9007027C1 /* XMPSample.mm */; };
 		26A5131518873B1700478200 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26A5131418873B1700478200 /* Cocoa.framework */; };
 		26A5131F18873B1700478200 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26A5131D18873B1700478200 /* InfoPlist.strings */; };
@@ -160,6 +163,7 @@
 		26EBC39718ADB70D0068BEC6 /* WavetableNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F12818AD6A31003F5CEB /* WavetableNode.h */; };
 		26EBC39818ADB7230068BEC6 /* EnvelopeNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */; };
 		26EBC39918ADB7230068BEC6 /* GeneratorNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11418AD6A31003F5CEB /* GeneratorNode.h */; };
+		26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26F72A9C18C9B16800D2D560 /* XMPData.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +183,9 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				2652382B18C4D27200E38BA5 /* valid.h in CopyFiles */,
+				2652382918C4D25B00E38BA5 /* XMPParser.h in CopyFiles */,
+				2652382A18C4D25B00E38BA5 /* XMPTokenizer.h in CopyFiles */,
 				2652382618C4C51900E38BA5 /* XMPSample.h in CopyFiles */,
 				26CC24A718BDC7A200716750 /* FirstOrderFilterNode.h in CopyFiles */,
 				26CC24A618BDC67000716750 /* ReverbNode.h in CopyFiles */,
@@ -521,6 +528,8 @@
 		26A5132E188762C200478200 /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 		26A513301887664600478200 /* GLES2MeshObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLES2MeshObj.h; path = GLES2/GLES2MeshObj.h; sourceTree = "<group>"; };
 		26A513331887985000478200 /* MatrixFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixFactory.h; sourceTree = "<group>"; };
+		26F72A9B18C9B16800D2D560 /* XMPData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPData.h; sourceTree = "<group>"; };
+		26F72A9C18C9B16800D2D560 /* XMPData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPData.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -692,6 +701,8 @@
 		2605801118691DE800F6668F /* XMPObject */ = {
 			isa = PBXGroup;
 			children = (
+				26F72A9B18C9B16800D2D560 /* XMPData.h */,
+				26F72A9C18C9B16800D2D560 /* XMPData.mm */,
 				266A221918BEE7A9007027C1 /* XMPSample.h */,
 				266A221A18BEE7A9007027C1 /* XMPSample.mm */,
 				2605801218691DE800F6668F /* XMPGtarNote.h */,
@@ -1253,6 +1264,7 @@
 				2647908018692BA50077987F /* MeshMd3.cpp in Sources */,
 				264EC76C18B30741001F7224 /* AudioNodeFactory.mm in Sources */,
 				264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */,
+				26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */,
 				2610F12D18AD6A31003F5CEB /* AUMixerNode.mm in Sources */,
 				2610F13018AD6A31003F5CEB /* ButterWorthFilterElement.mm in Sources */,
 				2610F14518AD6A31003F5CEB /* TanhDistortion.mm in Sources */,

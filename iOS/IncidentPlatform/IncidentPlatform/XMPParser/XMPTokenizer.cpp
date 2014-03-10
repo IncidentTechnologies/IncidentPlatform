@@ -144,6 +144,8 @@ RESULT XMPTokenizer::TokenizeFile( const char* XMPTokenizerDelims )
         pTextToken->pszContent = TokenizerTemp;
         m_pTokenList->Append(pTextToken);
         
+        /*
+        // TODO: do this or get rid of it?
         // Make sure there are elements
         if(pTempParser->GetElementList()->length() > 0) {
 
@@ -168,6 +170,7 @@ RESULT XMPTokenizer::TokenizeFile( const char* XMPTokenizerDelims )
                 m_pTokenList->Append(pDataToken);
             }
         }
+         */
 
         TokenizerTemp = filetok(m_pFile, XMPTokenizerDelims);
 

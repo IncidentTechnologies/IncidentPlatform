@@ -19,5 +19,6 @@ class SampleBuffer;
 -(id) initWithSampleBuffer:(SampleBuffer*)sampleBuffer;
 
 -(RESULT) CreateXMPTreeAndSaveToFile:(char *)pszFilename andOverwrite:(BOOL)fOverwrite;
+-(RESULT) ConstructSample;
 
 @end

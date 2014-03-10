@@ -61,7 +61,7 @@ float AudioNodeConnection::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
 
     for(list<AudioNodeConnection*>::iterator it = m_connections->First(); it != NULL; it++) {
-        retVal += (*it)->m_node->GetNextSample(timestamp);
+        retVal += ((*it)->m_node->GetNextSample(timestamp)) * (*it)->m_gain;
     }
 
     
@@ -87,7 +87,7 @@ float AudioNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
     for(int i = 0; i < m_channel_in_n; i++) {
-        retVal += m_inputs[i]->GetNextSample(timestamp);
+        retVal += (m_inputs[i]->GetNextSample(timestamp));
     }
     
     return retVal;
@@ -172,6 +172,33 @@ RESULT AudioNode::SetChannelCount(int channel_n, CONN_TYPE type) {
        
 Error:
     return r;
+}
+
+RESULT AudioNode::SetChannelGain(int chan, float gain, CONN_TYPE type) {
+    RESULT r = R_SUCCESS;
+    
+    if(type == CONN_OUT) {
+        CBR((chan < m_channel_out_n));
+        m_outputs[chan]->m_gain = gain;
+    }
+    else if(type == CONN_IN) {
+        CBR((chan < m_channel_in_n));
+        m_inputs[chan]->m_gain = gain;
+    }
+    
+Error:
+    return r;
+}
+
+RESULT AudioNode::SetChannelGain(float gain, CONN_TYPE type) {
+    if(type == CONN_OUT)
+        for(int i = 0; i < m_channel_out_n; i++)
+            m_outputs[i]->m_gain = gain;
+    else if(type == CONN_IN)
+        for(int i = 0; i < m_channel_in_n; i++)
+            m_inputs[i]->m_gain = gain;
+    
+    return R_SUCCESS;
 }
 
 AudioNodeConnection* AudioNode::GetChannel(int chan, CONN_TYPE type) {

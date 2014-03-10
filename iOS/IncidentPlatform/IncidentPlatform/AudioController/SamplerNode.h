@@ -27,6 +27,8 @@ public:
     
     RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
     
+    RESULT SetSampleGain(int sample, float gain);
+    
 public:
     SampleNode*& operator[](const int& i);
     
@@ -44,6 +46,8 @@ public:
     
     RESULT CreateNewBank(SamplerBankNode* &outBank);
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
+    
+    RESULT SetBankGain(int bank, float gain);
     
 public:
     SamplerBankNode*& operator[](const int& i);
