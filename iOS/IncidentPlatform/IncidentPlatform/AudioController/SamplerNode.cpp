@@ -118,6 +118,21 @@ SamplerNode::~SamplerNode() {
     }
 }
 
+RESULT SamplerNode::ReleaseBank(SamplerBankNode* &bank) {
+    RESULT r = R_SUCCESS;
+    
+    CNRM(bank, "ReleaseBank: Bank to release is NULL");
+    CRM(m_banks.Remove(bank, GET_BY_ITEM), "ReleaseBank: Bank does not exist in sampler");
+    
+    if(bank != NULL) {
+        delete bank;
+        bank = NULL;
+    }
+    
+Error:
+    return r;
+}
+
 RESULT SamplerNode::ReleaseBank(int bank) {
     RESULT r = R_SUCCESS;
     

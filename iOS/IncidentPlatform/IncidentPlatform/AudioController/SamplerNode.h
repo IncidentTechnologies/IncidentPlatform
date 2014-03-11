@@ -49,6 +49,7 @@ public:
     SampleNode *GetBankSample(int bank, int sample);
     
     RESULT ReleaseBank(int bank);
+    RESULT ReleaseBank(SamplerBankNode* &bank);
     
     RESULT CreateNewBank(SamplerBankNode* &outBank);
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
