@@ -11,11 +11,14 @@
 
 #include "AudioNodeNetwork.h"
 #include "dss_list.h"
+
 class SampleNode;
 
 // A sampler is a collection of Sample nodes mixed into
 // a bank, and all the banks are mixed into the output
 // node.
+
+using namespace dss;
 
 class SamplerBankNode : public AudioNodeNetwork {
 public:
@@ -28,12 +31,13 @@ public:
     RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
     
     RESULT SetSampleGain(int sample, float gain);
+    RESULT SetBankGain(float gain);
     
 public:
     SampleNode*& operator[](const int& i);
     
 public:
-    list<SampleNode*> m_samples;
+    dss::list<SampleNode*> m_samples;
 };
 
 class SamplerNode : public AudioNodeNetwork {
@@ -44,6 +48,8 @@ public:
     RESULT TriggerBankSample(int bank, int sample);
     SampleNode *GetBankSample(int bank, int sample);
     
+    RESULT ReleaseBank(int bank);
+    
     RESULT CreateNewBank(SamplerBankNode* &outBank);
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
     
@@ -53,7 +59,7 @@ public:
     SamplerBankNode*& operator[](const int& i);
     
 public:
-    list<SamplerBankNode*> m_banks;
+    dss::list<SamplerBankNode*> m_banks;
 };
 
 #endif /* defined(__IncidentPlatform__SamplerNode__) */

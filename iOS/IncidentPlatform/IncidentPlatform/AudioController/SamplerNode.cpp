@@ -20,7 +20,11 @@ SamplerBankNode::SamplerBankNode() :
 }
 
 SamplerBankNode::~SamplerBankNode() {
-    /* empty stub */
+    while(m_samples.length() > 0) {
+        SampleNode *tempNode = m_samples.Pop();
+        delete tempNode;
+        tempNode = NULL;
+    }
 }
 
 RESULT SamplerBankNode::TriggerSample(int sample) {
@@ -41,6 +45,11 @@ RESULT SamplerBankNode::SetSampleGain(int sample, float gain) {
     
 Error:
     return r;
+}
+
+RESULT SamplerBankNode::SetBankGain(float gain) {
+    this->SetChannelGain(gain, CONN_OUT);
+    return R_SUCCESS;
 }
 
 SampleNode* SamplerBankNode::GetSample(int sample) {
@@ -102,7 +111,27 @@ SamplerNode::SamplerNode() :
 }
 
 SamplerNode::~SamplerNode() {
-    /* empty stub */
+    while(m_banks.length() > 0) {
+        SamplerBankNode *tempNode = m_banks.Pop();
+        delete tempNode;
+        tempNode = NULL;
+    }
+}
+
+RESULT SamplerNode::ReleaseBank(int bank) {
+    RESULT r = R_SUCCESS;
+    
+    SamplerBankNode *node = NULL;
+    CRM(m_banks.Remove(node, (void*)(&bank), GET_BY_POSITION), "SamplerNode: Failed to release bank %d", bank);
+    CNRM(node, "SampleNode: Failed to acquire bank %d", bank);
+    
+    if(node != NULL) {
+        delete node;
+        node = NULL;
+    }
+    
+Error:
+    return r;
 }
 
 RESULT SamplerNode::CreateNewBank(SamplerBankNode* &outBank){

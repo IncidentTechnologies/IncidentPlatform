@@ -20,6 +20,13 @@ SampleBuffer::SampleBuffer(char *pszFilenamePath) :
     LoadSampleBufferFromPath(pszFilenamePath);
 }
 
+SampleBuffer::~SampleBuffer() {
+    if(m_pBuffer != NULL) {
+        free(m_pBuffer);
+        m_pBuffer = NULL;
+    }
+}
+
 bool SampleBuffer::SampleDone() {
     return (m_pBuffer_c >= m_pBuffer_end);
 }

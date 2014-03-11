@@ -327,7 +327,8 @@ Error:
                 } break;
 
                 case GET_BY_ITEM: {
-                    while(node->m_Item != *((T*)(pLocation)))
+                    //while(node->m_Item != *((T*)(pLocation)))
+                    while((void *)(node->m_Item) != (pLocation))
                     {
                       node = node->m_pNextItem;
                       if(node == NULL)
@@ -438,7 +439,12 @@ Error:
 		else {
 			listNode<T> *cur;			
 			CR(GetNode(cur, pLocation, gbt));
-			CR(DeleteNode(cur));			
+            
+            if(cur != NULL) {
+                CR(DeleteNode(cur));
+            }
+            else
+                return R_LIST_ITEM_NOT_FOUND;
 		}
 Error:		
 		return r;
@@ -454,8 +460,13 @@ Error:
 		else {
 			listNode<T> *cur;
 			CR(GetNode(cur, pLocation, gbt));
-            obj = cur->m_Item;
-			CR(DeleteNode(cur));
+            
+            if(cur != NULL) {
+                obj = cur->m_Item;
+                CR(DeleteNode(cur));
+            }
+            else
+                return R_LIST_ITEM_NOT_FOUND;
 		}
     Error:
 		return r;

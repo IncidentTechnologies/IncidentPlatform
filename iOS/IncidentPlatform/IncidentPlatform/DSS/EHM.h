@@ -42,7 +42,7 @@ typedef unsigned long DWORD;
 
 // Check RESULT value
 // Ensures that RESULT is successful
-#define CR(res) r = r; if(res < 0){ DEBUG_MSG(CurrentFileLine); DEBUG_MSG("Error: 0x%x\n", r); goto Error;}
+#define CR(res) r = res; if(r & 0x80000000){ DEBUG_MSG(CurrentFileLine); DEBUG_MSG("Error: 0x%x\n", r); goto Error;}
 
 // Check RESULT value
 // Ensures that RESULT is successful

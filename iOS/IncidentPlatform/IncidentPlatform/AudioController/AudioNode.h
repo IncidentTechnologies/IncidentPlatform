@@ -56,6 +56,11 @@ public:
     
     RESULT SetChannelGain(int chan, float gain, CONN_TYPE type);
     RESULT SetChannelGain(float gain, CONN_TYPE type);
+    
+    int GetID();
+    
+public:
+    static int GetUniqueId();
    
 public:
     int m_SampleRate;

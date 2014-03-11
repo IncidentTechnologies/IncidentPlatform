@@ -30,7 +30,9 @@ RESULT AudioNodeConnection::Disconnect(AudioNodeConnection* audioConn) {
     RESULT r = R_SUCCESS;
     
     // Remove from connection list
-    CR(m_connections->Remove((void*)(audioConn), GET_BY_ITEM));
+    if(m_connections != NULL && m_connections->length() > 0) {
+        CRM(m_connections->Remove((void*)(audioConn), GET_BY_ITEM), "Failed to disconnect node %d from connections", audioConn->m_node->GetID());
+    }
     
 Error:
     return r;
@@ -40,8 +42,16 @@ RESULT AudioNodeConnection::Disconnect() {
     RESULT r = R_SUCCESS;
     
     // Remove from all connections
-    for(list<AudioNodeConnection*>::iterator it = m_connections->First(); it != NULL; it++) {
+    /*for(list<AudioNodeConnection*>::iterator it = m_connections->First(); it != NULL; it++) {
         CR((*it)->Disconnect(this));
+    }*/
+    
+    while(m_connections->length() > 0) {
+        AudioNodeConnection *tempConn = m_connections->Pop();
+        
+        DEBUG_LINEOUT("Disconnecting node %d from node %d", this->m_node->GetID(), tempConn->m_node->GetID());
+        
+        tempConn->Disconnect(this);
     }
     
 Error:
@@ -51,7 +61,8 @@ Error:
 RESULT AudioNodeConnection::Connect(AudioNodeConnection* audioConn) {
     RESULT r = R_SUCCESS;
     
-    CR(m_connections->Push(audioConn));
+    CRM(m_connections->Append(audioConn), "Failed to connect node %d to node %d", this->m_node->GetID(), audioConn->m_node->GetID());
+    DEBUG_LINEOUT("Connecting node %d to node %d", this->m_node->GetID(), audioConn->m_node->GetID());
     
 Error:
     return r;
@@ -78,9 +89,10 @@ AudioNode::AudioNode() :
     m_channel_out_n(0),
     m_SampleRate(DEFAULT_SAMPLE_RATE),
     m_inputs(NULL),
-    m_outputs(NULL)
+    m_outputs(NULL),
+    m_id(0)
 {
-    /* empty stub */
+    m_id = AudioNode::GetUniqueId();
 }
 
 float AudioNode::GetNextSample(unsigned long int timestamp) {
@@ -91,6 +103,15 @@ float AudioNode::GetNextSample(unsigned long int timestamp) {
     }
     
     return retVal;
+}
+
+int AudioNode::GetUniqueId() {
+    static int uid = 0;
+    return uid++;
+}
+           
+int AudioNode::GetID() {
+    return  m_id;
 }
 
 RESULT AudioNode::DeleteAndDisconnect(CONN_TYPE type) {
@@ -104,7 +125,7 @@ RESULT AudioNode::DeleteAndDisconnect(CONN_TYPE type) {
     if(connList != NULL) {
         for(int i = 0; i < channels; i++) {
             connList[i]->Disconnect();
-            delete connList[i];
+            //delete connList[i];
             connList[i] = NULL;
         }
         
@@ -117,7 +138,15 @@ Error:
 }
 
 AudioNode::~AudioNode() {
+    if(m_outputs != NULL) {
+        DeleteAndDisconnect(CONN_OUT);
+        m_outputs = NULL;
+    }
     
+    if(m_inputs != NULL) {
+        DeleteAndDisconnect(CONN_IN);
+        m_inputs = NULL;
+    }
 }
 
 // Setting the channel will disconnect all current connections
@@ -227,7 +256,9 @@ RESULT AudioNode::ConnectInput(int inputChannel, AudioNode *inputNode, int outpu
     CBRM((inConn != NULL), "AudioNode: Input channel not found");
     CBRM((outConn != NULL), "AudioNode: Output channel not found");
     
-    return inConn->Connect(outConn);
+    // Connect the two
+    CRM(inConn->Connect(outConn), "Failed to connect output %d to input %d", outConn->m_node->GetID(), inConn->m_node->GetID());
+    CRM(outConn->Connect(inConn), "Failed to connect input %d to output %d", inConn->m_node->GetID(), outConn->m_node->GetID());
     
 Error:
     return r;

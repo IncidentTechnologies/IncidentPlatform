@@ -17,6 +17,7 @@
 class SampleBuffer {
 public:
     SampleBuffer(char *pszFilename);
+    ~SampleBuffer();
     
     float GetNextSample(unsigned long int timestamp);
     RESULT ResetSampleCounter();
