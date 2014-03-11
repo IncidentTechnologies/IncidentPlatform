@@ -50,6 +50,7 @@ public:
     
     RESULT ReleaseBank(int bank);
     RESULT ReleaseBank(SamplerBankNode* &bank);
+    RESULT RemoveBank(SamplerBankNode *bank);
     
     RESULT CreateNewBank(SamplerBankNode* &outBank);
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
