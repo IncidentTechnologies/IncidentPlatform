@@ -7,7 +7,7 @@
 //
 
 #include "SampleNode.h"
-
+#include "CAXException.h"
 
 SampleBuffer::SampleBuffer(char *pszFilenamePath) :
     m_pBuffer_c(0),
@@ -150,6 +150,11 @@ unsigned long SampleBuffer::GetSampleCount() {
     return m_pBuffer_n;
 }
 
+// Slightly different than Sample Count, this will count the start/end samples
+unsigned long SampleBuffer::GetStartStopSampleCount() {
+    return m_pBuffer_end - m_pBuffer_start;
+}
+
 // TODO: Add Stereo
 AudioStreamBasicDescription SampleBuffer::GetClientFormatDescription(bool fStereo) {
     AudioStreamBasicDescription ClientDataFormat;
@@ -167,6 +172,101 @@ AudioStreamBasicDescription SampleBuffer::GetClientFormatDescription(bool fStere
     ClientDataFormat.mSampleRate        = m_SampleRate;
     
     return ClientDataFormat;
+}
+
+// Currentlt configured for m4a
+RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
+    RESULT r = R_SUCCEED;
+    
+    ExtAudioFileRef outfileRef;
+    
+    CFStringRef cfstrPath = CFStringCreateWithCStringNoCopy(NULL, pszFilepath, kCFStringEncodingMacRoman, NULL);
+    CFURLRef outputFileURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
+                                                          cfstrPath,
+                                                          kCFURLPOSIXPathStyle,
+                                                          false);
+ 
+    // Create the file
+    AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
+
+    AudioFileTypeID fileType = kAudioFileM4AType;
+    AudioStreamBasicDescription OutputDataFormat;
+    memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
+    OutputDataFormat.mSampleRate         = 44100.0;
+    OutputDataFormat.mFormatID           = kAudioFormatMPEG4AAC;
+    OutputDataFormat.mFormatFlags        = kMPEG4Object_AAC_Main;
+    OutputDataFormat.mChannelsPerFrame   = 1;
+    OutputDataFormat.mBytesPerPacket     = 0;
+    OutputDataFormat.mBytesPerFrame      = 0;
+    OutputDataFormat.mFramesPerPacket    = 1024;
+    OutputDataFormat.mBitsPerChannel     = 0;
+    OutputDataFormat.mReserved           = 0;
+    
+    
+    UInt32 flags = (fOverwrite) ? kAudioFileFlags_EraseFile : 0;
+    OSStatus status = ExtAudioFileCreateWithURL(outputFileURL,
+                                                fileType,
+                                                &OutputDataFormat,
+                                                NULL,
+                                                flags,
+                                                &outfileRef);
+    if(status) {
+        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+    }
+    
+    // Tell the ExtAudioFile API what format we'll be sending samples in
+    status = ExtAudioFileSetProperty(outfileRef,
+                                     kExtAudioFileProperty_ClientDataFormat,
+                                     sizeof(AudioStreamBasicDescription),
+                                     &LocalDataFormat);
+    
+    if (status) {
+        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+    }
+    
+    // Create the audio buffer and copy
+    AudioSampleType *pAudioSampleBuffer;
+    pAudioSampleBuffer = (AudioSampleType*)malloc(sizeof(AudioSampleType) * GetStartStopSampleCount());
+    
+    for(int i = m_pBuffer_start; i < m_pBuffer_end; i++) {
+        pAudioSampleBuffer[i - m_pBuffer_start] = m_pBuffer[i] * 32767.0f;
+    }
+    
+    // Set up the audio bufer list
+    AudioBufferList *pAudioData = new AudioBufferList();
+    pAudioData->mNumberBuffers = 1;
+    pAudioData->mBuffers[0].mNumberChannels = LocalDataFormat.mChannelsPerFrame;
+    pAudioData->mBuffers[0].mDataByteSize = GetStartStopSampleCount() * LocalDataFormat.mBytesPerFrame; //totalFramesInFile * srcFormat.mBytesPerFrame;
+    pAudioData->mBuffers[0].mData = pAudioSampleBuffer;
+    
+    UInt32 numberOfFramesToWrite = (UInt32) GetStartStopSampleCount();
+    status = ExtAudioFileWrite (outfileRef,
+                                numberOfFramesToWrite,
+                                pAudioData);
+    
+    if(status) {
+        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+    }
+    
+    // close the file
+    status = ExtAudioFileDispose(outfileRef);
+    if(status) {
+        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+    }
+    
+    // Kill the AudioBufferList
+    if(pAudioData != NULL) {
+        delete pAudioData;
+        pAudioData = NULL;
+    }
+    
+    if(pAudioSampleBuffer != NULL) {
+        free(pAudioSampleBuffer);
+        pAudioSampleBuffer = NULL;
+    }
+    
+Error:
+    return r;
 }
 
 RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
@@ -260,6 +360,15 @@ SampleNode::SampleNode(char *pszFilenamePath) :
 {
     SetChannelCount(1, CONN_OUT);
     m_pSampleBuffer = new SampleBuffer(pszFilenamePath);
+}
+
+RESULT SampleNode::SaveToFile(char *pszFilepath, bool fOverwrite) {
+    RESULT r = R_SUCCEED;
+    
+    CRM(m_pSampleBuffer->SaveToFile(pszFilepath, fOverwrite), "SaveToFile: Buffer failed to save filepath %s", pszFilepath);
+    
+Error:
+    return r;
 }
 
 SampleNode::~SampleNode() {

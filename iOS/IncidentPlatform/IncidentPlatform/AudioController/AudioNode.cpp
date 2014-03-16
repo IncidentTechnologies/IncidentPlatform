@@ -68,7 +68,7 @@ Error:
     return r;
 }
 
-float AudioNodeConnection::GetNextSample(unsigned long int timestamp) {
+inline float AudioNodeConnection::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
 
     for(list<AudioNodeConnection*>::iterator it = m_connections->First(); it != NULL; it++) {

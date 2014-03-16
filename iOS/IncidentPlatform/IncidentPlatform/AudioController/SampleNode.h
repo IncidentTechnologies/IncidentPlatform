@@ -41,10 +41,14 @@ private:
     RESULT SetEndSample(unsigned long end);
     RESULT SetSample(unsigned long sample);
     unsigned long GetSampleCount();
+    unsigned long GetStartStopSampleCount();
     
 private:
     AudioStreamBasicDescription GetClientFormatDescription(bool fStereo);
     RESULT LoadSampleBufferFromPath(char *pszPath);
+    
+public:
+    RESULT SaveToFile(char *pszFilepath, bool fOverwrite);
     
 private:
     int m_SampleRate;
@@ -65,6 +69,8 @@ public:
     ~SampleNode();
     
     float GetNextSample(unsigned long int timestamp);
+    
+    RESULT SaveToFile(char *pszFilepath, bool fOverwrite);
     
     RESULT Trigger();
     RESULT Stop();
