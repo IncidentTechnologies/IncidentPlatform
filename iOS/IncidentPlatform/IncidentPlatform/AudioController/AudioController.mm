@@ -53,7 +53,7 @@
         
         [AUAudioNodeFactory InitWithAudioController:self];
         [self initializeAUGraph];
-        [self RouteAudioToSpeaker]; 
+        //[self RouteAudioToSpeaker];
     }
     
     return self;
@@ -233,6 +233,26 @@ void AudioInterruptionListener (void *inClientData, UInt32 inInterruptionState) 
 	// Now call initialize to verify connections
 	result = AUGraphInitialize(augraph);
     NSLog(@"AudioController: AUGraphInitialize: %s", CAX4CCString(result).get());
+}
+
+- (BOOL) SetVolume:(float)volume {
+    if(volume < 0.0f || volume > 1.0f) {
+        NSLog(@"Can't set volume outside [0.0f, 1.0f]");
+        return false;
+    }
+    
+    OSStatus status = [m_networkNode SetVolume:volume];
+    
+    if(status) {
+        NSLog(@"Error setting volume 0x%x", status);
+        return false;
+    }
+    else {
+        NSLog(@"Set volume to %f", volume);
+        return true;
+    }
+    
+    return false;
 }
 
 // Stops the render

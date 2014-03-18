@@ -43,6 +43,8 @@
 
 - (AUNodeNetwork*) GetNodeNetwork;
 
+- (BOOL) SetVolume:(float)volume;
+
 /*
 - (bool) setSamplePackWithName:(NSString*)name;
 - (void) setSamplePackWithName:(NSString*)name withSelector:(SEL)aSelector andOwner:(NSObject*)parent;

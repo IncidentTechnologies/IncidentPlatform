@@ -26,4 +26,7 @@ class CAStreamBasicDescription;
 - (AUNode*) GetNode;
 - (OSStatus) ConnectOutput:(int)outChannel toInput:(AUAudioNode*)inNode channel:(int)inChannel;
 
+// No way to do this for all devices
+//- (OSStatus) SetVolume:(float)volume;
+
 @end

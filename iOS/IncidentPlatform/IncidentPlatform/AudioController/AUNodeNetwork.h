@@ -18,6 +18,7 @@ class AudioNode;
 @interface AUNodeNetwork : AUAudioNode {
     unsigned long int m_timestamp;
     AudioNode *m_rootNode;
+    float m_volume;
 }
 
 - (unsigned long int) resetTimestamp;
@@ -28,5 +29,7 @@ class AudioNode;
 - (OSStatus) Initialize;
 
 - (AudioNode*) GetRootNode;
+
+- (OSStatus) SetVolume:(float)volume;
 
 @end

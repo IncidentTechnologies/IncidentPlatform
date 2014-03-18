@@ -15,5 +15,6 @@
 }
 
 - (id) initWithAudioController:(AudioController*)ac;
+- (OSStatus) SetVolume:(float)volume;
 
 @end

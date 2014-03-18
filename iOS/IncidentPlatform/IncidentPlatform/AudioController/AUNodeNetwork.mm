@@ -35,6 +35,8 @@
         
         OSStatus status = AUGraphAddNode(*(m_pAUGraph), &m_description, &m_node);
         NSLog(@"Add AUOutput Node: %s", CAX4CCString(status).get());
+        
+        m_volume = 1.0f;
     }
     
     return self;
@@ -60,7 +62,7 @@ static OSStatus renderNetwork(void *inRefCon, AudioUnitRenderActionFlags *ioActi
 	AudioSampleType *outA = (AudioSampleType*)ioData->mBuffers[0].mData;
     
 	for(UInt32 i = 0; i < inNumberFrames; i++) {
-        SInt16 nextSample = (SInt16)([net GetNextSample] * 32767.0f);
+        SInt16 nextSample = (SInt16)([net GetNextSample] * 32767.0f * net->m_volume);
         outA[i] = nextSample;
     }
     
@@ -108,6 +110,17 @@ static OSStatus renderNetwork(void *inRefCon, AudioUnitRenderActionFlags *ioActi
     NSLog(@"Generator: Set Stream Output Format chn: %d: %s", 0, CAX4CCString(status).get());
     
     
+    return status;
+}
+
+- (OSStatus) SetVolume:(float)volume {
+    OSStatus status = 0;
+    
+    //AudioUnit _node;
+    //status = AUGraphNodeInfo(*(m_pAUGraph), m_node, NULL, &_node);
+    //status = AudioUnitSetParameter(_node, kHALOutputParam_Volume, kAudioUnitScope_Output, 0, volume, 0);
+    
+    m_volume = volume;
     return status;
 }
 

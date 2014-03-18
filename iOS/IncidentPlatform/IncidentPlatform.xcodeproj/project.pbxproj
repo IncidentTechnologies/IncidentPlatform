@@ -148,6 +148,10 @@
 		2652382A18C4D25B00E38BA5 /* XMPTokenizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605803118691DE800F6668F /* XMPTokenizer.h */; };
 		2652382B18C4D27200E38BA5 /* valid.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605800818691DE800F6668F /* valid.h */; };
 		266A221B18BEE7A9007027C1 /* XMPSample.mm in Sources */ = {isa = PBXBuildFile; fileRef = 266A221A18BEE7A9007027C1 /* XMPSample.mm */; };
+		2678705A18D6416300779B81 /* UIKnob.m in Sources */ = {isa = PBXBuildFile; fileRef = 2678705918D6416300779B81 /* UIKnob.m */; };
+		2678705B18D6429000779B81 /* UIKnob.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2678705818D6416300779B81 /* UIKnob.h */; };
+		2678705E18D7BD4400779B81 /* TouchTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2678705D18D7BD4400779B81 /* TouchTracker.m */; };
+		2678705F18D7BD7300779B81 /* TouchTracker.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2678705C18D7BD4400779B81 /* TouchTracker.h */; };
 		26A5131518873B1700478200 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26A5131418873B1700478200 /* Cocoa.framework */; };
 		26A5131F18873B1700478200 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26A5131D18873B1700478200 /* InfoPlist.strings */; };
 		26A5132418873B5500478200 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 26A512FA188734CF00478200 /* fragment.glsl */; };
@@ -183,6 +187,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				2678705F18D7BD7300779B81 /* TouchTracker.h in CopyFiles */,
+				2678705B18D6429000779B81 /* UIKnob.h in CopyFiles */,
 				2652382B18C4D27200E38BA5 /* valid.h in CopyFiles */,
 				2652382918C4D25B00E38BA5 /* XMPParser.h in CopyFiles */,
 				2652382A18C4D25B00E38BA5 /* XMPTokenizer.h in CopyFiles */,
@@ -511,6 +517,10 @@
 		264EC77C18B55208001F7224 /* SamplerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamplerNode.h; sourceTree = "<group>"; };
 		266A221918BEE7A9007027C1 /* XMPSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPSample.h; sourceTree = "<group>"; };
 		266A221A18BEE7A9007027C1 /* XMPSample.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPSample.mm; sourceTree = "<group>"; };
+		2678705818D6416300779B81 /* UIKnob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIKnob.h; path = iOSWidgets/UIKnob.h; sourceTree = "<group>"; };
+		2678705918D6416300779B81 /* UIKnob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIKnob.m; path = iOSWidgets/UIKnob.m; sourceTree = "<group>"; };
+		2678705C18D7BD4400779B81 /* TouchTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchTracker.h; sourceTree = "<group>"; };
+		2678705D18D7BD4400779B81 /* TouchTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchTracker.m; sourceTree = "<group>"; };
 		26A512FA188734CF00478200 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		26A512FB188734CF00478200 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		26A5131318873B1600478200 /* IncidentPlatformBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IncidentPlatformBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -610,6 +620,7 @@
 		26057F4218691C7800F6668F /* IncidentPlatform */ = {
 			isa = PBXGroup;
 			children = (
+				2678705718D640C400779B81 /* Widgets */,
 				2610F0E818AD6A31003F5CEB /* AudioController */,
 				2647908B1869304C0077987F /* Window */,
 				26478FFC18692BA50077987F /* Dimension */,
@@ -1097,6 +1108,17 @@
 			name = Utility;
 			sourceTree = "<group>";
 		};
+		2678705718D640C400779B81 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				2678705818D6416300779B81 /* UIKnob.h */,
+				2678705918D6416300779B81 /* UIKnob.m */,
+				2678705C18D7BD4400779B81 /* TouchTracker.h */,
+				2678705D18D7BD4400779B81 /* TouchTracker.m */,
+			);
+			name = Widgets;
+			sourceTree = "<group>";
+		};
 		26A5131618873B1700478200 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1323,6 +1345,7 @@
 				2605804F18691DE800F6668F /* XMPText.mm in Sources */,
 				2647908318692BA50077987F /* ObjectStore.cpp in Sources */,
 				2610F13118AD6A31003F5CEB /* CAStreamBasicDescription.cpp in Sources */,
+				2678705E18D7BD4400779B81 /* TouchTracker.m in Sources */,
 				264790A21869304C0077987F /* WindowNPAPIWin32.cpp in Sources */,
 				2610F13318AD6A31003F5CEB /* Compressor.mm in Sources */,
 				2610F13618AD6A31003F5CEB /* Distortion.mm in Sources */,
@@ -1340,6 +1363,7 @@
 				2647907818692BA50077987F /* DX9Sphere.cpp in Sources */,
 				2605804E18691DE800F6668F /* XMPSong.mm in Sources */,
 				2647908218692BA50077987F /* nuke.cpp in Sources */,
+				2678705A18D6416300779B81 /* UIKnob.m in Sources */,
 				2605804318691DE800F6668F /* XMPNode.cpp in Sources */,
 				2610F12F18AD6A31003F5CEB /* ButterWorthFilter.mm in Sources */,
 				2647907518692BA50077987F /* DX9Line.cpp in Sources */,

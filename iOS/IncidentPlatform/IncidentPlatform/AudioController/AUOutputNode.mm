@@ -30,4 +30,12 @@
     return self;
 }
 
+- (OSStatus) SetVolume:(float)volume {
+    AudioUnit _node;
+    OSStatus status = AUGraphNodeInfo(*m_pAUGraph, m_node, 0, &_node);
+    status = AudioUnitSetParameter(_node, kHALOutputParam_Volume, kAudioUnitScope_Output, 0, volume, 0);
+    
+    return status;
+}
+
 @end
