@@ -15,6 +15,12 @@ typedef enum KnobType{
     KNOB_INVALID
 } KNOB_TYPE;
 
+@protocol UIKnobDelegate <NSObject>
+
+- (void)trackingDidEnd;
+
+@end
+
 @interface UIKnob : UIControl {
     double m_value; // this is a [0, 1] value
  
@@ -43,6 +49,8 @@ typedef enum KnobType{
     //float m_RotateFactor;
     float m_lastDegree;
 }
+
+@property (weak, nonatomic) id<UIKnobDelegate>delegate;
 
 @property double StartValue;
 @property double EndValue;

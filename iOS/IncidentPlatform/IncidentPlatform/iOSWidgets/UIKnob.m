@@ -10,6 +10,8 @@
 
 @implementation UIKnob
 
+@synthesize delegate;
+
 -(id) initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     
@@ -183,6 +185,7 @@
     m_fTouched = false;
     
     [m_touchView setHidden:true];
+    [delegate trackingDidEnd];
 }
 
 -(void) drawRect:(CGRect)rect{
