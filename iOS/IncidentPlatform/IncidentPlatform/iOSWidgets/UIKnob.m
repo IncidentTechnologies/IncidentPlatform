@@ -75,6 +75,9 @@
     else if(m_value < 0.0f)
         m_value = 0.0f;
     
+    // Redraw
+    [self setNeedsDisplay];
+    
     return;
 }
 
