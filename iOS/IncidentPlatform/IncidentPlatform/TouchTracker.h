@@ -18,13 +18,18 @@ typedef enum TouchQuad {
 
 @interface TouchTracker : UIView {
 
-    float m_circleThickness;
-    float m_lineThickness;
+    //float m_circleThickness;
+    //float m_lineThickness;
     
     TOUCH_QUAD m_quad;
     
     CGPoint m_touchCenter;
 }
+
+@property UIColor *TouchTrackerColor;
+
+@property float CircleThickness;
+@property float LineThickness;
 
 @property float CircleRadius;
 @property float MinRadius;

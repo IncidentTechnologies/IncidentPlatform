@@ -59,6 +59,11 @@
     
     [self setFAbsolute:false];
     [self setRotateFactor:0.01f];
+    
+    // Colors
+    [self setOuterColor:[UIColor colorWithRed:(84.0f/255.0f) green:(159.0f/255.0f) blue:(215.0f/255.0f) alpha:1.0f]];
+    [self setHighlightColor:[UIColor orangeColor]];
+    [self setLineColor:[UIColor blackColor]];
 }
 
 -(double) GetValue {
@@ -81,6 +86,22 @@
     [self setNeedsDisplay];
     
     return;
+}
+
+-(void)setTouchTrackerColor:(UIColor*)color {
+    [m_touchView setTouchTrackerColor:color];
+}
+
+-(void)setTouchTrackerCircleThickness:(float)thickness {
+    [m_touchView setCircleThickness:thickness];
+}
+
+-(void)setTouchTrackerCircleRadius:(float)radius {
+    [m_touchView setCircleRadius:radius];
+}
+
+-(void)setTouchTrackerLineThickness:(float)thickness {
+    [m_touchView setLineThickness:thickness];
 }
 
 -(float)getDegreeFromPoint:(CGPoint)pt withCenter:(CGPoint)center {
@@ -210,15 +231,14 @@
     float yRadius = ((rect.size.height / 2.0f) - m_inset);
     
     // Outer Circle
-    UIColor *outerColor = [UIColor colorWithRed:(84.0f/255.0f) green:(159.0f/255.0f) blue:(215.0f/255.0f) alpha:1.0f];
-    CGContextSetStrokeColorWithColor(context, outerColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, [self OuterColor].CGColor);
     float startTheta = _StartDegree / (180.0f / M_PI);
     float endTheta = _EndDegree / (180.0f / M_PI);
     CGContextAddArc(context, xMid, yMid, xRadius, startTheta, endTheta, !_fClockWise);
     CGContextStrokePath(context);
 
     // Line
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [self LineColor].CGColor);
     CGContextSetLineWidth(context, 2.0);
     
     float xVec = cosf(theta);
@@ -238,7 +258,7 @@
     // Highlight Arc
     CGContextAddArc(context, xMid, yMid, xRadius + 1.5f, startTheta, theta, !_fClockWise);
     CGContextSetLineWidth(context, 3.0);
-    CGContextSetStrokeColorWithColor(context, [UIColor orangeColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [self HighlightColor].CGColor);
     CGContextStrokePath(context);
     
     // Text

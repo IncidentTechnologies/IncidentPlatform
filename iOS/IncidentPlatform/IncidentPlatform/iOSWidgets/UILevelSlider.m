@@ -24,7 +24,7 @@
 }
 
 -(double)GetValue {
-    return _SliderValue;
+    return (1.0f - _SliderValue);
 }
 
 -(void)awakeFromNib {

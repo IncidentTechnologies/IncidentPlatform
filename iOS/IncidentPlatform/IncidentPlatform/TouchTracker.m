@@ -21,20 +21,22 @@
 }
 
 -(void)awakeFromNib {
-    m_circleThickness = 3.0f;
-    m_lineThickness = 1.0f;
-    
+    [self setCircleThickness:3.0f];
+    [self setLineThickness:1.0f];
     [self setCircleRadius:10.0f];
+    
     [self setMinRadius:44.0f];
     [self setMinOuterRadius:54.0f];
+    
+    [self setTouchTrackerColor:[UIColor blackColor]];
 }
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetShouldAntialias(context, YES);
     
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
-    CGContextSetLineWidth(context, m_circleThickness);
+    CGContextSetStrokeColorWithColor(context, [self TouchTrackerColor].CGColor);
+    CGContextSetLineWidth(context, [self CircleThickness]);
     
     CGRect circRect = CGRectMake(m_touchCenter.x - _CircleRadius, m_touchCenter.y - _CircleRadius, _CircleRadius * 2.0f, _CircleRadius * 2.0f);
     CGContextAddEllipseInRect(context, circRect);
@@ -61,7 +63,7 @@
         lineStartY = rect.size.height/2.0f - (_MinRadius) * cosf(theta);
     }
     
-    CGContextSetLineWidth(context, m_lineThickness);
+    CGContextSetLineWidth(context, [self LineThickness]);
     CGContextMoveToPoint(context, lineStartX, lineStartY);
     CGContextAddLineToPoint(context, xLine, yLine);
     CGContextStrokePath(context);
@@ -86,8 +88,8 @@
     if(dist < _MinOuterRadius) {
         //NSLog(@"less");
         float theta = degree / (180.0f / M_PI);
-        width = _MinOuterRadius * 2.0f + 2.0f * _CircleRadius + m_circleThickness * 2.0f;
-        height = _MinOuterRadius * 2.0f + 2.0f * _CircleRadius + m_circleThickness * 2.0f;
+        width = _MinOuterRadius * 2.0f + 2.0f * _CircleRadius + _CircleThickness * 2.0f;
+        height = _MinOuterRadius * 2.0f + 2.0f * _CircleRadius + _CircleThickness * 2.0f;
         switch(m_quad) {
             case TOUCH_QUAD_I: {
                 m_touchCenter.x = width/2.0f + _MinOuterRadius * fabs(sinf(theta));
@@ -111,8 +113,8 @@
         }
     }
     else {
-        width = fabs(width)*2.0f + 2.0f * _CircleRadius + m_circleThickness * 2.0f;
-        height = fabs(height)*2.0f + 2.0f * _CircleRadius + m_circleThickness * 2.0f;
+        width = fabs(width)*2.0f + 2.0f * _CircleRadius + _CircleThickness * 2.0f;
+        height = fabs(height)*2.0f + 2.0f * _CircleRadius + _CircleThickness * 2.0f;
         
         if(width > height)
             height = width;
