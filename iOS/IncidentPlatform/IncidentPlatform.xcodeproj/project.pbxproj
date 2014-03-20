@@ -81,6 +81,7 @@
 		261641EE18DA804300AEF042 /* LevelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 261641EC18DA804300AEF042 /* LevelNode.cpp */; };
 		261641F218DAA90E00AEF042 /* LevelNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641ED18DA804300AEF042 /* LevelNode.h */; };
 		261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641F018DA952100AEF042 /* CircularBuffer.hxx */; };
+		261D09AB18DBA10D00C7A0FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */; };
 		2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77C18B55208001F7224 /* SamplerNode.h */; };
 		2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */; };
 		26478FEE186929130077987F /* XMPNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801018691DE800F6668F /* XMPNode.h */; };
@@ -388,6 +389,7 @@
 		261641EC18DA804300AEF042 /* LevelNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelNode.cpp; sourceTree = "<group>"; };
 		261641ED18DA804300AEF042 /* LevelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelNode.h; sourceTree = "<group>"; };
 		261641F018DA952100AEF042 /* CircularBuffer.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircularBuffer.hxx; path = ../AudioController/CircularBuffer.hxx; sourceTree = "<group>"; };
+		261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioNodeCommon.h; sourceTree = "<group>"; };
 		26478FF818692B8C0077987F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		26478FFA18692B910077987F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -560,6 +562,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261D09AB18DBA10D00C7A0FD /* AVFoundation.framework in Frameworks */,
 				2610F15118AD8A1D003F5CEB /* AudioToolbox.framework in Frameworks */,
 				26478FFB18692B910077987F /* OpenGLES.framework in Frameworks */,
 				26478FF918692B8C0077987F /* QuartzCore.framework in Frameworks */,
@@ -615,6 +618,7 @@
 		26057F3F18691C7800F6668F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */,
 				2610F14F18AD8A1D003F5CEB /* AudioToolbox.framework */,
 				2610F15018AD8A1D003F5CEB /* AudioUnit.framework */,
 				26478FFA18692B910077987F /* OpenGLES.framework */,

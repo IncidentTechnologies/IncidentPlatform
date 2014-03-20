@@ -8,6 +8,7 @@
 
 #include "SampleNode.h"
 #include "CAXException.h"
+#include <AudioToolbox/AudioFormat.h>
 
 SampleBuffer::SampleBuffer(char *pszFilenamePath) :
     m_pBuffer_c(0),
@@ -174,6 +175,43 @@ AudioStreamBasicDescription SampleBuffer::GetClientFormatDescription(bool fStere
     return ClientDataFormat;
 }
 
+Boolean IsAACHardwareEncoderAvailable() {
+    Boolean isAvailable = false;
+    
+    // get an array of AudioClassDescriptions for all installed encoders for the given format
+    // the specifier is the format that we are interested in - this is 'aac ' in our case
+    UInt32 encoderSpecifier = kAudioFormatMPEG4AAC;
+    UInt32 size;
+    
+    OSStatus status = AudioFormatGetPropertyInfo(kAudioFormatProperty_Encoders,
+                                                  sizeof(encoderSpecifier),
+                                                  &encoderSpecifier,
+                                                  &size);
+    if (status) {
+        DEBUG_LINEOUT("AudioFormatGetPropertyInfo kAudioFormatProperty_Encoders error %lu %4.4s\n", status, CAX4CCString(status).get());
+        return false;
+    }
+                        
+    UInt32 numEncoders = size / sizeof(AudioClassDescription);
+    AudioClassDescription encoderDescriptions[numEncoders];
+    
+    status = AudioFormatGetProperty(kAudioFormatProperty_Encoders,
+                                    sizeof(encoderSpecifier),
+                                    &encoderSpecifier,
+                                    &size,
+                                    encoderDescriptions);
+    if (status) {
+        DEBUG_LINEOUT("AudioFormatGetProperty kAudioFormatProperty_Encoders error %lu %4.4s\n", status, CAX4CCString(status).get());
+        return false;
+    }
+                        
+    for (UInt32 i=0; i < numEncoders; ++i)
+        if (encoderDescriptions[i].mSubType == kAudioFormatMPEG4AAC && encoderDescriptions[i].mManufacturer == kAppleHardwareAudioCodecManufacturer)
+            isAvailable = true;
+    
+    return isAvailable;
+}
+
 // Currentlt configured for m4a
 RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     RESULT r = R_SUCCEED;
@@ -190,24 +228,20 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
 
     AudioFileTypeID fileType = kAudioFileM4AType;
-    //AudioFileTypeID fileType = kAudioFileMP3Type;
     
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
     OutputDataFormat.mSampleRate         = 44100.0;
     
     OutputDataFormat.mFormatID           = kAudioFormatMPEG4AAC;
-    //OutputDataFormat.mFormatID           = kAudioFormatMPEGLayer3;
     
     OutputDataFormat.mFormatFlags        = kMPEG4Object_AAC_Main;
-    //OutputDataFormat.mFormatFlags        = 0;
     
-    OutputDataFormat.mChannelsPerFrame   = 2;
+    OutputDataFormat.mChannelsPerFrame   = 1;
     OutputDataFormat.mBytesPerPacket     = 0;
     OutputDataFormat.mBytesPerFrame      = 0;
     
     OutputDataFormat.mFramesPerPacket    = 1024;
-    //OutputDataFormat.mFramesPerPacket    = 1152;
     
     OutputDataFormat.mBitsPerChannel     = 0;
     OutputDataFormat.mReserved           = 0;
@@ -224,7 +258,23 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
         DEBUG_LINEOUT("SampleBuffer: SaveToFile: ExtAudioFileCreate failed: %s", CAX4CCString(status).get());
     }
     
+    // Specify Codec
+    // TODO: Some issue here, not sure what since this still fails when the encoder is present
+    //UInt32 codec = (IsAACHardwareEncoderAvailable()) ? kAppleHardwareAudioCodecManufacturer : kAppleSoftwareAudioCodecManufacturer;
+    UInt32 codec = kAppleSoftwareAudioCodecManufacturer;
+    status = ExtAudioFileSetProperty(outfileRef,
+                                     kExtAudioFileProperty_CodecManufacturer,
+                                     sizeof(codec),
+                                     &codec);
+    
+    if(status) {
+        DEBUG_LINEOUT("SampleBuffer: SaveToFile: ExtAudioFileSetProperty:kExtAudioFileProperty_CodecManufacturer failed: %s", CAX4CCString(status).get());
+    }
+    
     // Tell the ExtAudioFile API what format we'll be sending samples in
+    //LocalDataFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked | kAudioFormatFlagsNativeEndian;
+    //LocalDataFormat.mChannelsPerFrame = 2;
+    
     status = ExtAudioFileSetProperty(outfileRef,
                                      kExtAudioFileProperty_ClientDataFormat,
                                      sizeof(AudioStreamBasicDescription),
