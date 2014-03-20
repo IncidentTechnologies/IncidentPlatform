@@ -126,9 +126,7 @@ float LevelNode::GetNextSample(unsigned long int timestamp) {
     return retVal;
 }
 
-RESULT LevelNode::Subscribe(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
-    RESULT r = R_SUCCEED;
-    
+LevelSubscriber* LevelNode::Subscribe(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
     LevelSubscriber *sub = new LevelSubscriber;
     memset(sub, 0, sizeof(LevelSubscriber));
     
@@ -137,15 +135,29 @@ RESULT LevelNode::Subscribe(LevelType type, void *pObject, LevelCallback cbLevel
     sub->pObject = pObject;
     sub->cb = cbLevel;
     
-    CRM(m_susbscribers.Append(sub), "RMSNode: Subscribe faield to append subscriber");;
+    m_susbscribers.Append(sub);
+    
+    return sub;
+}
+
+RESULT LevelNode::UnSubscribe(LevelSubscriber *sub) {
+    RESULT r = R_SUCCESS;
+    
+    LevelSubscriber *tempSub = NULL;
+    CNRM(sub, "UnSubscribe: Subscriber is null");
+    CRM(m_susbscribers.Remove(tempSub, (void*)(sub), GET_BY_ITEM), "UnSubscribe: Subscriber doesn't exist");
+    
+    if(tempSub != NULL) {
+        delete tempSub;
+        tempSub = NULL;
+        sub = NULL;
+    }
     
 Error:
     return r;
-}
-
-RESULT LevelNode::UnSubscribe(void *pObject) {
-    RESULT r = R_SUCCESS;
     
+    /*
+     // TODO: Above is a bit of a hack so maybe we should revisit it
     for(list<LevelSubscriber*>::iterator it = m_susbscribers.First(); it != NULL; it++) {
         if((*it)->pObject == pObject) {
             LevelSubscriber *tempSub = NULL;
@@ -158,9 +170,6 @@ RESULT LevelNode::UnSubscribe(void *pObject) {
             
             // dont break since might be doubly subscribed
         }
-    }
-    
-Error:
-    return r;
+    }*/
 }
 

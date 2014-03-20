@@ -47,8 +47,8 @@ public:
     RESULT SetInterval(float msInterval);
     float GetNextSample(unsigned long int timestamp);
     
-    RESULT Subscribe(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext);
-    RESULT UnSubscribe(void *pObject);
+    LevelSubscriber* Subscribe(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext);
+    RESULT UnSubscribe(LevelSubscriber *sub);
 
 private:
     RESULT NotifySubscribers();

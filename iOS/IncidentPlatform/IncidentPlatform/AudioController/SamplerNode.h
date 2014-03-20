@@ -34,10 +34,10 @@ public:
     RESULT SetSampleGain(int sample, float gain);
     RESULT SetBankGain(float gain);
     
-    RESULT UnSubscribe(void *pObject);
-    RESULT SubscribeLevel(LevelType type, void *pObject, LevelCallback cbRMS, void *pContext);
-    RESULT SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext);
-    RESULT SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext);
+    RESULT UnSubscribe(LevelSubscriber *pSub);
+    LevelSubscriber* SubscribeLevel(LevelType type, void *pObject, LevelCallback cbRMS, void *pContext);
+    LevelSubscriber* SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext);
+    LevelSubscriber* SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext);
     
 public:
     SampleNode*& operator[](const int& i);
@@ -64,10 +64,10 @@ public:
     
     RESULT SetBankGain(int bank, float gain);
     
-    RESULT UnSubscribe(void *pObject);
-    RESULT SubscribeLevel(LevelType type, void *pObject, LevelCallback cbRMS, void *pContext);
-    RESULT SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext);
-    RESULT SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext);
+    RESULT UnSubscribe(LevelSubscriber *pSub);
+    LevelSubscriber* SubscribeLevel(LevelType type, void *pObject, LevelCallback cbRMS, void *pContext);
+    LevelSubscriber* SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext);
+    LevelSubscriber* SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext);
     
 public:
     SamplerBankNode*& operator[](const int& i);

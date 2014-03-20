@@ -107,19 +107,19 @@ SampleNode*& SamplerBankNode::operator[](const int& i) {
     return retVal;
 }
 
-RESULT SamplerBankNode::UnSubscribe(void *pObject) {
-    return m_levelNode->UnSubscribe(pObject);
+RESULT SamplerBankNode::UnSubscribe(LevelSubscriber *pSub) {
+    return m_levelNode->UnSubscribe(pSub);
 }
 
-RESULT SamplerBankNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
+LevelSubscriber* SamplerBankNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
     return m_levelNode->Subscribe(type, pObject, cbLevel, pContext);
 }
 
-RESULT SamplerBankNode::SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext) {
+LevelSubscriber* SamplerBankNode::SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext) {
     return SubscribeLevel(LEVEL_RMS, pObject, cbRMS, pContext);
 }
 
-RESULT SamplerBankNode::SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext) {
+LevelSubscriber* SamplerBankNode::SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext) {
     return SubscribeLevel(LEVEL_ABS_MEAN, pObject, cbLevel, pContext);
 }
 
@@ -247,19 +247,19 @@ SampleNode* SamplerNode::GetBankSample(int bank, int sample) {
         return NULL;
 }
 
-RESULT SamplerNode::UnSubscribe(void *pObject) {
-    return m_levelNode->UnSubscribe(pObject);
+RESULT SamplerNode::UnSubscribe(LevelSubscriber *pSub) {
+    return m_levelNode->UnSubscribe(pSub);
 }
 
-RESULT SamplerNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
+LevelSubscriber* SamplerNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
         return m_levelNode->Subscribe(type, pObject, cbLevel, pContext);
 }
 
-RESULT SamplerNode::SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext) {
+LevelSubscriber* SamplerNode::SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext) {
     return SubscribeLevel(LEVEL_RMS, pObject, cbRMS, pContext);
 }
 
-RESULT SamplerNode::SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext) {
+LevelSubscriber* SamplerNode::SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext) {
     return SubscribeLevel(LEVEL_ABS_MEAN, pObject, cbLevel, pContext);
 }
 
