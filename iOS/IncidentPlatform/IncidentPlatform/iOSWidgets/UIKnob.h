@@ -48,6 +48,8 @@ typedef enum KnobType{
     //BOOL m_fAbsolute;
     //float m_RotateFactor;
     float m_lastDegree;
+    
+    BOOL m_fEnabled;
 }
 
 @property (weak, nonatomic) id<UIKnobDelegate>delegate;
@@ -55,6 +57,7 @@ typedef enum KnobType{
 @property UIColor *OuterColor;
 @property UIColor *HighlightColor;
 @property UIColor *LineColor;
+@property UIColor *DisabledColor;
 
 @property double StartValue;
 @property double EndValue;
@@ -75,6 +78,11 @@ typedef enum KnobType{
 - (void) cbDrawRect:(NSTimer *) timer;
 
 -(float)getDegreeFromPoint:(CGPoint)pt withCenter:(CGPoint)center;
+
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender;
+
+-(void)EnableKnob;
+-(void)DisableKnob;
 
 -(void)setTouchTrackerColor:(UIColor*)color;
 -(void)setTouchTrackerCircleThickness:(float)thickness;

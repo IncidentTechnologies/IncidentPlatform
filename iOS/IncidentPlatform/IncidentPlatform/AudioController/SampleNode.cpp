@@ -398,6 +398,7 @@ RESULT SampleNode::Trigger() {
 
 float SampleNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
+    
     if(m_fPlaying) {
         retVal = m_pSampleBuffer->GetNextSample(timestamp);
         

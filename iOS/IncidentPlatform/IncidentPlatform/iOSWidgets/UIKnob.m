@@ -23,10 +23,11 @@
 }
 
 -(void) awakeFromNib {
+    m_fEnabled = true;
+    
     [self setStartValue:0.0f];
     [self setEndValue:1.0f];
     m_value = 0.0;
-    
     
     [self setStartDegree:135.0f];
     [self setEndDegree:45.0f];
@@ -64,13 +65,52 @@
     [self setOuterColor:[UIColor colorWithRed:(84.0f/255.0f) green:(159.0f/255.0f) blue:(215.0f/255.0f) alpha:1.0f]];
     [self setHighlightColor:[UIColor orangeColor]];
     [self setLineColor:[UIColor blackColor]];
+    [self setDisabledColor:[UIColor grayColor]];
+    
+    // Double tap
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    tapGesture.numberOfTapsRequired = 2;
+    
+    [self addGestureRecognizer:tapGesture];
+
+}
+
+-(void)EnableKnob {
+    m_fEnabled = true;
+    [self setNeedsDisplay];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+-(void)DisableKnob {
+    m_fEnabled = false;
+    [self setNeedsDisplay];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateRecognized) {
+        NSLog(@"double tap");
+        
+        [m_touchView setHidden:true];
+        [self endTrackingWithTouch:NULL withEvent:NULL];
+        
+        if(m_fEnabled)
+            [self DisableKnob];
+        else
+            [self EnableKnob];
+    }
 }
 
 -(double) GetValue {
-    double range = _EndValue - _StartValue;
-    double value = m_value * range + _StartValue;
-    
-    return value;
+    if(m_fEnabled) {
+        double range = _EndValue - _StartValue;
+        double value = m_value * range + _StartValue;
+        
+        return value;
+    }
+    else {
+        return 0.0f;
+    }
 }
 
 -(void) SetValue:(double)value {
@@ -137,8 +177,6 @@
     m_ptCurrent = m_ptStart;
     m_fTouched = true;
     
-    [m_touchView setHidden:false];
-    
     float xMidPoint = [self frame].size.width / 2.0f;
     float yMidPoint = [self frame].size.height / 2.0f;
     m_lastDegree = [self getDegreeFromPoint:m_ptStart withCenter:CGPointMake(xMidPoint, yMidPoint)];
@@ -151,10 +189,17 @@
 }
 
 -(BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    CGPoint ptCurrent = [touch locationInView:self];
-    
     //float xDiff = ptCurrent.x - m_ptCurrent.x;
     //float yDiff = ptCurrent.y - m_ptCurrent.y;
+    
+    // Quit if we're disabled
+    if(!m_fEnabled)
+        return false;
+    
+    CGPoint ptCurrent = [touch locationInView:self];
+    
+    if([m_touchView isHidden])
+        [m_touchView setHidden:false];
     
     // Determine polar coord
     float xMidPoint = [self frame].size.width / 2.0f;
@@ -206,7 +251,12 @@
 }
 
 -(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-    CGPoint ptEnd = [touch locationInView:self];
+ 
+    CGPoint ptEnd;
+    
+    if(touch != NULL)
+        ptEnd = [touch locationInView:self];
+    
     m_fTouched = false;
     
     [m_touchView setHidden:true];
@@ -235,14 +285,22 @@
     float yRadius = ((rect.size.height / 2.0f) - m_inset);
     
     // Outer Circle
-    CGContextSetStrokeColorWithColor(context, [self OuterColor].CGColor);
+    if(m_fEnabled)
+        CGContextSetStrokeColorWithColor(context, [self OuterColor].CGColor);
+    else
+        CGContextSetStrokeColorWithColor(context, [self DisabledColor].CGColor);
+    
     float startTheta = _StartDegree / (180.0f / M_PI);
     float endTheta = _EndDegree / (180.0f / M_PI);
     CGContextAddArc(context, xMid, yMid, xRadius, startTheta, endTheta, !_fClockWise);
     CGContextStrokePath(context);
 
     // Line
-    CGContextSetStrokeColorWithColor(context, [self LineColor].CGColor);
+    if(m_fEnabled)
+        CGContextSetStrokeColorWithColor(context, [self LineColor].CGColor);
+    else
+        CGContextSetStrokeColorWithColor(context, [self DisabledColor].CGColor);
+    
     CGContextSetLineWidth(context, 2.0);
     
     float xVec = cosf(theta);
@@ -262,7 +320,12 @@
     // Highlight Arc
     CGContextAddArc(context, xMid, yMid, xRadius + 1.5f, startTheta, theta, !_fClockWise);
     CGContextSetLineWidth(context, 3.0);
-    CGContextSetStrokeColorWithColor(context, [self HighlightColor].CGColor);
+    
+    if(m_fEnabled)
+        CGContextSetStrokeColorWithColor(context, [self HighlightColor].CGColor);
+    else
+        CGContextSetStrokeColorWithColor(context, [self DisabledColor].CGColor);
+ 
     CGContextStrokePath(context);
     
     // Text
