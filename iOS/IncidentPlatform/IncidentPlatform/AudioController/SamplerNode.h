@@ -11,7 +11,7 @@
 
 #include "AudioNodeNetwork.h"
 #include "dss_list.h"
-#include "RMSNode.h"
+#include "LevelNode.h"
 
 class SampleNode;
 
@@ -34,11 +34,13 @@ public:
     RESULT SetSampleGain(int sample, float gain);
     RESULT SetBankGain(float gain);
     
-    RESULT SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext);
+    RESULT SubscribeLevel(LevelType type, void *pObject, LevelCallback cbRMS, void *pContext);
+    RESULT SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext);
+    RESULT SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext);
     
 public:
     SampleNode*& operator[](const int& i);
-    RMSNode *m_rmsNode;
+    LevelNode *m_levelNode;
     
 public:
     dss::list<SampleNode*> m_samples;
@@ -61,7 +63,9 @@ public:
     
     RESULT SetBankGain(int bank, float gain);
     
-    RESULT SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext);
+    RESULT SubscribeLevel(LevelType type, void *pObject, LevelCallback cbRMS, void *pContext);
+    RESULT SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext);
+    RESULT SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext);
     
 public:
     SamplerBankNode*& operator[](const int& i);
@@ -69,7 +73,7 @@ public:
 public:
     dss::list<SamplerBankNode*> m_banks;
     
-    RMSNode *m_rmsNode;
+    LevelNode *m_levelNode;
 };
 
 #endif /* defined(__IncidentPlatform__SamplerNode__) */

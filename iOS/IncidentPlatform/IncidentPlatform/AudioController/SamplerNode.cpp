@@ -15,10 +15,10 @@
 
 SamplerBankNode::SamplerBankNode() :
     AudioNodeNetwork(),
-    m_rmsNode(NULL)
+    m_levelNode(NULL)
 {
-    m_rmsNode = new RMSNode();
-    m_outputNode->ConnectInput(0, m_rmsNode, 0);
+    m_levelNode = new LevelNode();
+    m_outputNode->ConnectInput(0, m_levelNode, 0);
 }
 
 SamplerBankNode::~SamplerBankNode() {
@@ -28,9 +28,9 @@ SamplerBankNode::~SamplerBankNode() {
         tempNode = NULL;
     }
     
-    if(m_rmsNode != NULL) {
-        delete m_rmsNode;
-        m_rmsNode = NULL;
+    if(m_levelNode != NULL) {
+        delete m_levelNode;
+        m_levelNode = NULL;
     }
 }
 
@@ -73,7 +73,7 @@ RESULT SamplerBankNode::LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSa
     
     // Check, connect, and push the new sample
     CNRM(newSample, "SamplerBankNode: Failed to create sample");
-    CRM(m_rmsNode->ConnectInput(0, newSample, 0), "SamplerBankNode: Failed to connect new sample node to output");
+    CRM(m_levelNode->ConnectInput(0, newSample, 0), "SamplerBankNode: Failed to connect new sample node to output");
     CRM(m_samples.Append(newSample), "SamplerBankNode: Failed to add sample to bank");
     
     // pass out the sample
@@ -107,8 +107,16 @@ SampleNode*& SamplerBankNode::operator[](const int& i) {
     return retVal;
 }
 
-RESULT SamplerBankNode::SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext) {
-    return m_rmsNode->Subscribe(pObject, cbRMS, pContext);
+RESULT SamplerBankNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
+    return m_levelNode->Subscribe(type, pObject, cbLevel, pContext);
+}
+
+RESULT SamplerBankNode::SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext) {
+    return SubscribeLevel(LEVEL_RMS, pObject, cbRMS, pContext);
+}
+
+RESULT SamplerBankNode::SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext) {
+    return SubscribeLevel(LEVEL_ABS_MEAN, pObject, cbLevel, pContext);
 }
 
 /******************************/
@@ -117,10 +125,10 @@ RESULT SamplerBankNode::SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pCo
 
 SamplerNode::SamplerNode() :
     AudioNodeNetwork(),
-    m_rmsNode(NULL)
+    m_levelNode(NULL)
 {
-    m_rmsNode = new RMSNode();
-    m_outputNode->ConnectInput(0, m_rmsNode, 0);
+    m_levelNode = new LevelNode();
+    m_outputNode->ConnectInput(0, m_levelNode, 0);
 }
 
 SamplerNode::~SamplerNode() {
@@ -128,6 +136,11 @@ SamplerNode::~SamplerNode() {
         SamplerBankNode *tempNode = m_banks.Pop();
         delete tempNode;
         tempNode = NULL;
+    }
+    
+    if(m_levelNode != NULL) {
+        delete m_levelNode;
+        m_levelNode = NULL;
     }
 }
 
@@ -177,7 +190,7 @@ RESULT SamplerNode::CreateNewBank(SamplerBankNode* &outBank){
     
     SamplerBankNode *newBank = new SamplerBankNode();
     CNRM(newBank, "SamplerNode: Failed to allocate new bank");
-    CRM(m_rmsNode->ConnectInput(0, newBank, 0), "SamplerNode: Failed to connect bank output to Sampler output");
+    CRM(m_levelNode->ConnectInput(0, newBank, 0), "SamplerNode: Failed to connect bank output to Sampler output");
     CRM(m_banks.Append(newBank), "SamplerNode: Failed to add bank to sampler");
     
     // Pass it out
@@ -228,8 +241,16 @@ SampleNode* SamplerNode::GetBankSample(int bank, int sample) {
         return NULL;
 }
 
-RESULT SamplerNode::SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext) {
-    return m_rmsNode->Subscribe(pObject, cbRMS, pContext);
+RESULT SamplerNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
+        return m_levelNode->Subscribe(type, pObject, cbLevel, pContext);
+}
+
+RESULT SamplerNode::SubscribeRMS(void *pObject, LevelCallback cbRMS, void *pContext) {
+    return SubscribeLevel(LEVEL_RMS, pObject, cbRMS, pContext);
+}
+
+RESULT SamplerNode::SubscribeAbsoluteMean(void *pObject, LevelCallback cbLevel, void *pContext) {
+    return SubscribeLevel(LEVEL_ABS_MEAN, pObject, cbLevel, pContext);
 }
 
 SamplerBankNode*& SamplerNode::operator[](const int& i) {
