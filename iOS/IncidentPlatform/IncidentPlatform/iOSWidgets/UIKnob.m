@@ -109,7 +109,11 @@
     float yMidDiff = center.y - pt.y;
     
     //float dist = sqrt(pow(xMidDiff, 2.0f) + pow(yMidDiff, 2.0f));
-    float theta = atan(yMidDiff / xMidDiff);
+    float theta;
+    if(xMidDiff != 0.0f)
+        theta = atan(yMidDiff / xMidDiff);
+    else
+        theta = 0.0f;
     
     // convert theta
     if(xMidDiff >= 0.0f && yMidDiff > 0.0f) {        // QUAD I
