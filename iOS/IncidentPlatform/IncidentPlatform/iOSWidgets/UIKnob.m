@@ -79,12 +79,22 @@
     m_fEnabled = true;
     [self setNeedsDisplay];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
+    
+    [delegate enableKnob:self];
+    
 }
 
 -(void)DisableKnob {
     m_fEnabled = false;
     [self setNeedsDisplay];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
+    
+    [delegate disableKnob:self];
+}
+
+-(BOOL)isEnabled
+{
+    return m_fEnabled;
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {
@@ -327,6 +337,8 @@
         CGContextSetStrokeColorWithColor(context, [self DisabledColor].CGColor);
  
     CGContextStrokePath(context);
+    
+    UIGraphicsEndImageContext();
     
     // Text
     /*

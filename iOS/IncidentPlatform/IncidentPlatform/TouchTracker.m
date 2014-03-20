@@ -67,6 +67,8 @@
     CGContextMoveToPoint(context, lineStartX, lineStartY);
     CGContextAddLineToPoint(context, xLine, yLine);
     CGContextStrokePath(context);
+    
+    UIGraphicsEndImageContext();
 }
 
 -(void)updateTouchView:(CGPoint)touchPoint withCenter:(CGPoint)center andDegree:(float)degree {

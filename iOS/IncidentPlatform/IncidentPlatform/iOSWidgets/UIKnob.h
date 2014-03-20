@@ -18,6 +18,8 @@ typedef enum KnobType{
 @protocol UIKnobDelegate <NSObject>
 
 - (void)trackingDidEnd;
+- (void)enableKnob:(id)sender;
+- (void)disableKnob:(id)sender;
 
 @end
 
@@ -83,6 +85,7 @@ typedef enum KnobType{
 
 -(void)EnableKnob;
 -(void)DisableKnob;
+-(BOOL)isEnabled;
 
 -(void)setTouchTrackerColor:(UIColor*)color;
 -(void)setTouchTrackerCircleThickness:(float)thickness;
