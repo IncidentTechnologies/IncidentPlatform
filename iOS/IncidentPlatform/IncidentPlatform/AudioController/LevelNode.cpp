@@ -143,3 +143,16 @@ Error:
     return r;
 }
 
+RESULT LevelNode::UnSubscribe(void *pObject) {
+    RESULT r = R_SUCCESS;
+    
+    for(list<LevelSubscriber>::iterator it = m_susbscribers.First(); it != NULL; it++) {
+        if((*it).pObject == pObject) {
+            return m_susbscribers.Remove(static_cast<void*>(&(it)), GET_BY_ITERATOR);
+        } break; // for good measure
+    }
+    
+Error:
+    return r;
+}
+

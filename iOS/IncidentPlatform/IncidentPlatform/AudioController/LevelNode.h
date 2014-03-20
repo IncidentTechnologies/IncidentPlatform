@@ -48,6 +48,7 @@ public:
     float GetNextSample(unsigned long int timestamp);
     
     RESULT Subscribe(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext);
+    RESULT UnSubscribe(void *pObject);
 
 private:
     RESULT NotifySubscribers();
