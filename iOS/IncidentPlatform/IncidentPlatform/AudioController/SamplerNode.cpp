@@ -151,11 +151,13 @@ SamplerNode::~SamplerNode() {
 RESULT SamplerNode::ReleaseBank(SamplerBankNode* &bank) {
     RESULT r = R_SUCCESS;
     
+    SamplerBankNode *node = NULL;
     CNRM(bank, "ReleaseBank: Bank to release is NULL");
-    CRM(m_banks.Remove(bank, GET_BY_ITEM), "ReleaseBank: Bank does not exist in sampler");
+    CRM(m_banks.Remove(node, (void*)(bank), GET_BY_ITEM), "ReleaseBank: Bank does not exist in sampler");
     
-    if(bank != NULL) {
-        delete bank;
+    if(node != NULL) {
+        delete node;
+        node = NULL;
         bank = NULL;
     }
     

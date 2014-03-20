@@ -328,13 +328,11 @@ Error:
 
                 case GET_BY_ITEM: {
                     //while(node->m_Item != *((T*)(pLocation)))
-                    while((void *)(node->m_Item) != (pLocation))
-                    {
+                    while((void *)(node->m_Item) != (pLocation)) {
                       node = node->m_pNextItem;
+                        
                       if(node == NULL)
-                      {
                         return R_LIST_ITEM_NOT_FOUND;
-                      }
                     }				
                 } break;
                     
