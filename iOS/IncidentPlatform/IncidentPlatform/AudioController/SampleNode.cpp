@@ -190,15 +190,25 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
 
     AudioFileTypeID fileType = kAudioFileM4AType;
+    //AudioFileTypeID fileType = kAudioFileMP3Type;
+    
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
     OutputDataFormat.mSampleRate         = 44100.0;
+    
     OutputDataFormat.mFormatID           = kAudioFormatMPEG4AAC;
+    //OutputDataFormat.mFormatID           = kAudioFormatMPEGLayer3;
+    
     OutputDataFormat.mFormatFlags        = kMPEG4Object_AAC_Main;
-    OutputDataFormat.mChannelsPerFrame   = 1;
+    //OutputDataFormat.mFormatFlags        = 0;
+    
+    OutputDataFormat.mChannelsPerFrame   = 2;
     OutputDataFormat.mBytesPerPacket     = 0;
     OutputDataFormat.mBytesPerFrame      = 0;
+    
     OutputDataFormat.mFramesPerPacket    = 1024;
+    //OutputDataFormat.mFramesPerPacket    = 1152;
+    
     OutputDataFormat.mBitsPerChannel     = 0;
     OutputDataFormat.mReserved           = 0;
     
@@ -211,7 +221,7 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
                                                 flags,
                                                 &outfileRef);
     if(status) {
-        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+        DEBUG_LINEOUT("SampleBuffer: SaveToFile: ExtAudioFileCreate failed: %s", CAX4CCString(status).get());
     }
     
     // Tell the ExtAudioFile API what format we'll be sending samples in
@@ -221,7 +231,7 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
                                      &LocalDataFormat);
     
     if (status) {
-        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+        DEBUG_LINEOUT("SampleBuffer: SaveToFile: ExtAudioFileSetProperty failed: %s", CAX4CCString(status).get());
     }
     
     // Create the audio buffer and copy
@@ -245,13 +255,13 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
                                 pAudioData);
     
     if(status) {
-        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+        DEBUG_LINEOUT("SampleBuffer: SaveToFile: ExtAudioFileWrite failed: %s", CAX4CCString(status).get());
     }
     
     // close the file
     status = ExtAudioFileDispose(outfileRef);
     if(status) {
-        DEBUG_LINEOUT("AudioController: AUGraphInitialize: %s", CAX4CCString(status).get());
+        DEBUG_LINEOUT("SampleBuffer: SaveToFile: ExtAudioFileDispose failed: %s", CAX4CCString(status).get());
     }
     
     // Kill the AudioBufferList
