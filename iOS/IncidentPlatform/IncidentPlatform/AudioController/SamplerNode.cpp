@@ -14,9 +14,11 @@
 /******************************/
 
 SamplerBankNode::SamplerBankNode() :
-    AudioNodeNetwork()
+    AudioNodeNetwork(),
+    m_rmsNode(NULL)
 {
-    /* empty stub */
+    m_rmsNode = new RMSNode();
+    m_outputNode->ConnectInput(0, m_rmsNode, 0);
 }
 
 SamplerBankNode::~SamplerBankNode() {
@@ -24,6 +26,11 @@ SamplerBankNode::~SamplerBankNode() {
         SampleNode *tempNode = m_samples.Pop();
         delete tempNode;
         tempNode = NULL;
+    }
+    
+    if(m_rmsNode != NULL) {
+        delete m_rmsNode;
+        m_rmsNode = NULL;
     }
 }
 
@@ -66,7 +73,7 @@ RESULT SamplerBankNode::LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSa
     
     // Check, connect, and push the new sample
     CNRM(newSample, "SamplerBankNode: Failed to create sample");
-    CRM(m_outputNode->ConnectInput(0, newSample, 0), "SamplerBankNode: Failed to connect new sample node to output");
+    CRM(m_rmsNode->ConnectInput(0, newSample, 0), "SamplerBankNode: Failed to connect new sample node to output");
     CRM(m_samples.Append(newSample), "SamplerBankNode: Failed to add sample to bank");
     
     // pass out the sample
@@ -100,14 +107,20 @@ SampleNode*& SamplerBankNode::operator[](const int& i) {
     return retVal;
 }
 
+RESULT SamplerBankNode::SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext) {
+    return m_rmsNode->Subscribe(pObject, cbRMS, pContext);
+}
+
 /******************************/
 // Sampler Node
 /******************************/
 
 SamplerNode::SamplerNode() :
-    AudioNodeNetwork()
+    AudioNodeNetwork(),
+    m_rmsNode(NULL)
 {
-    /* empty stub */
+    m_rmsNode = new RMSNode();
+    m_outputNode->ConnectInput(0, m_rmsNode, 0);
 }
 
 SamplerNode::~SamplerNode() {
@@ -164,7 +177,7 @@ RESULT SamplerNode::CreateNewBank(SamplerBankNode* &outBank){
     
     SamplerBankNode *newBank = new SamplerBankNode();
     CNRM(newBank, "SamplerNode: Failed to allocate new bank");
-    CRM(m_outputNode->ConnectInput(0, newBank, 0), "SamplerNode: Failed to connect bank output to Sampler output");
+    CRM(m_rmsNode->ConnectInput(0, newBank, 0), "SamplerNode: Failed to connect bank output to Sampler output");
     CRM(m_banks.Append(newBank), "SamplerNode: Failed to add bank to sampler");
     
     // Pass it out
@@ -215,6 +228,10 @@ SampleNode* SamplerNode::GetBankSample(int bank, int sample) {
         return NULL;
 }
 
+RESULT SamplerNode::SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext) {
+    return m_rmsNode->Subscribe(pObject, cbRMS, pContext);
+}
+
 SamplerBankNode*& SamplerNode::operator[](const int& i) {
     SamplerBankNode *retVal = NULL;
     
@@ -223,6 +240,8 @@ SamplerBankNode*& SamplerNode::operator[](const int& i) {
     
     return retVal;
 }
+
+
 
 /*
 float SamplerNode::GetNextSample(unsigned long int timestamp) {

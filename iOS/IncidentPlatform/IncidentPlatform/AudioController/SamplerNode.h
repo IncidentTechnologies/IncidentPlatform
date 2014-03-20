@@ -11,6 +11,7 @@
 
 #include "AudioNodeNetwork.h"
 #include "dss_list.h"
+#include "RMSNode.h"
 
 class SampleNode;
 
@@ -33,8 +34,11 @@ public:
     RESULT SetSampleGain(int sample, float gain);
     RESULT SetBankGain(float gain);
     
+    RESULT SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext);
+    
 public:
     SampleNode*& operator[](const int& i);
+    RMSNode *m_rmsNode;
     
 public:
     dss::list<SampleNode*> m_samples;
@@ -57,11 +61,15 @@ public:
     
     RESULT SetBankGain(int bank, float gain);
     
+    RESULT SubscribeRMS(void *pObject, RMSCallback cbRMS, void *pContext);
+    
 public:
     SamplerBankNode*& operator[](const int& i);
     
 public:
     dss::list<SamplerBankNode*> m_banks;
+    
+    RMSNode *m_rmsNode;
 };
 
 #endif /* defined(__IncidentPlatform__SamplerNode__) */
