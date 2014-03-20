@@ -10,6 +10,7 @@
 
 @implementation UILevelSlider
 
+@synthesize delegate;
 @synthesize SliderValue = _SliderValue;
 @synthesize DisplayValue = _DisplayValue;
 
@@ -131,6 +132,8 @@
 -(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
     //CGPoint ptEnd = [touch locationInView:self];
     m_fTouched = false;
+    
+    [delegate valueDidChange:[self GetValue] forSlider:self];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -201,6 +204,8 @@
     float actualSliderPoint = effSliderPoint + m_sliderHeight/2.0f;
     CGRect levelRect = CGRectMake(m_inset, actualSliderPoint - m_sliderHeight/2.0f, rect.size.width - 2.0f*m_inset, m_sliderHeight);
     CGContextFillRect(context, levelRect);
+    
+    UIGraphicsEndImageContext();
     
     /*
     static float theta = 0.0f;

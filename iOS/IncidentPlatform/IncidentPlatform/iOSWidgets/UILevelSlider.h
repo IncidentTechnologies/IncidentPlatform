@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol UILevelSliderDelegate <NSObject>
+
+- (void)valueDidChange:(double)newValue forSlider:(id)sender;
+
+@end
+
 @interface UILevelSlider : UIControl {
     float m_sliderHeight;
     float m_inset;
@@ -25,6 +31,8 @@
     BOOL m_fTouched;
     BOOL m_fIntersected;
 }
+
+@property (weak, nonatomic) id<UILevelSliderDelegate>delegate;
 
 @property (nonatomic) double SliderValue;
 @property (nonatomic) double DisplayValue;
