@@ -79,6 +79,8 @@
 		2610F15518AD9125003F5CEB /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F15318AD9125003F5CEB /* CADebugPrintf.cpp */; };
 		2610F15C18AD9B08003F5CEB /* AUNodeNetwork.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F15B18AD9B08003F5CEB /* AUNodeNetwork.mm */; };
 		261641EE18DA804300AEF042 /* RMSNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 261641EC18DA804300AEF042 /* RMSNode.cpp */; };
+		261641F218DAA90E00AEF042 /* RMSNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641ED18DA804300AEF042 /* RMSNode.h */; };
+		261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641F018DA952100AEF042 /* CircularBuffer.hxx */; };
 		2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77C18B55208001F7224 /* SamplerNode.h */; };
 		2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */; };
 		26478FEE186929130077987F /* XMPNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801018691DE800F6668F /* XMPNode.h */; };
@@ -190,6 +192,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */,
+				261641F218DAA90E00AEF042 /* RMSNode.h in CopyFiles */,
 				2678706318D9141B00779B81 /* UILevelSlider.h in CopyFiles */,
 				2678705F18D7BD7300779B81 /* TouchTracker.h in CopyFiles */,
 				2678705B18D6429000779B81 /* UIKnob.h in CopyFiles */,
@@ -383,6 +387,7 @@
 		2610F15B18AD9B08003F5CEB /* AUNodeNetwork.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AUNodeNetwork.mm; sourceTree = "<group>"; };
 		261641EC18DA804300AEF042 /* RMSNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RMSNode.cpp; sourceTree = "<group>"; };
 		261641ED18DA804300AEF042 /* RMSNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMSNode.h; sourceTree = "<group>"; };
+		261641F018DA952100AEF042 /* CircularBuffer.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircularBuffer.hxx; path = ../AudioController/CircularBuffer.hxx; sourceTree = "<group>"; };
 		2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioNodeCommon.h; sourceTree = "<group>"; };
 		26478FF818692B8C0077987F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		26478FFA18692B910077987F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -672,6 +677,7 @@
 		26057FF818691DE800F6668F /* DSS */ = {
 			isa = PBXGroup;
 			children = (
+				261641F018DA952100AEF042 /* CircularBuffer.hxx */,
 				26057FF918691DE800F6668F /* btree.hxx */,
 				26057FFA18691DE800F6668F /* DebugConsole.h */,
 				26057FFB18691DE800F6668F /* dirty.h */,

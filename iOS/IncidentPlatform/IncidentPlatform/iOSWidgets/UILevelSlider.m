@@ -52,7 +52,9 @@
     else if(_SliderValue < 0.0f)
         _SliderValue = 0.0f;
     
-    [self setNeedsDisplay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setNeedsDisplay];
+    });
 }
 
 -(double)SliderValue {
@@ -67,7 +69,9 @@
     else if(_DisplayValue < 0.0f)
         _DisplayValue = 0.0f;
     
-    [self setNeedsDisplay];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setNeedsDisplay];
+    });
 }
 
 -(double)DisplayValue {
