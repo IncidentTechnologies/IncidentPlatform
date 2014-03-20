@@ -80,10 +80,10 @@ RESULT LevelNode::NotifySubscribers() {
 
     m_msNotificationCounter = 0.0f;
     
-    for(list<LevelSubscriber>::iterator it = m_susbscribers.First(); it != NULL; it++) {
+    for(list<LevelSubscriber*>::iterator it = m_susbscribers.First(); it != NULL; it++) {
         float value;
         
-        switch((*it).type) {
+        switch((*it)->type) {
             case LEVEL_RMS: {
                 if(rmsValue < 0)
                     rmsValue = GetRMSValue();
@@ -107,7 +107,7 @@ RESULT LevelNode::NotifySubscribers() {
             } break;
         }
         
-        (*it).cb(value, (*it).pObject, (*it).pContext);
+        (*it)->cb(value, (*it)->pObject, (*it)->pContext);
     }
     
     return R_SUCCEED;
@@ -129,13 +129,13 @@ float LevelNode::GetNextSample(unsigned long int timestamp) {
 RESULT LevelNode::Subscribe(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
     RESULT r = R_SUCCEED;
     
-    LevelSubscriber sub;
-    memset(&sub, 0, sizeof(LevelSubscriber));
+    LevelSubscriber *sub = new LevelSubscriber;
+    memset(sub, 0, sizeof(LevelSubscriber));
     
-    sub.type = type;
-    sub.pContext = pContext;
-    sub.pObject = pObject;
-    sub.cb = cbLevel;
+    sub->type = type;
+    sub->pContext = pContext;
+    sub->pObject = pObject;
+    sub->cb = cbLevel;
     
     CRM(m_susbscribers.Append(sub), "RMSNode: Subscribe faield to append subscriber");;
     
@@ -146,10 +146,18 @@ Error:
 RESULT LevelNode::UnSubscribe(void *pObject) {
     RESULT r = R_SUCCESS;
     
-    for(list<LevelSubscriber>::iterator it = m_susbscribers.First(); it != NULL; it++) {
-        if((*it).pObject == pObject) {
-            return m_susbscribers.Remove(static_cast<void*>(&(it)), GET_BY_ITERATOR);
-        } break; // for good measure
+    for(list<LevelSubscriber*>::iterator it = m_susbscribers.First(); it != NULL; it++) {
+        if((*it)->pObject == pObject) {
+            LevelSubscriber *tempSub = NULL;
+            CRM(m_susbscribers.Remove(tempSub, (void*)(*it), GET_BY_ITEM), "UnSubscribe failed to remove subscriber");
+            
+            if(tempSub != NULL) {
+                delete tempSub;
+                tempSub = NULL;
+            }
+            
+            // dont break since might be doubly subscribed
+        }
     }
     
 Error:

@@ -25,7 +25,7 @@ typedef enum LEVEL_TYPE {
     LEVEL_INVALID
 } LevelType;
 
-typedef struct Level_SUBSCRIBER {
+typedef struct LEVEL_SUBSCRIBER {
     void *pObject;
     LevelCallback cb;
     void *pContext;
@@ -58,7 +58,7 @@ private:
     
     float m_msNotificationInterval;
     
-    list<LevelSubscriber> m_susbscribers;
+    list<LevelSubscriber*> m_susbscribers;
     CircularBuffer<float> *m_CircularBuffer;
 };
 
