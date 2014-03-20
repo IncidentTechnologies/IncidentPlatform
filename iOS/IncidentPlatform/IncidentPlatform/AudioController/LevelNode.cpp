@@ -44,18 +44,19 @@ float LevelNode::GetAbsoluteMeanValue() {
     
     for(unsigned long i = 0 ; i < m_CircularBuffer->length(); i++) {
         float val = (float)(*m_CircularBuffer)[i];
-        retVal *= pow(fabsf(val), 1.0f/(double)(m_CircularBuffer->length()));
+        retVal += fabsf(val) / (double)(m_CircularBuffer->length());
     }
     
     return retVal;
 }
 
-float LevelNode::GetAbsoluteGeometricMean() {
+float LevelNode::GetAbsoluteGeometricMeanValue() {
     double retVal = 0.0f;
     
     for(unsigned long i = 0 ; i < m_CircularBuffer->length(); i++) {
         float val = (float)(*m_CircularBuffer)[i];
-        retVal += fabsf(val/((float)m_CircularBuffer->length()));
+        
+        retVal *= pow(fabsf(val), 1.0f/(double)(m_CircularBuffer->length()));
     }
     
     return retVal;
@@ -75,6 +76,7 @@ RESULT LevelNode::NotifySubscribers() {
     // niether of these can be negative
     float rmsValue = -1;// = GetRMSValue();
     float absMeanValue = -1;
+    float absGeoMeanValue = -1;
 
     m_msNotificationCounter = 0.0f;
     
@@ -93,6 +95,12 @@ RESULT LevelNode::NotifySubscribers() {
                     absMeanValue = GetAbsoluteMeanValue();
                 value = absMeanValue;
             } break;
+            
+            case LEVEL_ABS_GEOMETRIC_MEAN: {
+                if(absGeoMeanValue < 0)
+                    absGeoMeanValue = GetAbsoluteGeometricMeanValue();
+                value = absGeoMeanValue;
+            }
                 
             case LEVEL_INVALID: {
                 value = 0.0f;

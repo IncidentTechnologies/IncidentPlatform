@@ -41,7 +41,7 @@ public:
     
     float GetRMSValue();
     float GetAbsoluteMeanValue();
-    float GetAbsoluteGeometricMean();
+    float GetAbsoluteGeometricMeanValue();
     float GetValue();
     
     RESULT SetInterval(float msInterval);
