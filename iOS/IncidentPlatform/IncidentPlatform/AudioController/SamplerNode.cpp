@@ -107,6 +107,10 @@ SampleNode*& SamplerBankNode::operator[](const int& i) {
     return retVal;
 }
 
+RESULT SamplerBankNode::UnSubscribe(void *pObject) {
+    return m_levelNode->UnSubscribe(pObject);
+}
+
 RESULT SamplerBankNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
     return m_levelNode->Subscribe(type, pObject, cbLevel, pContext);
 }
@@ -239,6 +243,10 @@ SampleNode* SamplerNode::GetBankSample(int bank, int sample) {
         return m_banks[bank]->GetSample(sample);
     else
         return NULL;
+}
+
+RESULT SamplerNode::UnSubscribe(void *pObject) {
+    return m_levelNode->UnSubscribe(pObject);
 }
 
 RESULT SamplerNode::SubscribeLevel(LevelType type, void *pObject, LevelCallback cbLevel, void *pContext) {
