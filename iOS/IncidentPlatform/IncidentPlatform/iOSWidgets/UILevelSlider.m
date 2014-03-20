@@ -13,6 +13,11 @@
 @synthesize delegate;
 @synthesize SliderValue = _SliderValue;
 @synthesize DisplayValue = _DisplayValue;
+@synthesize GreenColor;
+@synthesize LightGreenColor;
+@synthesize YellowColor;
+@synthesize RedColor;
+@synthesize ControlColor;
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -38,6 +43,12 @@
     m_lightGreenPoint = 0.7f;
     m_yellowPoint = 0.85f;
     m_redPoint = 1.0f;
+    
+    GreenColor = [UIColor greenColor];
+    LightGreenColor = [UIColor colorWithRed:(176.0f/255.0f) green:(253.0f/255.0f) blue:(147.0f/255.0f) alpha:1.0f];
+    YellowColor = [UIColor yellowColor];
+    RedColor = [UIColor redColor];
+    ControlColor = [UIColor blueColor];
     
     [self setSliderValue:0.0f];
     [self setDisplayValue:1.0f];
@@ -153,7 +164,7 @@
     CGContextStrokePath(context);
     
     // Green Level
-    CGContextSetStrokeColorWithColor(context, [UIColor greenColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, GreenColor.CGColor);
     float greenVal = (_DisplayValue > m_greenPoint) ? m_greenPoint : _DisplayValue;
     float greenHeight = effectiveHeight * greenVal;
                             
@@ -163,7 +174,7 @@
     
     // Light Green Level
     if(_DisplayValue > m_greenPoint) {
-        CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(176.0f/255.0f) green:(253.0f/255.0f) blue:(147.0f/255.0f) alpha:1.0f].CGColor);
+        CGContextSetStrokeColorWithColor(context, LightGreenColor.CGColor);
         float lightGreenVal = (_DisplayValue > m_lightGreenPoint) ? m_lightGreenPoint : _DisplayValue;
         float lightGreenStart = m_greenPoint * effectiveHeight;
         float lightGreenHeight = effectiveHeight * lightGreenVal;
@@ -176,7 +187,7 @@
 
     // Yellow Level
     if(_DisplayValue > m_lightGreenPoint) {
-        CGContextSetStrokeColorWithColor(context, [UIColor yellowColor].CGColor);
+        CGContextSetStrokeColorWithColor(context, YellowColor.CGColor);
         float yellowVal = (_DisplayValue > m_yellowPoint) ? m_yellowPoint : _DisplayValue;
         float yellowStart = m_lightGreenPoint * effectiveHeight;
         float yellowHeight = effectiveHeight * yellowVal;
@@ -188,7 +199,7 @@
     
     // Red Level
     if(_DisplayValue > m_yellowPoint) {
-        CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
+        CGContextSetStrokeColorWithColor(context, RedColor.CGColor);
         float redVal = (_DisplayValue > m_redPoint) ? m_redPoint : _DisplayValue;
         float redStart = m_yellowPoint * effectiveHeight;
         float redHeight = effectiveHeight * redVal;
@@ -199,7 +210,7 @@
     }
     
     // Control Rect
-    CGContextSetFillColorWithColor(context, [UIColor blueColor].CGColor);
+    CGContextSetFillColorWithColor(context, ControlColor.CGColor);
     float effSliderPoint = _SliderValue * effectiveHeight;
     float actualSliderPoint = effSliderPoint + m_sliderHeight/2.0f;
     CGRect levelRect = CGRectMake(m_inset, actualSliderPoint - m_sliderHeight/2.0f, rect.size.width - 2.0f*m_inset, m_sliderHeight);
