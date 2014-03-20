@@ -34,6 +34,12 @@
 
 @property (weak, nonatomic) id<UILevelSliderDelegate>delegate;
 
+@property UIColor *GreenColor;
+@property UIColor *LightGreenColor;
+@property UIColor *YellowColor;
+@property UIColor *RedColor;
+@property UIColor *ControlColor;
+
 @property (nonatomic) double SliderValue;
 @property (nonatomic) double DisplayValue;
 
