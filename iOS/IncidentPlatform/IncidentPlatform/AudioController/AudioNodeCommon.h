@@ -25,4 +25,7 @@
 #include "FirstOrderFilterNode.h"
 #include "ReverbNode.h"
 
+// Utility
+#include "FileoutNode.h"
+
 #endif

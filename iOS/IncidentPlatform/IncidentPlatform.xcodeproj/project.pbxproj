@@ -81,6 +81,8 @@
 		261641EE18DA804300AEF042 /* LevelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 261641EC18DA804300AEF042 /* LevelNode.cpp */; };
 		261641F218DAA90E00AEF042 /* LevelNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641ED18DA804300AEF042 /* LevelNode.h */; };
 		261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641F018DA952100AEF042 /* CircularBuffer.hxx */; };
+		2616854318E8C18E00094BB0 /* FileoutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2616854118E8C18E00094BB0 /* FileoutNode.cpp */; };
+		2616854418E8C5ED00094BB0 /* FileoutNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616854218E8C18E00094BB0 /* FileoutNode.h */; };
 		261D09AB18DBA10D00C7A0FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */; };
 		2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77C18B55208001F7224 /* SamplerNode.h */; };
 		2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */; };
@@ -193,6 +195,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				2616854418E8C5ED00094BB0 /* FileoutNode.h in CopyFiles */,
 				261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */,
 				261641F218DAA90E00AEF042 /* LevelNode.h in CopyFiles */,
 				2678706318D9141B00779B81 /* UILevelSlider.h in CopyFiles */,
@@ -389,6 +392,8 @@
 		261641EC18DA804300AEF042 /* LevelNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelNode.cpp; sourceTree = "<group>"; };
 		261641ED18DA804300AEF042 /* LevelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelNode.h; sourceTree = "<group>"; };
 		261641F018DA952100AEF042 /* CircularBuffer.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircularBuffer.hxx; path = ../AudioController/CircularBuffer.hxx; sourceTree = "<group>"; };
+		2616854118E8C18E00094BB0 /* FileoutNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileoutNode.cpp; sourceTree = "<group>"; };
+		2616854218E8C18E00094BB0 /* FileoutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileoutNode.h; sourceTree = "<group>"; };
 		261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioNodeCommon.h; sourceTree = "<group>"; };
 		26478FF818692B8C0077987F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -859,6 +864,8 @@
 				2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */,
 				261641EC18DA804300AEF042 /* LevelNode.cpp */,
 				261641ED18DA804300AEF042 /* LevelNode.h */,
+				2616854118E8C18E00094BB0 /* FileoutNode.cpp */,
+				2616854218E8C18E00094BB0 /* FileoutNode.h */,
 			);
 			name = AudioNode;
 			sourceTree = "<group>";
@@ -1309,6 +1316,7 @@
 				264EC76C18B30741001F7224 /* AudioNodeFactory.mm in Sources */,
 				264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */,
 				26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */,
+				2616854318E8C18E00094BB0 /* FileoutNode.cpp in Sources */,
 				2610F12D18AD6A31003F5CEB /* AUMixerNode.mm in Sources */,
 				2610F13018AD6A31003F5CEB /* ButterWorthFilterElement.mm in Sources */,
 				2610F14518AD6A31003F5CEB /* TanhDistortion.mm in Sources */,

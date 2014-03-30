@@ -43,11 +43,14 @@ public:
     float SetFrequency(float freq);
     float SetPhaseOffset(float phase);
 
+    RESULT SetType(WAVETABLE_TYPE type);
+    
 private:
     void InitializeWavetable();
-    
-public:
+
     WAVETABLE_TYPE m_type;
+
+public:
     float m_phase;
     float m_frequency;
     float m_theta;

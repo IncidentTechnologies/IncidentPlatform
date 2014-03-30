@@ -50,7 +50,6 @@ WavetableNode::WavetableNode() :
     m_type(WAVETABLE_SAW)
 {
     SetChannelCount(1, CONN_OUT);
-    
     InitializeWavetable();
 }
 
@@ -59,6 +58,16 @@ void WavetableNode::InitializeWavetable() {
     
     for(int i = 0; i < WAVETABLE_LENGTH; i++)
         m_wavetable[i] = WavetableFunctions[m_type](i * wavetableIncrement);
+}
+
+RESULT WavetableNode::SetType(WAVETABLE_TYPE type) {
+    RESULT r = R_SUCCESS;
+    
+    m_type = type;
+    InitializeWavetable();
+    
+Error:
+    return r;
 }
 
 void WavetableNode::trigger() {

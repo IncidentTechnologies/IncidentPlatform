@@ -231,18 +231,14 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
+    
     OutputDataFormat.mSampleRate         = 44100.0;
-    
     OutputDataFormat.mFormatID           = kAudioFormatMPEG4AAC;
-    
     OutputDataFormat.mFormatFlags        = kMPEG4Object_AAC_Main;
-    
     OutputDataFormat.mChannelsPerFrame   = 1;
     OutputDataFormat.mBytesPerPacket     = 0;
     OutputDataFormat.mBytesPerFrame      = 0;
-    
     OutputDataFormat.mFramesPerPacket    = 1024;
-    
     OutputDataFormat.mBitsPerChannel     = 0;
     OutputDataFormat.mReserved           = 0;
     
