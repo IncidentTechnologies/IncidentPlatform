@@ -245,12 +245,12 @@ Error:
 
 RESULT XMPTree::PrintXMPTree(SmartBuffer* &n_psmbuf) {         
     n_psmbuf = new SmartBuffer();
-    return PrintXMPTree(m_pRoot, 0, n_psmbuf); 
+    return PrintXMPTree(*m_pRoot->GetChildren()->First(), 0, n_psmbuf);
 }
 
 RESULT XMPTree::PrintXMPTree() {         
     SmartBuffer *pNulBuf = NULL;
-    return PrintXMPTree(m_pRoot, 0, pNulBuf); 
+    return PrintXMPTree(*m_pRoot->GetChildren()->First(), 0, pNulBuf);
 }
 
 RESULT XMPTree::SaveXMPToFile(char *pszFilename, bool fOverwrite) {
@@ -263,7 +263,7 @@ RESULT XMPTree::SaveXMPToFile(char *pszFilename, bool fOverwrite) {
         pFile = fopen(pszFilename, "wb");
         
         SmartBuffer *pTemp = NULL;
-        CRM(PrintXMPTree(m_pRoot, 0, pTemp, pFile), "SaveXMPToFile: Faild due to PrintXMPTree Failure");            
+        CRM(PrintXMPTree(*m_pRoot->GetChildren()->First(), 0, pTemp, pFile), "SaveXMPToFile: Faild due to PrintXMPTree Failure");            
     }
     else        
         CBRM(0, "File %s already exists or overwrite flag not set!", pszFilename);        

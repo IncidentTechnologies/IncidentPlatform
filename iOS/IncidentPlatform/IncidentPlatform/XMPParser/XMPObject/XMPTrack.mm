@@ -25,6 +25,8 @@ Error:
     else
         m_Name = @"";
     
+    m_TrackName = m_Name;
+    
 Error:
     return r;
 }

@@ -36,6 +36,9 @@ public:
     unsigned long int GetByteSize();
     void *GetBufferArray();
     
+public:
+    RESULT SetSampleRate(unsigned long samplerate);
+    
 private:
     RESULT SetStartSample(unsigned long start);
     RESULT SetEndSample(unsigned long end);

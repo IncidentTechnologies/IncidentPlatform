@@ -19,6 +19,8 @@
     CPRM((self = [self init]), "initWithParentLesson: Failed to init");
     m_type = XMP_OBJECT_SAMPLE;
     
+    m_SampleBuffer = NULL;
+    
     [self ConstructSample];
     
     return self;
@@ -32,9 +34,28 @@ Error:
     float starttime, endtime;
     int samplerate;
     
+    if([self HasAttributeWithName:@"fileref"]) {
+        NSString *tempPath = [[NSString alloc] initWithCString:[self GetAttributeValueWithName:@"fileref"].GetPszValue()
+                                                      encoding:NSUTF8StringEncoding];
+        // Check if file exists there
+        NSString *componentName = [tempPath stringByDeletingPathExtension];
+        NSString *componentExt = [tempPath pathExtension];
+        m_strResourcePath = [[NSBundle mainBundle] pathForResource:componentName ofType:componentExt];
+    }
+    
     [self GetXMPValueOfChild:@"starttime" withAttribute:@"value"].GetValueDouble((double*)(&starttime));
     [self GetXMPValueOfChild:@"endtime" withAttribute:@"value"].GetValueDouble((double*)(&endtime));
+
+    if(m_SampleBuffer != NULL)
+        m_SampleBuffer->SetEnd(endtime);
+    
     [self GetXMPValueOfChild:@"samplerate" withAttribute:@"value"].GetValueInt((long*)(&samplerate));
+    //m_SampleBuffer->m_SampleRate = samplerate;
+    
+    if([self HasAttributeWithName:@"value"])
+        [self GetAttributeValueWithName:@"value"].GetValueInt((long*)(&m_value));
+    else
+        m_value = -1;
     
     //XMPObject *tempData = [self GetChildWithName:@"data"];
     //int a = 5;

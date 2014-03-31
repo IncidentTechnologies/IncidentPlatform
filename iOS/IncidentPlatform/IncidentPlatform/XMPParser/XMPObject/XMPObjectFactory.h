@@ -18,6 +18,8 @@
 +(XMPObject*)MakeXMPObjectFromFilename:(NSString *)XMPFileName;
 +(XMPObject*)MakeXMPObject:(XMPNode*)xmpNode;
 
++(XMPObject*)MakeXMPObjectFromType:(XMP_OBJECT_TYPE)type;
+
 //+(const unsigned int)str2int:(const char *)str withH:(int)h;
 
 @end

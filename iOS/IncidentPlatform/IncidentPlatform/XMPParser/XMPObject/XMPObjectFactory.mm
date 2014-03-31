@@ -28,6 +28,11 @@
 #import "XMPSample.h"
 #import "XMPData.h"
 
+#import "XMPContent.h"
+#import "XMPSampler.h"
+#import "XMPBank.h"
+#import "XMPInstrument.h"
+
 @implementation XMPObjectFactory
 
 /*
@@ -105,6 +110,18 @@ Error:
     else if(strcmp(pszName, (char*)"data") == 0) {
         retObj = [[XMPData alloc] initWithXMPNode:xmpNode];
     }
+    else if(strcmp(pszName, (char*)"content") == 0) {
+        retObj = [[XMPContent alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"sampler") == 0) {
+        retObj = [[XMPSampler alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"bank") == 0) {
+        retObj = [[XMPBank alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"instrument") == 0) {
+        retObj = [[XMPInstrument alloc] initWithXMPNode:xmpNode];
+    }
     else {
         retObj = [[XMPObject alloc] initWithXMPNode:xmpNode];
     }
@@ -116,6 +133,98 @@ Error:
     */
     
     return retObj;
+}
+
++(XMPObject*)MakeXMPObjectFromType:(XMP_OBJECT_TYPE)type {
+    XMPObject *retObject = NULL;
+    
+    switch(type) {
+        case XMP_OBJECT_TEXT: {
+            retObject = [[XMPText alloc] init];
+        } break;
+            
+        case XMP_OBJECT_LEDEVENT: {
+            retObject = [[XMPLEDEvent alloc] init];
+        } break;
+            
+        case XMP_OBJECT_LOOP: {
+            // TODO: retObject = [[XMPLoop alloc] init];
+        } break;
+            
+        case XMP_OBJECT_GTARNOTE: {
+            retObject = [[XMPGtarNote alloc] init];
+        } break;
+            
+        case XMP_OBJECT_INPUT: {
+            retObject = [[XMPInput alloc] init];
+        } break;
+            
+        case XMP_OBJECT_LESSON: {
+            retObject = [[XMPLesson alloc] init];
+        } break;
+            
+        case XMP_OBJECT_CHAPTER: {
+            retObject = [[XMPLessonChapter alloc] init];
+        } break;
+            
+        case XMP_OBJECT_SONG: {
+            retObject = [[XMPSong alloc] init];
+        } break;
+            
+        case XMP_OBJECT_OBJECT: {
+            retObject = [[XMPObject alloc] init];
+        } break;
+            
+        case XMP_OBJECT_TRACK: {
+            retObject = [[XMPTrack alloc] init];
+        } break;
+            
+        case XMP_OBJECT_MEASURE: {
+            retObject = [[XMPMeasure alloc] init];
+        } break;
+            
+        case XMP_OBJECT_CLIP: {
+            //retObject = [[XMPClip alloc] init];
+        } break;
+            
+        case XMP_OBJECT_GROUP: {
+            //TODO: retObject = [[XMPGroup alloc] init];
+        } break;
+            
+        case XMP_OBJECT_NOTE: {
+            retObject = [[XMPNote alloc] init];
+        } break;
+            
+        case XMP_OBJECT_SAMPLE: {
+            retObject = [[XMPSample alloc] init];
+        } break;
+            
+        case XMP_OBJECT_DATA: {
+            retObject = [[XMPData alloc] init];
+        } break;
+            
+        case XMP_OBJECT_CONTENT: {
+            retObject = [[XMPContent alloc] init];
+        } break;
+            
+        case XMP_OBJECT_INSTRUMENT: {
+            // TODO: retObject = [[XMPInstrument alloc] init];
+        } break;
+            
+        case XMP_OBJECT_SAMPLER: {
+            // TODO: retObject = [[XMPSampler alloc] init];
+        } break;
+            
+        case XMP_OBJECT_BANK: {
+            // TODO: retObject = [[XMPBank alloc] init];
+        } break;
+            
+        default: {
+            retObject = NULL;
+        } break;
+    }
+    
+    return retObject;
 }
 
 @end

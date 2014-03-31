@@ -131,6 +131,36 @@ RESULT XMPValue::GetValueDouble(double *value) {
     }
 }
 
+RESULT XMPValue::GetValueBool(bool *value) {
+    if(this->m_ValueType == XMP_VALUE_DOUBLE) {
+        if(*((double*)m_Buffer) == 0)
+            *value = false;
+        else
+            *value = true;
+        
+        return R_SUCCESS;
+    }
+    else if(this->m_ValueType == XMP_VALUE_INTEGER) {
+        if((*((long int*)m_Buffer)) == 0)
+            *value = false;
+        else
+            *value = true;
+        
+        return R_SUCCESS;
+    }
+    else if(this->m_ValueType == XMP_VALUE_STRING) {
+        if(strcmp((char *)m_Buffer, "true") == 0 || strcmp((char *)m_Buffer, "TRUE") == 0)
+            *value = true;
+        else
+            *value = false;
+        
+        return R_SUCCESS;
+    }
+    else {
+        return R_FAIL;
+    }
+}
+
 char* XMPValue::GetPszValue() {
     char *ReturnBuffer = new char[25];
     memset(ReturnBuffer, 0, sizeof(char) * 25);

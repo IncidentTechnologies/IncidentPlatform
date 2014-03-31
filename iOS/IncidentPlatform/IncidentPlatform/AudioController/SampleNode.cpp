@@ -84,6 +84,12 @@ Error:
     return r;
 }
 
+// Warning, this can be dangerous to manipulate
+RESULT SampleBuffer::SetSampleRate(unsigned long samplerate) {
+    m_SampleRate = samplerate;
+    return R_SUCCEED;
+}
+
 float SampleBuffer::GetStart() {
     return ((float)m_pBuffer_start * 1000.0f) / (float)m_SampleRate;
 }

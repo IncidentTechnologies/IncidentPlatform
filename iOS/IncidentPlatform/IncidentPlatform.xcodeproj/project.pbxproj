@@ -83,6 +83,11 @@
 		261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261641F018DA952100AEF042 /* CircularBuffer.hxx */; };
 		2616854318E8C18E00094BB0 /* FileoutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2616854118E8C18E00094BB0 /* FileoutNode.cpp */; };
 		2616854418E8C5ED00094BB0 /* FileoutNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616854218E8C18E00094BB0 /* FileoutNode.h */; };
+		2616854718E9278800094BB0 /* XMPClip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616854618E9278800094BB0 /* XMPClip.mm */; };
+		2616854F18E93FA500094BB0 /* XMPContent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616854E18E93FA500094BB0 /* XMPContent.mm */; };
+		2616855218E940DE00094BB0 /* XMPSampler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616855118E940DE00094BB0 /* XMPSampler.mm */; };
+		2616855518E943E900094BB0 /* XMPBank.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616855418E943E900094BB0 /* XMPBank.mm */; };
+		2616855818E9443D00094BB0 /* XMPInstrument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616855718E9443D00094BB0 /* XMPInstrument.mm */; };
 		261D09AB18DBA10D00C7A0FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */; };
 		2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77C18B55208001F7224 /* SamplerNode.h */; };
 		2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */; };
@@ -394,6 +399,16 @@
 		261641F018DA952100AEF042 /* CircularBuffer.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircularBuffer.hxx; path = ../AudioController/CircularBuffer.hxx; sourceTree = "<group>"; };
 		2616854118E8C18E00094BB0 /* FileoutNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileoutNode.cpp; sourceTree = "<group>"; };
 		2616854218E8C18E00094BB0 /* FileoutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileoutNode.h; sourceTree = "<group>"; };
+		2616854518E9278800094BB0 /* XMPClip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPClip.h; sourceTree = "<group>"; };
+		2616854618E9278800094BB0 /* XMPClip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPClip.mm; sourceTree = "<group>"; };
+		2616854D18E93FA500094BB0 /* XMPContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPContent.h; sourceTree = "<group>"; };
+		2616854E18E93FA500094BB0 /* XMPContent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPContent.mm; sourceTree = "<group>"; };
+		2616855018E940DE00094BB0 /* XMPSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPSampler.h; sourceTree = "<group>"; };
+		2616855118E940DE00094BB0 /* XMPSampler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPSampler.mm; sourceTree = "<group>"; };
+		2616855318E943E900094BB0 /* XMPBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPBank.h; sourceTree = "<group>"; };
+		2616855418E943E900094BB0 /* XMPBank.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPBank.mm; sourceTree = "<group>"; };
+		2616855618E9443D00094BB0 /* XMPInstrument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPInstrument.h; sourceTree = "<group>"; };
+		2616855718E9443D00094BB0 /* XMPInstrument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPInstrument.mm; sourceTree = "<group>"; };
 		261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioNodeCommon.h; sourceTree = "<group>"; };
 		26478FF818692B8C0077987F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -765,6 +780,16 @@
 				2605802918691DE800F6668F /* XMPText.mm */,
 				2605802A18691DE800F6668F /* XMPTrack.h */,
 				2605802B18691DE800F6668F /* XMPTrack.mm */,
+				2616854518E9278800094BB0 /* XMPClip.h */,
+				2616854618E9278800094BB0 /* XMPClip.mm */,
+				2616854D18E93FA500094BB0 /* XMPContent.h */,
+				2616854E18E93FA500094BB0 /* XMPContent.mm */,
+				2616855018E940DE00094BB0 /* XMPSampler.h */,
+				2616855118E940DE00094BB0 /* XMPSampler.mm */,
+				2616855318E943E900094BB0 /* XMPBank.h */,
+				2616855418E943E900094BB0 /* XMPBank.mm */,
+				2616855618E9443D00094BB0 /* XMPInstrument.h */,
+				2616855718E9443D00094BB0 /* XMPInstrument.mm */,
 			);
 			path = XMPObject;
 			sourceTree = "<group>";
@@ -1306,16 +1331,19 @@
 				2610F14118AD6A31003F5CEB /* Parameter.cpp in Sources */,
 				2647908618692BA50077987F /* vertex.vsh in Sources */,
 				2605804718691DE800F6668F /* XMPLesson.mm in Sources */,
+				2616854F18E93FA500094BB0 /* XMPContent.mm in Sources */,
 				2605805218691DE800F6668F /* XMPTest.cpp in Sources */,
 				2605805118691DE800F6668F /* XMPParser.cpp in Sources */,
 				2610F13E18AD6A31003F5CEB /* KSObject.mm in Sources */,
 				2647907C18692BA50077987F /* FlatObject.cpp in Sources */,
 				264EC77318B43CC9001F7224 /* EffectNode.cpp in Sources */,
+				2616854718E9278800094BB0 /* XMPClip.mm in Sources */,
 				2610F12E18AD6A31003F5CEB /* AUOutputNode.mm in Sources */,
 				2647908018692BA50077987F /* MeshMd3.cpp in Sources */,
 				264EC76C18B30741001F7224 /* AudioNodeFactory.mm in Sources */,
 				264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */,
 				26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */,
+				2616855818E9443D00094BB0 /* XMPInstrument.mm in Sources */,
 				2616854318E8C18E00094BB0 /* FileoutNode.cpp in Sources */,
 				2610F12D18AD6A31003F5CEB /* AUMixerNode.mm in Sources */,
 				2610F13018AD6A31003F5CEB /* ButterWorthFilterElement.mm in Sources */,
@@ -1326,6 +1354,7 @@
 				2647908818692BA50077987F /* vertex.vsh in Sources */,
 				2605804D18691DE800F6668F /* XMPObjectFactory.mm in Sources */,
 				2610F13218AD6A31003F5CEB /* ChorusEffect.mm in Sources */,
+				2616855218E940DE00094BB0 /* XMPSampler.mm in Sources */,
 				2605804118691DE800F6668F /* XMPElement.cpp in Sources */,
 				2605804618691DE800F6668F /* XMPLEDEvent.mm in Sources */,
 				2605804C18691DE800F6668F /* XMPObject.mm in Sources */,
@@ -1377,6 +1406,7 @@
 				2605804F18691DE800F6668F /* XMPText.mm in Sources */,
 				2647908318692BA50077987F /* ObjectStore.cpp in Sources */,
 				2610F13118AD6A31003F5CEB /* CAStreamBasicDescription.cpp in Sources */,
+				2616855518E943E900094BB0 /* XMPBank.mm in Sources */,
 				2678705E18D7BD4400779B81 /* TouchTracker.m in Sources */,
 				264790A21869304C0077987F /* WindowNPAPIWin32.cpp in Sources */,
 				2610F13318AD6A31003F5CEB /* Compressor.mm in Sources */,

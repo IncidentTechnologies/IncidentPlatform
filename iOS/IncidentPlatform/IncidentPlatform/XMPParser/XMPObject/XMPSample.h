@@ -12,7 +12,10 @@
 class SampleBuffer;
 
 @interface XMPSample : XMPObject {
-    SampleBuffer *m_SampleBuffer;       // contains all the info (including sample)
+    SampleBuffer *m_SampleBuffer;       // Contains all the info (including sample)
+    
+    int m_value;
+    NSString *m_strResourcePath;
 }
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;

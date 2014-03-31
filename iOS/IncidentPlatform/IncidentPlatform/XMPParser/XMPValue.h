@@ -37,6 +37,8 @@ public:
     char *GetPszValue();
     RESULT GetValueInt(long int *);
     RESULT GetValueDouble(double *);
+    RESULT GetValueBool(bool *);
+    
     RESULT SetValueChar(char value);
     
     RESULT SetBuffer(void *newBuffer, int newBuffer_n, XMP_VALUE_TYPE newType);
