@@ -21,4 +21,6 @@
 
 -(RESULT)ConsructLessonChapterFromChapterNode;
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
 @end

@@ -32,6 +32,7 @@ public:
     bool Empty(); 
 
     RESULT AppendContent(char *pszContent);
+    RESULT AppendContentNode(char *pszContent);
 
     bool IsContentNode();
     bool IsDataNode();
@@ -42,6 +43,7 @@ public:
     
     char *text();
     bool HasContent();
+    //RESULT AppendContent(char *pszContent);
 
 private:
     char *m_pszName;        // Tag name

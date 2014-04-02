@@ -10,6 +10,28 @@
 #import "XMPNode.h"
 #import "XMPObject.h"
 
+#import "XMPText.h"
+#import "XMPGtarNote.h"
+#import "XMPLEDEvent.h"
+#import "XMPLoop.h"
+#import "XMPInput.h"
+#import "XMPLesson.h"
+#import "XMPLessonChapter.h"
+
+#import "XMPTrack.h"
+#import "XMPSong.h"
+#import "XMPNote.h"
+#import "XMPMeasure.h"
+
+#import "XMPSample.h"
+#import "XMPData.h"
+
+#import "XMPClip.h"
+#import "XMPContent.h"
+#import "XMPSampler.h"
+#import "XMPBank.h"
+#import "XMPInstrument.h"
+
 @interface XMPObjectFactory : NSObject {
     
 }

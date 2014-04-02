@@ -14,4 +14,6 @@
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 -(RESULT)ConstructMeasure;
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
 @end

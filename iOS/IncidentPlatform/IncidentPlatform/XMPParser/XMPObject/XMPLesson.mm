@@ -46,4 +46,35 @@ Error:
     return r;
 }
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    
+    XMPNode *headerNode = new XMPNode("header", node);
+    node->AddChild(headerNode);
+    
+    XMPNode *tempNode = new XMPNode("description", headerNode);
+    tempNode->AppendContent((char*)[m_Description UTF8String]);
+    headerNode->AddChild(tempNode);
+    
+    tempNode = new XMPNode("title", headerNode);
+    tempNode->AppendContent((char*)[m_Title UTF8String]);
+    headerNode->AddChild(tempNode);
+    
+    tempNode = new XMPNode("author", headerNode);
+    tempNode->AppendContent((char*)[m_Author UTF8String]);
+    headerNode->AddChild(tempNode);
+    
+    // Shouldn't have any children, but if it does
+    for(XMPObject *child in m_contents) {
+        if(child->m_type != XMP_OBJECT_OBJECT) {
+            XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+            node->AddChild(childNode);
+        }
+    }
+    
+    return node;
+}
+
 @end

@@ -11,6 +11,7 @@
 #import "EHM.h"
 #import "XMPValue.h"
 #import "XMPNode.h"
+#import "XMPTree.h"
 
 using namespace dss;
 
@@ -50,10 +51,18 @@ typedef enum XMPObjectTypes
     NSString *m_Name;
 }
 
+-(NSString*)GetName;
+-(void)SetName:(NSString*)strName;
+-(void)SetType:(XMP_OBJECT_TYPE)type;
+
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 
--(RESULT)AddXmpObject:(XMPObject*)xmpObj;
--(RESULT)AddXMpVariable:(XMPValue*)xmpVar;
+-(RESULT)AddXMPObject:(XMPObject*)xmpObj;
+-(RESULT)AddXMPVariable:(XMPValue*)xmpVar;
+
+-(RESULT)RemoveXMPObject:(XMPObject*)xmpObj;
+-(RESULT)RemoveXMPVariable:(XMPValue*)xmpVar;
+
 -(RESULT)BuildChildren;
 
 -(bool)ContentHasXMPNode:(XMPNode*)xmpNode;
@@ -68,6 +77,10 @@ typedef enum XMPObjectTypes
 -(XMPValue)GetAttributeValueWithName:(NSString *)name;
 
 -(XMPValue)GetXMPValueOfChild:(NSString *)childName withAttribute:(NSString*)attributeName;
+
+//-(XMPNode*)CreateXMPNodeFromObject;
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+-(XMPTree*)GetXMPTree;
 
 -(NSString*)Text;
 

@@ -174,6 +174,23 @@
 		26CC24A518BDC24000716750 /* DiffusionTankNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10518AD6A31003F5CEB /* DiffusionTankNode.h */; };
 		26CC24A618BDC67000716750 /* ReverbNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11F18AD6A31003F5CEB /* ReverbNode.h */; };
 		26CC24A718BDC7A200716750 /* FirstOrderFilterNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10F18AD6A31003F5CEB /* FirstOrderFilterNode.h */; };
+		26E2E6FC18EB782E00B5EBE2 /* XMPSong.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605802618691DE800F6668F /* XMPSong.h */; };
+		26E2E6FD18EB8FEB00B5EBE2 /* XMPTrack.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605802A18691DE800F6668F /* XMPTrack.h */; };
+		26E2E6FE18EB8FF400B5EBE2 /* XMPClip.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616854518E9278800094BB0 /* XMPClip.h */; };
+		26E2E6FF18EB8FFF00B5EBE2 /* XMPNote.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605802018691DE800F6668F /* XMPNote.h */; };
+		26E2E70018EB900E00B5EBE2 /* XMPSampler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616855018E940DE00094BB0 /* XMPSampler.h */; };
+		26E2E70118EB977200B5EBE2 /* XMPInstrument.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616855618E9443D00094BB0 /* XMPInstrument.h */; };
+		26E2E70218EB978100B5EBE2 /* XMPBank.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616855318E943E900094BB0 /* XMPBank.h */; };
+		26E2E70318EB97B300B5EBE2 /* XMPText.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605802818691DE800F6668F /* XMPText.h */; };
+		26E2E70418EB97C800B5EBE2 /* XMPGtarNote.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801218691DE800F6668F /* XMPGtarNote.h */; };
+		26E2E70518EB97E800B5EBE2 /* XMPData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F72A9B18C9B16800D2D560 /* XMPData.h */; };
+		26E2E70618EB97E800B5EBE2 /* XMPInput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801418691DE800F6668F /* XMPInput.h */; };
+		26E2E70718EB97E800B5EBE2 /* XMPLEDEvent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801618691DE800F6668F /* XMPLEDEvent.h */; };
+		26E2E70818EB97E800B5EBE2 /* XMPLesson.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801818691DE800F6668F /* XMPLesson.h */; };
+		26E2E70918EB97E800B5EBE2 /* XMPLessonChapter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801A18691DE800F6668F /* XMPLessonChapter.h */; };
+		26E2E70A18EB97E800B5EBE2 /* XMPLoop.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801C18691DE800F6668F /* XMPLoop.h */; };
+		26E2E70B18EB97E800B5EBE2 /* XMPMeasure.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801E18691DE800F6668F /* XMPMeasure.h */; };
+		26E2E70C18EB97E800B5EBE2 /* XMPContent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2616854D18E93FA500094BB0 /* XMPContent.h */; };
 		26EBC39418ADB5260068BEC6 /* AUNodeNetwork.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F15A18AD9B08003F5CEB /* AUNodeNetwork.h */; };
 		26EBC39518ADB5950068BEC6 /* AudioNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F0F118AD6A31003F5CEB /* AudioNode.h */; };
 		26EBC39618ADB5950068BEC6 /* AUAudioNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F0E918AD6A31003F5CEB /* AUAudioNode.h */; };
@@ -200,6 +217,23 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				26E2E70518EB97E800B5EBE2 /* XMPData.h in CopyFiles */,
+				26E2E70618EB97E800B5EBE2 /* XMPInput.h in CopyFiles */,
+				26E2E70718EB97E800B5EBE2 /* XMPLEDEvent.h in CopyFiles */,
+				26E2E70818EB97E800B5EBE2 /* XMPLesson.h in CopyFiles */,
+				26E2E70918EB97E800B5EBE2 /* XMPLessonChapter.h in CopyFiles */,
+				26E2E70A18EB97E800B5EBE2 /* XMPLoop.h in CopyFiles */,
+				26E2E70B18EB97E800B5EBE2 /* XMPMeasure.h in CopyFiles */,
+				26E2E70C18EB97E800B5EBE2 /* XMPContent.h in CopyFiles */,
+				26E2E70418EB97C800B5EBE2 /* XMPGtarNote.h in CopyFiles */,
+				26E2E70318EB97B300B5EBE2 /* XMPText.h in CopyFiles */,
+				26E2E70218EB978100B5EBE2 /* XMPBank.h in CopyFiles */,
+				26E2E70118EB977200B5EBE2 /* XMPInstrument.h in CopyFiles */,
+				26E2E70018EB900E00B5EBE2 /* XMPSampler.h in CopyFiles */,
+				26E2E6FF18EB8FFF00B5EBE2 /* XMPNote.h in CopyFiles */,
+				26E2E6FE18EB8FF400B5EBE2 /* XMPClip.h in CopyFiles */,
+				26E2E6FD18EB8FEB00B5EBE2 /* XMPTrack.h in CopyFiles */,
+				26E2E6FC18EB782E00B5EBE2 /* XMPSong.h in CopyFiles */,
 				2616854418E8C5ED00094BB0 /* FileoutNode.h in CopyFiles */,
 				261641F318DAA91A00AEF042 /* CircularBuffer.hxx in CopyFiles */,
 				261641F218DAA90E00AEF042 /* LevelNode.h in CopyFiles */,

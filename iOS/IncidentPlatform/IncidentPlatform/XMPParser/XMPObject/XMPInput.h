@@ -15,4 +15,6 @@
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
 @end

@@ -25,7 +25,8 @@ class XMPValue {
 public:
     XMPValue();
     XMPValue(XMPNode *xmpNode);
-    XMPValue(char *pszValue); 
+    XMPValue(char *pszValue);
+    XMPValue(int value);
     XMPValue(long int value);
     XMPValue(double value);
 

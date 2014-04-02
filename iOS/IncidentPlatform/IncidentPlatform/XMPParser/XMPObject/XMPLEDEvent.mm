@@ -24,4 +24,20 @@ Error:
     return NULL;
 }
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    
+    // Shouldn't have any children, but if it does
+    /*
+     for(XMPObject *child in m_contents) {
+     XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+     node->AddChild(childNode);
+     }
+     */
+    
+    return node;
+}
+
 @end

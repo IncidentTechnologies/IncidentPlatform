@@ -25,4 +25,6 @@ typedef enum {
 -(RESULT) ConstructData;
 -(DATA_ENCODING) ConvertEncodingString:(char*)pszEncoding;
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
 @end

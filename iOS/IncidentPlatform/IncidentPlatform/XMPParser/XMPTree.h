@@ -32,6 +32,8 @@ public:
     RESULT NavigateToChildName(char *pszName);
     RESULT NavigateToParent();
     RESULT AddChildByName(char *pszName);
+    RESULT AddChild(XMPNode* node);
+    
     RESULT AddAttributeByNameValue(char *pszName, char *pszValue);
     RESULT AddAttribute(XMPAttribute *attrib);
     RESULT AppendContent(char *pszContent);

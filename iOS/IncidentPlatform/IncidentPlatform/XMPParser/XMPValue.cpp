@@ -35,6 +35,15 @@ XMPValue::XMPValue(char *pszValue) :
     SetValue(pszValue);
 }
 
+XMPValue::XMPValue(int value) :
+    m_ValueType(XMP_VALUE_INVALID),
+    m_Buffer(NULL),
+    m_BufferSize(0),
+    m_pszName(NULL)
+{
+    SetValueInt((long int)value);
+}
+
 XMPValue::XMPValue(long int value) :
     m_ValueType(XMP_VALUE_INVALID),
     m_Buffer(NULL),

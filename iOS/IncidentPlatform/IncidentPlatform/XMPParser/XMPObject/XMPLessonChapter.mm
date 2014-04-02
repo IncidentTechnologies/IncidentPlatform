@@ -42,4 +42,21 @@ Error:
     return r;
 }
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    node->AddAttribute(new XMPAttribute("title", (char*)[m_Title UTF8String]));
+    
+    // Shouldn't have any children, but if it does
+    for(XMPObject *child in m_contents) {
+        if(child->m_type != XMP_OBJECT_OBJECT) {
+            XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+            node->AddChild(childNode);
+        }
+    }
+    
+    return node;
+}
+
 @end

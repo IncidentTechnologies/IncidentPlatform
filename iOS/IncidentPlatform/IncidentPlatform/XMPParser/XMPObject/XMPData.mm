@@ -43,7 +43,6 @@ Error:
         dataLength.GetValueInt((long*)(&m_length));
     
     m_data = [[NSData alloc] initWithBase64EncodedString:[self Text] options:0];
-    int a = 5;
     
 Error:
     return r;
@@ -54,6 +53,23 @@ Error:
         return DATA_ENCODING_BASE64;
     
     return DATA_ENCODING_INVALID;
+}
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    node->AddChild(new XMPNode("content", node, (char*)[[m_data base64EncodedStringWithOptions:0] UTF8String]));
+    
+    // Shouldn't have any children, but if it does
+    /*
+    for(XMPObject *child in m_contents) {
+        XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+        node->AddChild(childNode);
+    }
+    */
+    
+    return node;
 }
 
 @end

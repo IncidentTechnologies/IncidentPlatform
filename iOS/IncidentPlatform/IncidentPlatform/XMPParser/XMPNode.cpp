@@ -103,6 +103,18 @@ Error:
     return r;
 }
 
+/*
+RESULT XMPNode::AppendContent(char *pszContent) {
+    RESULT r = R_SUCCESS;
+    
+    XMPNode *pTemp = new XMPNode("content", this, pszContent);
+    CRM(AddChild(pTemp), "XMPTree:AppendContent Failed to append content");
+    
+Error:
+    return r;
+}
+ */
+
 XMPNode* XMPNode::GetParent(){
   return m_Parent; 
 }
@@ -162,6 +174,16 @@ bool XMPNode::HasContent() {
     }
     
     return false;
+}
+
+RESULT XMPNode::AppendContentNode(char *pszContent) {
+    RESULT r = R_SUCCESS;
+    
+    XMPNode *contentNode = new XMPNode("content", NULL, pszContent);
+    CRM(AddChild(contentNode), "AppendContentNode: Failed to AddChile node for content");
+    
+Error:
+    return r;
 }
 
 RESULT XMPNode::AppendContent(char *pszContent) {

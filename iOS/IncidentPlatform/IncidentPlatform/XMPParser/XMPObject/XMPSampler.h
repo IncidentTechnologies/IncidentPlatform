@@ -8,12 +8,20 @@
 
 #import "XMPObject.h"
 
+@class XMPBank;
+
 @interface XMPSampler : XMPObject {
     // name
     NSString *m_strName;
 }
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
+-(id) initWithName:(NSString*)name;
 -(RESULT)ConstructSampler;
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
+-(RESULT)AddBank:(XMPBank*)bank;
+-(XMPBank*)AddNewBankWithName:(NSString*)name;
 
 @end

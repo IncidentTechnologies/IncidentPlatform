@@ -23,8 +23,8 @@
 
     if(m_xmpNode != NULL)
         m_Name = [[NSString alloc] initWithCString:m_xmpNode->GetName() encoding:NSUTF8StringEncoding];
-    else
-        m_Name = @"";
+    else if([m_Name length] == 0)
+        m_Name = @"xmp";
     
     // Note: This will build the children before the sub-class initialization
     [self BuildChildren];
@@ -172,14 +172,68 @@ Error:
     return NULL;
 }
 
--(RESULT)AddXmpObject:(XMPObject*)xmpObj {
+-(RESULT)AddXMPObject:(XMPObject*)xmpObj {
     [m_contents addObject:xmpObj];
     return R_SUCCESS;
 }
 
--(RESULT)AddXMpVariable:(XMPValue*)xmpVar {
+-(RESULT)AddXMPVariable:(XMPValue*)xmpVar {
     m_variables->Append(xmpVar);
     return R_SUCCESS;
+}
+
+-(RESULT)RemoveXMPObject:(XMPObject*)xmpObj {
+    if([m_contents containsObject:xmpObj]) {
+        [m_contents removeObject:xmpObj];
+        return R_SUCCEED;
+    }
+    else {
+        return R_FAIL;
+    }
+}
+
+-(RESULT)RemoveXMPVariable:(XMPValue*)xmpVar {
+    RESULT r = R_SUCCEED;
+    
+    XMPValue* tempVal = NULL;
+    CRM(m_variables->Remove(tempVal, (void*)(xmpVar), GET_BY_ITEM), "RemoveXMPVariable: Failed to remove variable from XMP Object");;
+
+Error:
+    return r;
+}
+
+-(NSString*)GetName {
+    return m_Name;
+}
+
+-(void)SetName:(NSString*)strName {
+    m_Name = [[NSString alloc] initWithString:strName];
+}
+
+-(void)SetType:(XMP_OBJECT_TYPE)type {
+    m_type = type;
+}
+
+-(XMPTree*)GetXMPTree {
+    XMPTree *tree = new XMPTree();
+    tree->AddChild([self CreateXMPNodeFromObjectWithParent:tree->GetRootNode()]);
+    return tree;
+}
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    
+    // Shouldn't have any children, but if it does
+    for(XMPObject *child in m_contents) {
+        if(child->m_type != XMP_OBJECT_OBJECT) {
+            XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+            node->AddChild(childNode);
+        }
+    }
+    
+    return node;
 }
 
 @end

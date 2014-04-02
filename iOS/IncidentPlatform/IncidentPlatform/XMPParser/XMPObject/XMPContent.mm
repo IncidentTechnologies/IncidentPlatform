@@ -10,6 +10,19 @@
 
 @implementation XMPContent
 
+-(id) init {
+    RESULT r = R_SUCCESS;
+    
+    CPRM((self = [super init]), "XMPContent: init: Failed to init super");
+    m_type = XMP_OBJECT_CONTENT;
+    m_Name = @"content";
+    
+    return self;
+Error:
+    return NULL;
+}
+
+
 -(id) initWithXMPNode:(XMPNode*)xmpNode {
     RESULT r = R_SUCCESS;
     
@@ -31,6 +44,22 @@ Error:
     
 Error:
     return r;
+}
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    
+    // Shouldn't have any children, but if it does
+    for(XMPObject *child in m_contents) {
+        if(child->m_type != XMP_OBJECT_OBJECT) {
+            XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+            node->AddChild(childNode);
+        }
+    }
+    
+    return node;
 }
 
 @end

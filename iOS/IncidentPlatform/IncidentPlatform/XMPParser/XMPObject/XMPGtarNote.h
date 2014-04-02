@@ -16,4 +16,6 @@
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 -(int) StringNumberFromNSString:(NSString*)nssString;
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
 @end

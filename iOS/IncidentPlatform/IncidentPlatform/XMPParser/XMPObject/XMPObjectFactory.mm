@@ -12,27 +12,6 @@
 
 #import "XMPTree.h"
 
-#import "XMPText.h"
-#import "XMPGtarNote.h"
-#import "XMPLEDEvent.h"
-#import "XMPLoop.h"
-#import "XMPInput.h"
-#import "XMPLesson.h"
-#import "XMPLessonChapter.h"
-
-#import "XMPTrack.h"
-#import "XMPSong.h"
-#import "XMPNote.h"
-#import "XMPMeasure.h"
-
-#import "XMPSample.h"
-#import "XMPData.h"
-
-#import "XMPContent.h"
-#import "XMPSampler.h"
-#import "XMPBank.h"
-#import "XMPInstrument.h"
-
 @implementation XMPObjectFactory
 
 /*
@@ -124,6 +103,7 @@ Error:
     }
     else {
         retObj = [[XMPObject alloc] initWithXMPNode:xmpNode];
+        [retObj SetType:XMP_OBJECT_INVALID];
     }
     /*
 
@@ -141,82 +121,102 @@ Error:
     switch(type) {
         case XMP_OBJECT_TEXT: {
             retObject = [[XMPText alloc] init];
+            [retObject SetName:@"text"];
         } break;
             
         case XMP_OBJECT_LEDEVENT: {
             retObject = [[XMPLEDEvent alloc] init];
+            [retObject SetName:@"ledout"];
         } break;
             
         case XMP_OBJECT_LOOP: {
             // TODO: retObject = [[XMPLoop alloc] init];
+            //[retObject SetName:@"text"];
         } break;
             
         case XMP_OBJECT_GTARNOTE: {
             retObject = [[XMPGtarNote alloc] init];
+            [retObject SetName:@"guitarposition"];
         } break;
             
         case XMP_OBJECT_INPUT: {
             retObject = [[XMPInput alloc] init];
+            [retObject SetName:@"input"];
         } break;
             
         case XMP_OBJECT_LESSON: {
             retObject = [[XMPLesson alloc] init];
+            [retObject SetName:@"lesson"];
         } break;
             
         case XMP_OBJECT_CHAPTER: {
             retObject = [[XMPLessonChapter alloc] init];
+            [retObject SetName:@"chapter"];
         } break;
             
         case XMP_OBJECT_SONG: {
             retObject = [[XMPSong alloc] init];
+            [retObject SetName:@"song"];
         } break;
             
         case XMP_OBJECT_OBJECT: {
             retObject = [[XMPObject alloc] init];
+            [retObject SetName:@"xmp"];
         } break;
             
         case XMP_OBJECT_TRACK: {
             retObject = [[XMPTrack alloc] init];
+            [retObject SetName:@"track"];
         } break;
             
         case XMP_OBJECT_MEASURE: {
             retObject = [[XMPMeasure alloc] init];
+            [retObject SetName:@"measure"];
         } break;
             
         case XMP_OBJECT_CLIP: {
-            //retObject = [[XMPClip alloc] init];
+            retObject = [[XMPClip alloc] init];
+            [retObject SetName:@"clip"];
         } break;
             
         case XMP_OBJECT_GROUP: {
             //TODO: retObject = [[XMPGroup alloc] init];
+            //[retObject SetName:@"group"];
         } break;
             
         case XMP_OBJECT_NOTE: {
             retObject = [[XMPNote alloc] init];
+            [retObject SetName:@"note"];
         } break;
             
         case XMP_OBJECT_SAMPLE: {
             retObject = [[XMPSample alloc] init];
+            [retObject SetName:@"sample"];
         } break;
             
         case XMP_OBJECT_DATA: {
             retObject = [[XMPData alloc] init];
+            [retObject SetName:@"data"];
         } break;
             
         case XMP_OBJECT_CONTENT: {
             retObject = [[XMPContent alloc] init];
+            [retObject SetName:@"content"];
         } break;
             
         case XMP_OBJECT_INSTRUMENT: {
-            // TODO: retObject = [[XMPInstrument alloc] init];
+            retObject = [[XMPInstrument alloc] init];
+            [retObject SetName:@"instrument"];
         } break;
             
         case XMP_OBJECT_SAMPLER: {
-            // TODO: retObject = [[XMPSampler alloc] init];
+            retObject = [[XMPSampler alloc] init];
+            [retObject SetName:@"sampler"];
         } break;
             
         case XMP_OBJECT_BANK: {
-            // TODO: retObject = [[XMPBank alloc] init];
+            retObject = [[XMPBank alloc] init];
+            [retObject SetName:@"bank"];
         } break;
             
         default: {

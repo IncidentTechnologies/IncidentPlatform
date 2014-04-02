@@ -13,8 +13,11 @@
 }
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
+-(id) initWithValue:(int)value Duration:(double)duration Beatstart:(double)beat;
 -(RESULT)ConstructNote;
 
 +(int)MidiNoteNumberFromNote:(char *)pszName;
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
 
 @end

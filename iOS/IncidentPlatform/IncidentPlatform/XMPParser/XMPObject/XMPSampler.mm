@@ -7,6 +7,8 @@
 //
 
 #import "XMPSampler.h"
+#import "XMPBank.h"
+
 
 @implementation XMPSampler
 
@@ -24,6 +26,22 @@ Error:
     return NULL;
 }
 
+-(id) initWithName:(NSString*)name {
+    RESULT r = R_SUCCESS;
+    
+    m_xmpNode = NULL;
+    CPRM((self = [super init]), "initWithParentLesson: Failed to init super");
+    
+    m_type = XMP_OBJECT_SAMPLER;
+    m_Name = @"sampler";
+    
+    m_strName = [[NSString alloc] initWithString:name];
+    
+    return self;
+Error:
+    return NULL;
+}
+
 -(RESULT)ConstructSampler {
     RESULT r = R_SUCCESS;
     
@@ -35,6 +53,33 @@ Error:
     
 Error:
     return r;
+}
+
+-(RESULT)AddBank:(XMPBank*)bank {
+    return [self AddXMPObject:bank];
+}
+
+-(XMPBank*)AddNewBankWithName:(NSString*)name {
+    XMPBank *bank = [[XMPBank alloc] initWithName:name];
+    [self AddBank:bank];
+    return bank;
+}
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    node->AddAttribute(new XMPAttribute("name", (char*)[m_strName UTF8String]));
+    
+    // Shouldn't have any children, but if it does
+    for(XMPObject *child in m_contents) {
+        if(child->m_type != XMP_OBJECT_OBJECT) {
+            XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+            node->AddChild(childNode);
+        }
+    }
+    
+    return node;
 }
 
 @end

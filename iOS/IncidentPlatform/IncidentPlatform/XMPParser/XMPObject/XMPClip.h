@@ -8,6 +8,8 @@
 
 #import "XMPObject.h"
 
+@class XMPNote;
+
 @interface XMPClip : XMPObject {
     // name
     NSString *m_strName;
@@ -28,6 +30,13 @@
 }
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
+-(id) initWithName:(NSString*)name Start:(double)startbeat End:(double)endbeat;
+
 -(RESULT)ConstructClip;
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+
+-(RESULT)AddNote:(XMPNote*)note;
+-(XMPNote*)AddNewNote:(int)value beatstart:(double)beat duration:(double)duration;
 
 @end

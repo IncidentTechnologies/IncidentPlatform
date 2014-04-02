@@ -16,6 +16,24 @@ Error:
     return NULL;
 }
 
+-(id) initWithValue:(int)value Duration:(double)duration Beatstart:(double)beat {
+    RESULT r = R_SUCCESS;
+    
+    m_xmpNode = NULL;
+    CPRM((self = [super init]), "initWithParentLesson: Failed to init super");
+    
+    m_type = XMP_OBJECT_NOTE;
+    m_Name = @"note";
+    
+    m_MidiNote = value;
+    m_duration = duration;
+    m_beatstart = beat;
+    
+    return self;
+Error:
+    return NULL;
+}
+
 -(RESULT)ConstructNote {
     RESULT r = R_SUCCESS;
     
@@ -71,6 +89,31 @@ Error:
         return -1;  // Err: Octave val must be [0-9]
     
     return midiVal + (12 * (octaveVal + 1));
+}
+
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    
+    node->AddAttribute(new XMPAttribute("value", m_MidiNote));
+    node->AddAttribute(new XMPAttribute("duration", m_duration));
+    
+    // Save as measure start if parent is a measure
+    if(strcmp(parent->GetName(), "measure") == 0)
+        node->AddAttribute(new XMPAttribute("measurestart", m_beatstart));
+    else
+        node->AddAttribute(new XMPAttribute("beatstart", m_beatstart));
+    
+    // Shouldn't have any children, but if it does
+    for(XMPObject *child in m_contents) {
+        if(child->m_type != XMP_OBJECT_OBJECT) {
+            XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+            node->AddChild(childNode);
+        }
+    }
+    
+    return node;
 }
 
 @end

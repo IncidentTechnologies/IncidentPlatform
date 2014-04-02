@@ -51,4 +51,23 @@ Error:
     return stringNum;
 }
 
+-(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
+    XMPNode *node = NULL;
+    
+    node = new XMPNode((char*)[m_Name UTF8String], parent);
+    
+    node->AddAttribute(new XMPAttribute("string", m_string));
+    node->AddAttribute(new XMPAttribute("fret", m_fret));
+    
+    // Shouldn't have any children, but if it does
+    /*
+     for(XMPObject *child in m_contents) {
+     XMPNode *childNode = [child CreateXMPNodeFromObjectWithParent:node];
+     node->AddChild(childNode);
+     }
+     */
+    
+    return node;
+}
+
 @end

@@ -1,10 +1,8 @@
-	#include "XMPTree.h"
+// XMPTree.cpp
+
+#include "XMPTree.h"
 #include <string>
 #include <stdlib.h>
-
-
-
-
 
 /* XMPTree **************/
 XMPTree::XMPTree(char* pszFilename) :
@@ -309,6 +307,15 @@ RESULT XMPTree::AddChildByName(char *pszName) {
 
     XMPNode *pTemp = new XMPNode(pszName, m_pNodeNav, NULL);
     CRM(m_pNodeNav->AddChild(pTemp), "XMPTree:AddChildByName Failed to add child");
+Error:
+    return r;
+}
+
+RESULT XMPTree::AddChild(XMPNode* node) {
+    RESULT r = R_SUCCESS;
+    
+    CRM(m_pNodeNav->AddChild(node), "XMPTree:AddChild: Failed to add child");
+    
 Error:
     return r;
 }
