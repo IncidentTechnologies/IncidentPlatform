@@ -201,12 +201,11 @@
     float degreeDiff = m_lastDegree - degree;
     
     // Bit of a hack but it works
-    /*
+
     if(degreeDiff > 270.f)
         degreeDiff -= 360.0f;
     else if(degreeDiff < -270.0f)
         degreeDiff += 360.0f;
-     */
     
     m_lastDegree = degree;
     m_ptCurrent = ptCurrent;
