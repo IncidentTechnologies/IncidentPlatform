@@ -157,28 +157,7 @@
 -(float)getDegreeFromPoint:(CGPoint)pt withCenter:(CGPoint)center {
     float xMidDiff = pt.x - center.x;
     float yMidDiff = center.y - pt.y;
-    
-    //float dist = sqrt(pow(xMidDiff, 2.0f) + pow(yMidDiff, 2.0f));
-    float theta;
-    if(xMidDiff != 0.0f)
-        theta = atan(yMidDiff / xMidDiff);
-    else
-        theta = 0.0f;
-    
-    // convert theta
-    if(xMidDiff >= 0.0f && yMidDiff > 0.0f) {        // QUAD I
-        theta = M_PI + M_PI_2 + theta;
-    }
-    else if(xMidDiff < 0.0f && yMidDiff >= 0.0f) {   // QUAD II
-        theta = M_PI_2 + (theta);
-    }
-    else if(xMidDiff < 0.0f && yMidDiff < 0.0f) {   // QUAD III
-        theta = M_PI_2 + theta;
-    }
-    else if(xMidDiff >= 0.0f && yMidDiff <= 0.0f) {   // QUAD IV
-        theta = M_PI + M_PI_2 + theta;
-    }
-
+    float theta = atan2(yMidDiff, xMidDiff);
     return (theta * 180.0f) / M_PI;
 }
 
@@ -222,15 +201,17 @@
     float degreeDiff = m_lastDegree - degree;
     
     // Bit of a hack but it works
+    /*
     if(degreeDiff > 270.f)
         degreeDiff -= 360.0f;
     else if(degreeDiff < -270.0f)
         degreeDiff += 360.0f;
+     */
     
     m_lastDegree = degree;
     m_ptCurrent = ptCurrent;
     
-    //NSLog(@"degree: %f diff: %f", degree, degreeDiff);
+    NSLog(@"degree: %f diff: %f", degree, degreeDiff);
     
     // convert degree to value
     float degreeRange;
