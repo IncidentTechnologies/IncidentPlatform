@@ -75,6 +75,26 @@ bool DelayNode::SetDelayTime(float delayTime) {
     return true;
 }
 
+Parameter* DelayNode::getPrimaryParam()
+{
+    return m_pDelayTime;
+}
+
+bool DelayNode::setPrimaryParam(float value)
+{
+    return SetDelayTime(value);
+}
+
+Parameter* DelayNode::getSecondaryParam()
+{
+    return m_pFeedback;
+}
+
+bool DelayNode::setSecondaryParam(float value)
+{
+    return SetFeedback(value);
+}
+
 void DelayNode::Reset() {
     EffectNode::Reset();
     ClearOutEffect();

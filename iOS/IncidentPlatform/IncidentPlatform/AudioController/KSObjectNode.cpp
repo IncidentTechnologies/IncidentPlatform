@@ -1,25 +1,32 @@
-#include "KSObject.h"
+//
+//  KSObjectNode.cpp
+//  IncidentPlatform
+//
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+//
 
+#include "KSObjectNode.h"
 
-KSObject::KSObject() :
-    m_BufferKS(NULL),
-    m_eBufferKS(0),
-    m_FreqKS(MIN_FREQ),
-    m_Fs(44100.0f),
-    m_attenuationKS(0.99f),
-    m_currentAttenuation(m_attenuationKS),
-    m_attenuationVariation(0),
-    m_pBWFilter(NULL),
-    m_bwFltOrder(10),
-    m_bwFltCutoff(2000),
-    m_b3rdHarmonicOn(true),
-    m_b5thHarmonicOn(false),
-    m_noiseScale(0.3f),
-    m_noiseVariation(0.3f),
-    m_bSawToothOn(true),
-    m_sawFreqMultiplier(1),
-    m_bSqOn(true),
-    m_sqFreqMultiplier(2)
+KSObjectNode::KSObjectNode() :
+m_BufferKS(NULL),
+m_eBufferKS(0),
+m_FreqKS(MIN_FREQ),
+m_Fs(44100.0f),
+m_attenuationKS(0.99f),
+m_currentAttenuation(m_attenuationKS),
+m_attenuationVariation(0),
+m_pBWFilter(NULL),
+m_bwFltOrder(10),
+m_bwFltCutoff(2000),
+m_b3rdHarmonicOn(true),
+m_b5thHarmonicOn(false),
+m_noiseScale(0.3f),
+m_noiseVariation(0.3f),
+m_bSawToothOn(true),
+m_sawFreqMultiplier(1),
+m_bSqOn(true),
+m_sqFreqMultiplier(2)
 {
     m_BufferKS_n = (int) m_Fs / MIN_FREQ;
     m_BufferKS = new float[m_BufferKS_n];
@@ -28,30 +35,30 @@ KSObject::KSObject() :
     
     // Set up the butterworth filter
     if(m_bwFltOrder > 0)
-        m_pBWFilter = new ButterWorthFilter(m_bwFltOrder, m_bwFltCutoff, m_Fs);
+        m_pBWFilter = new ButterWorthFilterNode(m_bwFltOrder, m_bwFltCutoff, m_Fs);
     else
         m_pBWFilter = NULL;
 }
-	
-KSObject::KSObject(float SamplingFreq) :
-    m_BufferKS(NULL),
-    m_eBufferKS(0),
-    m_FreqKS(420),
-    m_Fs(SamplingFreq),
-    m_attenuationKS(0.99f),
-    m_currentAttenuation(m_attenuationKS),
-    m_attenuationVariation(0),
-    m_pBWFilter(NULL),
-    m_bwFltOrder(10),
-    m_bwFltCutoff(2000),
-    m_b3rdHarmonicOn(true),
-    m_b5thHarmonicOn(false),
-    m_noiseScale(0.3f),
-    m_noiseVariation(0.3f),
-    m_bSawToothOn(true),
-    m_sawFreqMultiplier(1),
-    m_bSqOn(true),
-    m_sqFreqMultiplier(2)
+
+KSObjectNode::KSObjectNode(float SamplingFreq) :
+m_BufferKS(NULL),
+m_eBufferKS(0),
+m_FreqKS(420),
+m_Fs(SamplingFreq),
+m_attenuationKS(0.99f),
+m_currentAttenuation(m_attenuationKS),
+m_attenuationVariation(0),
+m_pBWFilter(NULL),
+m_bwFltOrder(10),
+m_bwFltCutoff(2000),
+m_b3rdHarmonicOn(true),
+m_b5thHarmonicOn(false),
+m_noiseScale(0.3f),
+m_noiseVariation(0.3f),
+m_bSawToothOn(true),
+m_sawFreqMultiplier(1),
+m_bSqOn(true),
+m_sqFreqMultiplier(2)
 {
     m_BufferKS_n = (int) m_Fs / MIN_FREQ;
     m_BufferKS = new float[m_BufferKS_n];
@@ -59,16 +66,16 @@ KSObject::KSObject(float SamplingFreq) :
     
     // Set up the butterworth filter
     if(m_bwFltOrder > 0)
-        m_pBWFilter = new ButterWorthFilter(m_bwFltOrder, m_bwFltCutoff, m_Fs);
+        m_pBWFilter = new ButterWorthFilterNode(m_bwFltOrder, m_bwFltCutoff, m_Fs);
     else
         m_pBWFilter = NULL;
 }
-	
+
 /*
  freq - freqency of note to pluck
  pluckAmplitude - factor indicating how strongly the string was plucked, in range [0,1]
  */
-void KSObject::Pluck(float freq, float pluckAmplitude)
+void KSObjectNode::Pluck(float freq, float pluckAmplitude)
 {
     // set up an example pluck
     m_FreqKS = freq;
@@ -177,7 +184,7 @@ void KSObject::Pluck(float freq, float pluckAmplitude)
     }
 }
 
-bool KSObject::SetBWFilterCutoff(double cutoff)
+bool KSObjectNode::SetBWFilterCutoff(double cutoff)
 {
     m_bwFltCutoff = cutoff;
     if(m_pBWFilter != NULL)
@@ -186,7 +193,7 @@ bool KSObject::SetBWFilterCutoff(double cutoff)
         return false;
 }
 
-bool KSObject::SetBWFilterOrder(int order)
+bool KSObjectNode::SetBWFilterOrder(int order)
 {
     m_bwFltOrder = order;
     if(m_pBWFilter != NULL)
@@ -195,7 +202,7 @@ bool KSObject::SetBWFilterOrder(int order)
         return false;
 }
 
-/*inline */double KSObject::GetNextKSSample()
+/*inline */double KSObjectNode::GetNextKSSample()
 {
     // first ensure that the pluck is initialized
     // TODO can we remove this check? its costing us ~1%
@@ -228,7 +235,7 @@ bool KSObject::SetBWFilterOrder(int order)
         {
             // TODO
             // This condition is sometimes triggering and the NSlog is costing ~%0.6 for no benefit
-            NSLog(@"err: Out of bounds in KS array lookup!");
+            // NSLog(@"err: Out of bounds in KS array lookup!");
             pValArray[i] = 0;
         }
     }
@@ -249,23 +256,23 @@ bool KSObject::SetBWFilterOrder(int order)
     return CurVal;
 }
 
-void KSObject::Set3rdOrderHarmonicOn(bool on)
+void KSObjectNode::Set3rdOrderHarmonicOn(bool on)
 {
     m_b3rdHarmonicOn = on;
 }
 
-void KSObject::Set5thOrderHarmonicOn(bool on)
+void KSObjectNode::Set5thOrderHarmonicOn(bool on)
 {
     m_b5thHarmonicOn = on;
 }
 
-bool KSObject::SetNoiseScale(float scale)
+bool KSObjectNode::SetNoiseScale(float scale)
 {
     m_noiseScale = scale;
     return true;
 }
 
-bool KSObject::SetNoiseVariation(float variation)
+bool KSObjectNode::SetNoiseVariation(float variation)
 {
     if (variation < 0 || variation > 1.0)
     {
@@ -275,29 +282,29 @@ bool KSObject::SetNoiseVariation(float variation)
     return true;
 }
 
-void KSObject::SetSawToothOn(bool on)
+void KSObjectNode::SetSawToothOn(bool on)
 {
     m_bSawToothOn = on;
 }
 
-bool KSObject::SetSawMultiplier(float multiplier)
+bool KSObjectNode::SetSawMultiplier(float multiplier)
 {
     m_sawFreqMultiplier = multiplier;
     return true;
 }
 
-void KSObject::SetSqWaveOn(bool on)
+void KSObjectNode::SetSqWaveOn(bool on)
 {
     m_bSqOn = on;
 }
 
-bool KSObject::SetSqMultiplier(float multiplier)
+bool KSObjectNode::SetSqMultiplier(float multiplier)
 {
     m_sqFreqMultiplier = multiplier;
     return true;
 }
 
-bool KSObject::SetAttenuationVariation(float variation)
+bool KSObjectNode::SetAttenuationVariation(float variation)
 {
     if (variation < 0 || variation > 1.0)
     {
@@ -307,7 +314,7 @@ bool KSObject::SetAttenuationVariation(float variation)
     return true;
 }
 
-KSObject::~KSObject()
+KSObjectNode::~KSObjectNode()
 {
     delete [] m_BufferKS;
     m_BufferKS = NULL;
@@ -316,7 +323,7 @@ KSObject::~KSObject()
     m_pBWFilter = NULL;
 }
 
-float KSObject::GuitarFreqLookup(int string, int fret)
+float KSObjectNode::GuitarFreqLookup(int string, int fret)
 {
     int midi = 40 + string * 5;
     if(string > 3)

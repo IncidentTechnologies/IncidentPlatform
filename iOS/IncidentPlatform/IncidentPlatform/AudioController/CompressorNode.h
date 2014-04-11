@@ -1,10 +1,10 @@
 //
-//  Compressor.h
-//  gTarAudioController
+//  CompressorNode.h
+//  IncidentPlatform
 //
-//  Created by Franco Cedano on 1/16/12.
-//  Copyright (c) 2012 Incident Technologies. All rights reserved.
-//  
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+//
 //  Compresses the dynamic range of an audio signal. Makes use of
 //  an envelope follower to determine when the signal is above a given
 //  threshold
@@ -12,11 +12,11 @@
 #ifndef gTarAudioController_Compressor_h
 #define gTarAudioController_Compressor_h
 
-#import "EnvelopeFollower.h"
+#import "EnvelopeFollowerNode.h"
 
-struct Compressor
+struct CompressorNode
 {
-    Compressor(double threshold, double ratio, double attackMs, double releaseMs, int sampleRate );
+    CompressorNode(double threshold, double ratio, double attackMs, double releaseMs, int sampleRate );
     void Setup(double threshold, double ratio, double attackMs, double releaseMs, int sampleRate );
     
     //  The numChannels parameter indicates the number of channels for an interleaved
@@ -46,7 +46,7 @@ struct Compressor
     }
     
 private:
-    EnvelopeFollower e;
+    EnvelopeFollowerNode e;
     double m_threshold;
     double m_ratio;
 };

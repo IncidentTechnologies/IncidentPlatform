@@ -1,23 +1,24 @@
 //
-//  KSObject.h
-//  gTarAudioController
+//  KSObjectNode.h
+//  IncidentPlatform
 //
-//  Created by Franco Cedano on 12/7/11.
-//  Copyright (c) 2011 Incident Technologies. All rights reserved.
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #ifndef gTarAudioController_KSObject_h
 #define gTarAudioController_KSObject_h
 
-#include "ButterWorthFilter.h"
+#include "ButterWorthFilterNode.h"
+#include <math.h>
 
 #define MIN_FREQ 50
 
-class KSObject {
+class KSObjectNode {
 public:
-	KSObject();
+	KSObjectNode();
 	
-	KSObject(float SamplingFreq);
+	KSObjectNode(float SamplingFreq);
 	
     /*
      freq - freqency of note to pluck
@@ -49,7 +50,7 @@ public:
     
     bool SetAttenuationVariation(float variation);
 	
-	~KSObject();
+	~KSObjectNode();
 	
 private:
 	float *m_BufferKS;
@@ -58,7 +59,7 @@ private:
 	int m_eBufferKS;
 	float m_FreqKS;
     
-    ButterWorthFilter *m_pBWFilter;
+    ButterWorthFilterNode *m_pBWFilter;
     int m_bwFltOrder;
     double m_bwFltCutoff;
     

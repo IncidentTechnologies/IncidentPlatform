@@ -1,6 +1,14 @@
-#include "ButterWorthFilterElement.h"
+//
+//  ButterWorthFilterElementNode.cpp
+//  IncidentPlatform
+//
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+//
 
-ButterWorthFilterElement::ButterWorthFilterElement(int k, int order, float cutoff, float SamplingFrequency) :
+#include "ButterWorthFilterElementNode.h"
+
+ButterWorthFilterElementNode::ButterWorthFilterElementNode(int k, int order, float cutoff, float SamplingFrequency) :
     m_pDelayLine(NULL),
     m_pAC(NULL),
     m_pBC(NULL),
@@ -11,7 +19,8 @@ ButterWorthFilterElement::ButterWorthFilterElement(int k, int order, float cutof
     m_pSampleDelay_n(0),
     m_fReady(false)
 {
-    lock = [[NSLock alloc] init];
+    //lock = [[NSLock alloc] init];
+    lock = false;
     
     // set up the sample delay line
     //m_pSampleDelay_n = m_order;
@@ -49,7 +58,7 @@ ButterWorthFilterElement::ButterWorthFilterElement(int k, int order, float cutof
     m_fReady = true;
 }
 
-ButterWorthFilterElement::~ButterWorthFilterElement() {
+ButterWorthFilterElementNode::~ButterWorthFilterElementNode() {
     m_fReady = false;
     
     if(m_pDelayLine != NULL) {
@@ -74,9 +83,10 @@ ButterWorthFilterElement::~ButterWorthFilterElement() {
 }
 
 // This will calculate the coefficients for the given order, k, cutoff, and sampling frequency
-bool ButterWorthFilterElement::CalculateCoefficients(int k, float cutoff, float SamplingFrequency) {
-
-    if ([lock tryLock]) {
+bool ButterWorthFilterElementNode::CalculateCoefficients(int k, float cutoff, float SamplingFrequency) {
+    
+    if (!lock) {
+        lock = true;
         m_fReady = false;
         
         m_k = k;
@@ -99,15 +109,16 @@ bool ButterWorthFilterElement::CalculateCoefficients(int k, float cutoff, float 
         
         m_fReady = true;
         
-        [lock unlock];
+        lock = false;
     }
     
     return true;
 }
 
+
 // Simplification of the InputSamples function creates a delay line of the order of the filter
 // this will return 0 until the line is filled
-/*inline */double ButterWorthFilterElement::InputSample(double sample)
+/*inline */double ButterWorthFilterElementNode::InputSample(double sample)
 {
     double retVal = 0;
     
@@ -123,18 +134,18 @@ bool ButterWorthFilterElement::CalculateCoefficients(int k, float cutoff, float 
     return retVal;
 }
 
-void ButterWorthFilterElement::Reset()
+void ButterWorthFilterElementNode::Reset()
 {
     ClearOutEffect();
 }
 
-void ButterWorthFilterElement::ClearOutEffect()
+void ButterWorthFilterElementNode::ClearOutEffect()
 {
     memset(m_pSampleDelay, 0, sizeof(double) * m_pSampleDelay_n);
     memset(m_pDelayLine, 0, sizeof(double) * (m_pDelayLine_n));
 }
 
-/*inline */double ButterWorthFilterElement::InputSamples(double *pSamples, int pSamples_n)
+/*inline */double ButterWorthFilterElementNode::InputSamples(double *pSamples, int pSamples_n)
 {
     double retVal = 0;
     
@@ -142,8 +153,10 @@ void ButterWorthFilterElement::ClearOutEffect()
      if(pSamples_n != m_order)
      return 0;
      */
-    if ([lock tryLock])
+    if (!lock)
     {
+        lock = true;
+        
         retVal = m_pAC[0]*pSamples[0] + m_pAC[1]*pSamples[1] + m_pAC[2]*pSamples[2] - m_pBC[1]*m_pDelayLine[0] - m_pBC[2]*m_pDelayLine[1];
         
         // prevent clip
@@ -157,8 +170,9 @@ void ButterWorthFilterElement::ClearOutEffect()
             m_pDelayLine[i] = m_pDelayLine[i - 1];
         m_pDelayLine[0] = retVal;
         
-        [lock unlock];
+        lock = false;
     }
     
     return retVal;
 }
+

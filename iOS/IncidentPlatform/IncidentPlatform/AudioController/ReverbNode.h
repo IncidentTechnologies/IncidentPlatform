@@ -42,10 +42,10 @@ public:
     
     float GetNextSample(unsigned long int timestamp);
     
-    Parameter& getPrimaryParam();
-    Parameter& getSecondaryParam();
-    Parameter& getLFO();
-    Parameter& getExcursion();
+    Parameter* getPrimaryParam();
+    Parameter* getSecondaryParam();
+    Parameter* getLFO();
+    Parameter* getExcursion();
     
     ~ReverbNode();
     

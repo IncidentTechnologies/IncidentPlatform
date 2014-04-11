@@ -1,45 +1,43 @@
 //
-//  ChorusEffect.h
-//  gTarAudioController
+//  ChorusEffectNode.h
+//  IncidentPlatform
 //
-//  Created by Franco Cedano on 12/7/11.
-//  Copyright (c) 2011 Incident Technologies. All rights reserved.
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #ifndef gTarAudioController_ChorusEffect_h
 #define gTarAudioController_ChorusEffect_h
 
-#include "Effect.h"
+#include "EffectNode.h"
+#include <math.h>
 
 #define CHORUS_EFFECT_MAX_MS_DELAY 500
 
 // Main difference between a chorus and delay is that a chrous does not feedback
 // and only plays the input signal again with a delay defined in the chorus
-class ChorusEffect : public Effect
+class ChorusEffectNode : public EffectNode
 {
 public:
-    ChorusEffect(double msDelayTime, double depth, double width, double LFOFreq, double wet, double SamplingFrequency);
+    ChorusEffectNode(double msDelayTime, double depth, double width, double LFOFreq, double wet, double SamplingFrequency);
+    
+    inline double InputSample(double sample);
+    float GetNextSample(unsigned long int timestamp);
+    
+    void Reset();
+    void ClearOutEffect();
     
     bool SetMSDelayTime(double msDelayTime);
     bool SetDepth(double depth);
     bool SetLFOFreq(double freq);
     bool SetWidth(double width);
-    
-    inline double InputSample(double sample);
-    
-    void Reset();
-    
-    void ClearOutEffect();
-    
-    Parameter& getPrimaryParam();
-    
     virtual bool setPrimaryParam(float value);
-    
-    Parameter& getSecondaryParam();
-    
     virtual bool setSecondaryParam(float value);
     
-    ~ChorusEffect();
+    Parameter* getPrimaryParam();
+    Parameter* getSecondaryParam();
+    
+    ~ChorusEffectNode();
     
 private:
     double m_SamplingFrequency;

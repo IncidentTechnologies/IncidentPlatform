@@ -1,10 +1,24 @@
-#include "ButterWorthFilter.h"
+//
+//  ButterWorthFilterNode.cpp
+//  IncidentPlatform
+//
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+//
 
-ButterWorthFilter::ButterWorthFilter(int order, double cutoff, double SamplingFrequency) :
-    Effect  ("Filter", 1.0, SamplingFrequency),
-    m_ppFilters(NULL),
-    m_SamplingFrequency(SamplingFrequency)
+#include "ButterWorthFilterNode.h"
+
+ButterWorthFilterNode::ButterWorthFilterNode(int order, double cutoff, double SamplingFrequency) :
+//Effect  ("Filter", 1.0, SamplingFrequency),
+EffectNode(),
+m_ppFilters(NULL),
+m_SamplingFrequency(SamplingFrequency)
 {
+    SetChannelCount(1, CONN_IN);
+    SetChannelCount(1, CONN_OUT);
+    
+    //SetWet(wet);
+    
     m_pCutoff = new Parameter(cutoff, 10, 5000, "Frequency");
     m_order = order + (order % 2);  // ensure only even orders
     if(m_order == 0)                // no zero order filters
@@ -12,16 +26,24 @@ ButterWorthFilter::ButterWorthFilter(int order, double cutoff, double SamplingFr
     
     m_ppFilters_n = m_order / 2;
     
-    m_ppFilters = new ButterWorthFilterElement*[m_ppFilters_n];
+    m_ppFilters = new ButterWorthFilterElementNode*[m_ppFilters_n];
     
     // order is just a cascade of 2nd order filters
     for(int i = 0; i < m_ppFilters_n; i++)
     {
-        m_ppFilters[i] = new ButterWorthFilterElement(0, 2, m_pCutoff->getValue(), m_SamplingFrequency);
+        m_ppFilters[i] = new ButterWorthFilterElementNode(0, 2, m_pCutoff->getValue(), m_SamplingFrequency);
     }
 }
-    
-bool ButterWorthFilter::SetCutoff(double cutoff)
+
+// Passes the AudioNode::GetNextSample to InputSample which calculates the next output sample
+// and returns it
+float ButterWorthFilterNode::GetNextSample(unsigned long int timestamp) {
+    float inVal = AudioNode::GetNextSample(timestamp);  // will get the input from all incoming nodes
+    return InputSample(inVal);
+}
+
+
+bool ButterWorthFilterNode::SetCutoff(double cutoff)
 {
     bool retVal = true;
     
@@ -35,7 +57,7 @@ bool ButterWorthFilter::SetCutoff(double cutoff)
     return retVal;
 }
 
-inline double ButterWorthFilter::InputSample(double sample)
+inline double ButterWorthFilterNode::InputSample(double sample)
 {
     if(m_fPassThrough)
         return sample;
@@ -55,7 +77,7 @@ inline double ButterWorthFilter::InputSample(double sample)
     return retVal;
 }
 
-bool ButterWorthFilter::SetOrder(int order)
+bool ButterWorthFilterNode::SetOrder(int order)
 {
     // first of all adjust to ensure it's an even order
     int NewOrder = order + (order % 2);
@@ -84,20 +106,20 @@ bool ButterWorthFilter::SetOrder(int order)
         // create new ones
         m_order = NewOrder;
         m_ppFilters_n = m_order / 2;
-        m_ppFilters = new ButterWorthFilterElement*[m_ppFilters_n];
+        m_ppFilters = new ButterWorthFilterElementNode*[m_ppFilters_n];
         
         // order is just a cascade of 2nd order filters
         for(int i = 0; i < m_ppFilters_n; i++)
         {
             //m_ppFilters[i] = new ButterWorthFilterElement(i, m_order, m_cutoff, m_SamplingFrequency);
-            m_ppFilters[i] = new ButterWorthFilterElement(0, 2, m_pCutoff->getValue(), m_SamplingFrequency);
+            m_ppFilters[i] = new ButterWorthFilterElementNode(0, 2, m_pCutoff->getValue(), m_SamplingFrequency);
         }
     }
     
     return true;
 }
 
-void ButterWorthFilter::Reset()
+void ButterWorthFilterNode::Reset()
 {
     for(int i = 0; i < m_ppFilters_n; i++)
     {
@@ -105,27 +127,27 @@ void ButterWorthFilter::Reset()
     }
 }
 
-Parameter& ButterWorthFilter::getPrimaryParam()
+Parameter* ButterWorthFilterNode::getPrimaryParam()
 {
-    return *m_pCutoff;
+    return m_pCutoff;
 }
 
-bool ButterWorthFilter::setPrimaryParam(float value)
+bool ButterWorthFilterNode::setPrimaryParam(float value)
 {
     return SetCutoff(value);
 }
 
-Parameter& ButterWorthFilter::getSecondaryParam()
+Parameter* ButterWorthFilterNode::getSecondaryParam()
 {
     return getPrimaryParam();
 }
 
-bool ButterWorthFilter::setSecondaryParam(float value)
+bool ButterWorthFilterNode::setSecondaryParam(float value)
 {
     return setPrimaryParam(value);
 }
 
-ButterWorthFilter::~ButterWorthFilter()
+ButterWorthFilterNode::~ButterWorthFilterNode()
 {
     if(m_ppFilters != NULL)
     {

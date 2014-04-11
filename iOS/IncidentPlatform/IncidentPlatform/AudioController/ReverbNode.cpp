@@ -351,28 +351,28 @@ bool ReverbNode::SetDelayR2Length(double length) {
     return true;
 }
 
-Parameter& ReverbNode::getPrimaryParam() {
-    return *m_pDecay;
+Parameter* ReverbNode::getPrimaryParam() {
+    return m_pDecay;
 }
 
 bool ReverbNode::setPrimaryParam(float value) {
     return SetDecay(value);
 }
 
-Parameter& ReverbNode::getSecondaryParam() {
-    return *m_pBandwidth;
+Parameter* ReverbNode::getSecondaryParam() {
+    return m_pBandwidth;
 }
 
 bool ReverbNode::setSecondaryParam(float value) {
     return SetBandwidth(value);
 }
 
-Parameter& ReverbNode::getLFO() {
-    return *m_pLFOFreq;
+Parameter* ReverbNode::getLFO() {
+    return m_pLFOFreq;
 }
 
-Parameter& ReverbNode::getExcursion() {
-    return *m_pExcursion;
+Parameter* ReverbNode::getExcursion() {
+    return m_pExcursion;
 }
 
 ReverbNode::~ReverbNode() {

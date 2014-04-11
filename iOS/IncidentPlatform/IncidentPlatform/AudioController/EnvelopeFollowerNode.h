@@ -1,10 +1,10 @@
 //
-//  EnvelopeFollower.h
-//  gTarAudioController
+//  EnvelopeFollowerNode.h
+//  IncidentPlatform
 //
-//  Created by Franco Cedano on 1/16/12.
-//  Copyright (c) 2012 Incident Technologies. All rights reserved.
-//
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+
 //  This class provides the means to follow the envelope of a signal.
 //  The input signal should be centered at zero, with positive and negative
 //  values. The envelope value will always be positive.
@@ -13,10 +13,13 @@
 #ifndef gTarAudioController_EnvFollower_h
 #define gTarAudioController_EnvFollower_h
 
-class EnvelopeFollower
+#include <math.h>
+#include <string.h>
+
+class EnvelopeFollowerNode
 {
 public:
-    EnvelopeFollower();
+    EnvelopeFollowerNode();
     
     void Setup( double attackMs, double releaseMs, int sampleRate );
     

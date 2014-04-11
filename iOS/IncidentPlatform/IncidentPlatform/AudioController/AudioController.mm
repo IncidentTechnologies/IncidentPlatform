@@ -59,6 +59,13 @@
     return self;
 }
 
+// TODO: AUDIOCONTROLLER
+- (id) initWithAudioSource:(AudioSource)audioSource AndInstrument:(NSString*)instrument
+{
+    NSLog(@"Fake init with audio source");
+    return self;
+}
+
 // Default stream description (MONO)
 - (AudioStreamBasicDescription*) InitDefaultStreamDescription {
     // Initialize structure to zero

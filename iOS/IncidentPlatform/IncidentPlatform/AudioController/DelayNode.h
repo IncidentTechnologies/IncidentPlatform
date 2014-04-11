@@ -30,6 +30,12 @@ public:
     void Reset();
     void ClearOutEffect();
     
+    bool setPrimaryParam(float value);
+    bool setSecondaryParam(float value);
+    
+    Parameter* getPrimaryParam();
+    Parameter* getSecondaryParam();
+    
 protected:
     Parameter *m_pDelayTime;
     Parameter *m_pFeedback;

@@ -10,6 +10,16 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
+// TODO: remove
+typedef enum {
+    KarplusStrong,
+    SamplerSource,
+    SinWave,
+    SawWave,
+    SquareWave
+} AudioSource;
+
+
 @class AUNodeNetwork;
 
 #define AUDIO_CONTROLLER_SAMPLE_RATE 44100.0f
@@ -31,7 +41,8 @@
 
 +(id) sharedAudioController;
 
-//- (id) initWithAudioSource:(AudioSource)audioSource AndInstrument:(NSString*)instrument;
+// TODO: remove
+- (id) initWithAudioSource:(AudioSource)audioSource AndInstrument:(NSString*)instrument;
 
 - (void) initializeAUGraph;
 - (void) startAUGraph;
@@ -57,6 +68,8 @@
 - (CFStringRef) GetAudioRoute;
 - (void) requestAudioRouteDetails;
 - (void) AnnounceAudioRouteChange;
+
+// start old
 
 //- (void) SetAudioSource:(AudioSource)audioSource;
 //- (void) SetWaveFrequency:(float)freq;
@@ -137,8 +150,12 @@
 - (NSArray*) getEffectNames;
 
 - (NSArray*) getInstrumentNames;
+ 
+- (NSArray*) getEffectNames;
 - (int) getCurrentSamplePackIndex;
- */
+*/
+
+// end old
 
 void AudioInterruptionListener (void *inClientData, UInt32 inInterruptionState);
 

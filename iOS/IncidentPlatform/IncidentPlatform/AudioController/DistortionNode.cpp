@@ -1,18 +1,39 @@
-#include "Distortion.h"
+//
+//  DistortionNode.cpp
+//  IncidentPlatform
+//
+//  Created by Kate Schnippering on 4/11/14.
+//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+//
 
-Distortion::Distortion (double gain, double wet, double SamplingFrequency) :
-    Effect("Distortion", wet, SamplingFrequency)
+#include "DistortionNode.h"
+
+DistortionNode::DistortionNode (double gain, double wet, double SamplingFrequency) :
+//Effect("Distortion", wet, SamplingFrequency)
+EffectNode()
 {
+    SetChannelCount(1, CONN_IN);
+    SetChannelCount(1, CONN_OUT);
+    
+    SetWet(wet);
+    
     m_pDrive = new Parameter(defaultDrive, 1.0f, 20.0f, "Drive");
     m_pFuzzGain = new Parameter(defaultFuzz, 1.0f, 20.0f, "Fuzz");
     
     m_gain = gain;
-    m_pTanhDistortion = new TanhDistortion(1.0, 1.0, SamplingFrequency);
+    m_pTanhDistortion = new TanhDistortionNode(1.0, 1.0, SamplingFrequency);
     setPrimaryParam(m_pDrive->getValue());
-    m_pFuzzExpDistortion = new FuzzExpDistortion(m_pFuzzGain->getValue(), 1.0, SamplingFrequency);
+    m_pFuzzExpDistortion = new FuzzExpDistortionNode(m_pFuzzGain->getValue(), 1.0, SamplingFrequency);
 }
 
-inline double Distortion::InputSample(double sample)
+// Passes the AudioNode::GetNextSample to InputSample which calculates the next output sample
+// and returns it
+float DistortionNode::GetNextSample(unsigned long int timestamp) {
+    float inVal = AudioNode::GetNextSample(timestamp);  // will get the input from all incoming nodes
+    return InputSample(inVal);
+}
+
+inline double DistortionNode::InputSample(double sample)
 {
     if (m_fPassThrough)
         return sample;
@@ -27,14 +48,14 @@ inline double Distortion::InputSample(double sample)
     return tempSample;
 }
 
-Parameter& Distortion::getPrimaryParam()
+Parameter* DistortionNode::getPrimaryParam()
 {
-    return *m_pDrive;
+    return m_pDrive;
 }
 
 // This param is the negDistortion param of the TanhDistortion unit. Here we
 // will also set the posDistortion param based on the neg value.
-bool Distortion::setPrimaryParam(float value)
+bool DistortionNode::setPrimaryParam(float value)
 {
     m_pDrive->setValue(value);
     // from testing we have come up with this formula for relating the
@@ -44,25 +65,25 @@ bool Distortion::setPrimaryParam(float value)
     return m_pTanhDistortion->setSecondaryParam(value);
 }
 
-Parameter& Distortion::getSecondaryParam()
+Parameter* DistortionNode::getSecondaryParam()
 {
-    return *m_pFuzzGain;
+    return m_pFuzzGain;
 }
 
-bool Distortion::setSecondaryParam(float value)
+bool DistortionNode::setSecondaryParam(float value)
 {
     m_pFuzzGain->setValue(value);
     return m_pFuzzExpDistortion->SetGain(value);
 }
 
-void Distortion::Reset()
+void DistortionNode::Reset()
 {
-    Effect::Reset();
+    EffectNode::Reset();
     setPrimaryParam(defaultDrive);
     setSecondaryParam(defaultFuzz);
 }
 
-Distortion::~Distortion()
+DistortionNode::~DistortionNode()
 {
     delete m_pDrive;
     m_pDrive = NULL;
@@ -76,3 +97,4 @@ Distortion::~Distortion()
     delete m_pFuzzExpDistortion;
     m_pFuzzExpDistortion = NULL;
 }
+

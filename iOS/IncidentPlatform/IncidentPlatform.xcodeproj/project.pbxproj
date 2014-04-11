@@ -53,7 +53,6 @@
 		2610F12F18AD6A31003F5CEB /* ButterWorthFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F0F718AD6A31003F5CEB /* ButterWorthFilter.mm */; };
 		2610F13018AD6A31003F5CEB /* ButterWorthFilterElement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F0F918AD6A31003F5CEB /* ButterWorthFilterElement.mm */; };
 		2610F13118AD6A31003F5CEB /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F0FC18AD6A31003F5CEB /* CAStreamBasicDescription.cpp */; };
-		2610F13218AD6A31003F5CEB /* ChorusEffect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10018AD6A31003F5CEB /* ChorusEffect.mm */; };
 		2610F13318AD6A31003F5CEB /* Compressor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10218AD6A31003F5CEB /* Compressor.mm */; };
 		2610F13418AD6A31003F5CEB /* DelayNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10418AD6A31003F5CEB /* DelayNode.cpp */; };
 		2610F13518AD6A31003F5CEB /* DiffusionTankNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2610F10618AD6A31003F5CEB /* DiffusionTankNode.cpp */; };
@@ -198,6 +197,7 @@
 		26EBC39818ADB7230068BEC6 /* EnvelopeNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */; };
 		26EBC39918ADB7230068BEC6 /* GeneratorNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11418AD6A31003F5CEB /* GeneratorNode.h */; };
 		26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26F72A9C18C9B16800D2D560 /* XMPData.mm */; };
+		6DA7852B18F86C1000D9A6D3 /* ChorusEffectNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -380,8 +380,6 @@
 		2610F0FC18AD6A31003F5CEB /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
 		2610F0FD18AD6A31003F5CEB /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
 		2610F0FE18AD6A31003F5CEB /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
-		2610F0FF18AD6A31003F5CEB /* ChorusEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChorusEffect.h; sourceTree = "<group>"; };
-		2610F10018AD6A31003F5CEB /* ChorusEffect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChorusEffect.mm; sourceTree = "<group>"; };
 		2610F10118AD6A31003F5CEB /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
 		2610F10218AD6A31003F5CEB /* Compressor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Compressor.mm; sourceTree = "<group>"; };
 		2610F10318AD6A31003F5CEB /* DelayNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DelayNode.h; sourceTree = "<group>"; };
@@ -609,6 +607,8 @@
 		26A513331887985000478200 /* MatrixFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixFactory.h; sourceTree = "<group>"; };
 		26F72A9B18C9B16800D2D560 /* XMPData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPData.h; sourceTree = "<group>"; };
 		26F72A9C18C9B16800D2D560 /* XMPData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPData.mm; sourceTree = "<group>"; };
+		6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChorusEffectNode.cpp; sourceTree = "<group>"; };
+		6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChorusEffectNode.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -905,6 +905,8 @@
 				2610F10A18AD6A31003F5CEB /* Effect.mm */,
 				2610F10318AD6A31003F5CEB /* DelayNode.h */,
 				2610F10418AD6A31003F5CEB /* DelayNode.cpp */,
+				6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */,
+				6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */,
 				2610F14A18AD6A88003F5CEB /* Effects */,
 				2610F10D18AD6A31003F5CEB /* EnvelopeNode.cpp */,
 				2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */,
@@ -946,8 +948,6 @@
 				2610F10C18AD6A31003F5CEB /* EnvelopeFollower.mm */,
 				2610F11118AD6A31003F5CEB /* FuzzExpDistortion.h */,
 				2610F11218AD6A31003F5CEB /* FuzzExpDistortion.mm */,
-				2610F0FF18AD6A31003F5CEB /* ChorusEffect.h */,
-				2610F10018AD6A31003F5CEB /* ChorusEffect.mm */,
 				2610F10118AD6A31003F5CEB /* Compressor.h */,
 				2610F10218AD6A31003F5CEB /* Compressor.mm */,
 				2610F10718AD6A31003F5CEB /* Distortion.h */,
@@ -1387,7 +1387,6 @@
 				2610F13918AD6A31003F5CEB /* EnvelopeNode.cpp in Sources */,
 				2647908818692BA50077987F /* vertex.vsh in Sources */,
 				2605804D18691DE800F6668F /* XMPObjectFactory.mm in Sources */,
-				2610F13218AD6A31003F5CEB /* ChorusEffect.mm in Sources */,
 				2616855218E940DE00094BB0 /* XMPSampler.mm in Sources */,
 				2605804118691DE800F6668F /* XMPElement.cpp in Sources */,
 				2605804618691DE800F6668F /* XMPLEDEvent.mm in Sources */,
@@ -1406,6 +1405,7 @@
 				2605804018691DE800F6668F /* XMPAttribute.cpp in Sources */,
 				2647907218692BA50077987F /* DimensionImpDX9.cpp in Sources */,
 				2605803E18691DE800F6668F /* SmartBuffer.cpp in Sources */,
+				6DA7852B18F86C1000D9A6D3 /* ChorusEffectNode.cpp in Sources */,
 				2647907418692BA50077987F /* DX9Camera.cpp in Sources */,
 				2610F14218AD6A31003F5CEB /* ReverbNode.cpp in Sources */,
 				261641EE18DA804300AEF042 /* LevelNode.cpp in Sources */,
@@ -1590,6 +1590,7 @@
 		26057F6118691C7800F6668F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
@@ -1602,9 +1603,11 @@
 		26057F6218691C7800F6668F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
