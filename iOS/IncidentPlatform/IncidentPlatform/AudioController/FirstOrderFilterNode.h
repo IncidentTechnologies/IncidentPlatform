@@ -19,7 +19,7 @@ class FirstOrderFilterNode : public EffectNode {
 public:
     FirstOrderFilterNode(double feedback, double wet);
     
-    inline double InputSample(double sample);
+    double InputSample(double sample);
     bool SetFeedback(double feedback);
     
     float GetNextSample(unsigned long int timestamp);
