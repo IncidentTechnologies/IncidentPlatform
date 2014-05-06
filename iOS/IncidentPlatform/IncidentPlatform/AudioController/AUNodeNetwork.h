@@ -20,8 +20,12 @@ class AudioNode;
     AudioNode *m_rootNode;
     float m_volume;
     
-    dispatch_semaphore_t m_sem;
+    //dispatch_semaphore_t m_sem;
+    //NSCondition *pauseRender;
+    BOOL waiting;
 }
+
+@property (retain, nonatomic) dispatch_semaphore_t m_sem;
 
 - (unsigned long int) resetTimestamp;
 - (unsigned long int) incrementTimestamp;
@@ -35,5 +39,6 @@ class AudioNode;
 
 - (int) WaitOnSemaphore;
 - (int) ReleaseSemaphore;
+- (dispatch_semaphore_t) TakeSemaphore;
 
 @end

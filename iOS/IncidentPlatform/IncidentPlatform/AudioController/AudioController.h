@@ -55,6 +55,7 @@ typedef enum {
 - (AUNodeNetwork*) GetNodeNetwork;
 - (int) WaitOnSemaphore;
 - (int) ReleaseSemaphore;
+- (dispatch_semaphore_t) TakeSemaphore;
 
 - (BOOL) SetVolume:(float)volume;
 

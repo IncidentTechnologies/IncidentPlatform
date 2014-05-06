@@ -63,14 +63,14 @@
     NSString *plistPath;
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    plistPath = [rootPath stringByAppendingPathComponent:@"instruments.plist"];
+    plistPath = [rootPath stringByAppendingPathComponent:@"instrumentList.plist"];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
-        plistPath = [[NSBundle mainBundle] pathForResource:@"instruments" ofType:@"plist"];
+        plistPath = [[NSBundle mainBundle] pathForResource:@"instrumentList" ofType:@"plist"];
     }
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
-        plistPath = [[NSBundle mainBundle] pathForResource:@"instruments" ofType:@"plist"];
+        plistPath = [[NSBundle mainBundle] pathForResource:@"instrumentList" ofType:@"plist"];
     }
     
     NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];

@@ -41,7 +41,9 @@
         m_volume = 1.0f;
         
         // Create semaphore with 1 count
-        m_sem = dispatch_semaphore_create(1);
+        _m_sem = dispatch_semaphore_create(1);
+        
+        
     }
     
     return self;
@@ -58,11 +60,19 @@
 }
 
 - (int) WaitOnSemaphore {
-    return dispatch_semaphore_wait(m_sem, DISPATCH_TIME_FOREVER);
+    //NSLog(@"Wait on Semaphore");
+
+    return dispatch_semaphore_wait(_m_sem, DISPATCH_TIME_FOREVER);
 }
 
 - (int) ReleaseSemaphore {
-    return dispatch_semaphore_signal(m_sem);
+    //NSLog(@"Release Semaphore");
+
+    return dispatch_semaphore_signal(_m_sem);
+}
+
+- (dispatch_semaphore_t)TakeSemaphore {
+    return _m_sem;
 }
 
 // Audio Render Callback Procedure
@@ -71,16 +81,18 @@ static OSStatus renderNetwork(void *inRefCon, AudioUnitRenderActionFlags *ioActi
 {
     
     AUNodeNetwork *net = (__bridge AUNodeNetwork*)(inRefCon);
-    [net WaitOnSemaphore];
     
-	AudioSampleType *outA = (AudioSampleType*)ioData->mBuffers[0].mData;
+    dispatch_semaphore_wait([net TakeSemaphore], DISPATCH_TIME_FOREVER);
+
+    AudioSampleType *outA = (AudioSampleType*)ioData->mBuffers[0].mData;
     
-	for(UInt32 i = 0; i < inNumberFrames; i++) {
+    for(UInt32 i = 0; i < inNumberFrames; i++) {
         SInt16 nextSample = (SInt16)([net GetNextSample] * 32767.0f * net->m_volume);
         outA[i] = nextSample;
     }
     
-    [net ReleaseSemaphore];
+    dispatch_semaphore_signal([net TakeSemaphore]);
+    
 	return noErr;
 }
 

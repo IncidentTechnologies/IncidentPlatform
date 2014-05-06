@@ -212,6 +212,10 @@ void AudioInterruptionListener (void *inClientData, UInt32 inInterruptionState) 
     return [m_networkNode ReleaseSemaphore];
 }
 
+- (dispatch_semaphore_t) TakeSemaphore {
+    return [m_networkNode TakeSemaphore];
+}
+
 - (void) initializeAUGraph {
 	OSStatus result = noErr;
     
