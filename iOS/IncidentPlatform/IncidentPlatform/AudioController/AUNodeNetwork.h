@@ -20,7 +20,7 @@ class AudioNode;
     AudioNode *m_rootNode;
     float m_volume;
     
-    int m_semaphoreNet;
+    dispatch_semaphore_t m_sem;
 }
 
 - (unsigned long int) resetTimestamp;

@@ -41,7 +41,7 @@
         m_volume = 1.0f;
         
         // Create semaphore with 1 count
-        m_semaphoreNet = sem_init(&m_semaphoreNet, 0, 1);
+        m_sem = dispatch_semaphore_create(1);
     }
     
     return self;
@@ -58,11 +58,11 @@
 }
 
 - (int) WaitOnSemaphore {
-    return sem_wait(&m_semaphoreNet);
+    return dispatch_semaphore_wait(m_sem, DISPATCH_TIME_FOREVER);
 }
 
 - (int) ReleaseSemaphore {
-    return sem_post(&m_semaphoreNet);
+    return dispatch_semaphore_signal(m_sem);
 }
 
 // Audio Render Callback Procedure
