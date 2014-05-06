@@ -14,6 +14,8 @@
 #import "CAStreamBasicDescription.h"
 #import "CAXException.h"
 
+#import <semaphore.h>
+
 
 @implementation AUNodeNetwork
 
@@ -37,6 +39,9 @@
         NSLog(@"Add AUOutput Node: %s", CAX4CCString(status).get());
         
         m_volume = 1.0f;
+        
+        // Create semaphore with 1 count
+        m_semaphoreNet = sem_init(&m_semaphoreNet, 0, 1);
     }
     
     return self;
@@ -52,12 +57,21 @@
     return retVal;
 }
 
+- (int) WaitOnSemaphore {
+    return sem_wait(&m_semaphoreNet);
+}
+
+- (int) ReleaseSemaphore {
+    return sem_post(&m_semaphoreNet);
+}
+
 // Audio Render Callback Procedure
 static OSStatus renderNetwork(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp,
                                UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
     
     AUNodeNetwork *net = (__bridge AUNodeNetwork*)(inRefCon);
+    [net WaitOnSemaphore];
     
 	AudioSampleType *outA = (AudioSampleType*)ioData->mBuffers[0].mData;
     
@@ -66,6 +80,7 @@ static OSStatus renderNetwork(void *inRefCon, AudioUnitRenderActionFlags *ioActi
         outA[i] = nextSample;
     }
     
+    [net ReleaseSemaphore];
 	return noErr;
 }
 

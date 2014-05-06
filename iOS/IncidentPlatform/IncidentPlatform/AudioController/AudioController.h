@@ -53,6 +53,8 @@ typedef enum {
 - (AudioStreamBasicDescription*) InitDefaultStreamDescription;
 
 - (AUNodeNetwork*) GetNodeNetwork;
+- (int) WaitOnSemaphore;
+- (int) ReleaseSemaphore;
 
 - (BOOL) SetVolume:(float)volume;
 

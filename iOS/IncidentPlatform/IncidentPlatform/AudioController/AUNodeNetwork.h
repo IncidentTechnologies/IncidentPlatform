@@ -19,6 +19,8 @@ class AudioNode;
     unsigned long int m_timestamp;
     AudioNode *m_rootNode;
     float m_volume;
+    
+    int m_semaphoreNet;
 }
 
 - (unsigned long int) resetTimestamp;
@@ -29,7 +31,9 @@ class AudioNode;
 - (OSStatus) Initialize;
 
 - (AudioNode*) GetRootNode;
-
 - (OSStatus) SetVolume:(float)volume;
+
+- (int) WaitOnSemaphore;
+- (int) ReleaseSemaphore;
 
 @end

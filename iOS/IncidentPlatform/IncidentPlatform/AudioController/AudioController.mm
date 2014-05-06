@@ -204,6 +204,14 @@ void AudioInterruptionListener (void *inClientData, UInt32 inInterruptionState) 
     }
 }
 
+- (int) WaitOnSemaphore {
+    return [m_networkNode WaitOnSemaphore];
+}
+
+- (int) ReleaseSemaphore {
+    return [m_networkNode ReleaseSemaphore];
+}
+
 - (void) initializeAUGraph {
 	OSStatus result = noErr;
     
