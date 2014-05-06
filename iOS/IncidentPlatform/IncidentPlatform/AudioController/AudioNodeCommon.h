@@ -24,6 +24,16 @@
 #include "DiffusionTankNode.h"
 #include "FirstOrderFilterNode.h"
 #include "ReverbNode.h"
+#include "ChorusEffectNode.h"
+
+#include "DistortionNode.h"
+
+#include "ButterWorthFilterNode.h"
+#include "KSObjectNode.h"
+
+#include "OverdriveNode.h"
+#include "SoftClippingOverdriveNode.h"
+#include "HardCutoffDistortionNode.h"
 
 // Utility
 #include "FileoutNode.h"

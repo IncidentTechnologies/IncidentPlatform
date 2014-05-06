@@ -10,7 +10,7 @@ FirstOrderFilterNode::FirstOrderFilterNode(double feedback, double wet) :
     SetChannelCount(1, CONN_OUT);
 }
 
-inline double FirstOrderFilterNode::InputSample(double sample) {
+double FirstOrderFilterNode::InputSample(double sample) {
     double retVal = 0;
     
     if(m_fPassThrough)
