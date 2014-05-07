@@ -190,6 +190,33 @@
 		6D495E9D190F3612002530EB /* GtarController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E8C190F3510002530EB /* GtarController.h */; };
 		6D495E9E190F3618002530EB /* Gtar.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E9C190F3543002530EB /* Gtar.h */; };
 		6D495E9F190F3773002530EB /* GtarControllerInternal.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E99190F3510002530EB /* GtarControllerInternal.h */; };
+		6D7D46B71919B46F00EF8C75 /* CloudController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46A41919B46F00EF8C75 /* CloudController.m */; };
+		6D7D46B81919B46F00EF8C75 /* CloudRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46A61919B46F00EF8C75 /* CloudRequest.m */; };
+		6D7D46B91919B46F00EF8C75 /* CloudResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46A81919B46F00EF8C75 /* CloudResponse.m */; };
+		6D7D46BA1919B46F00EF8C75 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46AA1919B46F00EF8C75 /* User.m */; };
+		6D7D46BB1919B46F00EF8C75 /* UserProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46AC1919B46F00EF8C75 /* UserProfile.m */; };
+		6D7D46BC1919B46F00EF8C75 /* UserProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46AE1919B46F00EF8C75 /* UserProfiles.m */; };
+		6D7D46BD1919B46F00EF8C75 /* UserSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46B01919B46F00EF8C75 /* UserSong.m */; };
+		6D7D46BE1919B46F00EF8C75 /* UserSongs.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46B21919B46F00EF8C75 /* UserSongs.m */; };
+		6D7D46BF1919B46F00EF8C75 /* UserSongSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46B41919B46F00EF8C75 /* UserSongSession.m */; };
+		6D7D46C01919B46F00EF8C75 /* UserSongSessions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46B61919B46F00EF8C75 /* UserSongSessions.m */; };
+		6D7D46C51919B50D00EF8C75 /* CloudRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46A51919B46F00EF8C75 /* CloudRequest.h */; };
+		6D7D46C61919B50D00EF8C75 /* CloudResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46A71919B46F00EF8C75 /* CloudResponse.h */; };
+		6D7D46C71919B50D00EF8C75 /* User.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46A91919B46F00EF8C75 /* User.h */; };
+		6D7D46C81919B50D00EF8C75 /* UserProfile.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46AB1919B46F00EF8C75 /* UserProfile.h */; };
+		6D7D46C91919B50D00EF8C75 /* UserProfiles.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46AD1919B46F00EF8C75 /* UserProfiles.h */; };
+		6D7D46CA1919B50D00EF8C75 /* UserSong.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46AF1919B46F00EF8C75 /* UserSong.h */; };
+		6D7D46CB1919B50D00EF8C75 /* UserSongs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46B11919B46F00EF8C75 /* UserSongs.h */; };
+		6D7D46CC1919B50D00EF8C75 /* UserSongSession.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46B31919B46F00EF8C75 /* UserSongSession.h */; };
+		6D7D46CD1919B50D00EF8C75 /* UserSongSessions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46B51919B46F00EF8C75 /* UserSongSessions.h */; };
+		6D7D46CE1919B50D00EF8C75 /* CloudController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46A31919B46F00EF8C75 /* CloudController.h */; };
+		6D7D46D41919B5B700EF8C75 /* XmlDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46D11919B5B700EF8C75 /* XmlDictionary.m */; };
+		6D7D46D51919B5B700EF8C75 /* XmlDom.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46D31919B5B700EF8C75 /* XmlDom.m */; };
+		6D7D46DA1919B5EF00EF8C75 /* FileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46D71919B5EF00EF8C75 /* FileController.m */; };
+		6D7D46DB1919B5EF00EF8C75 /* FileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46D91919B5EF00EF8C75 /* FileRequest.m */; };
+		6D7D46DD1919B88300EF8C75 /* FileController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46D61919B5EF00EF8C75 /* FileController.h */; };
+		6D7D46DE1919B88300EF8C75 /* XmlDictionary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46D01919B5B700EF8C75 /* XmlDictionary.h */; };
+		6D7D46DF1919B88300EF8C75 /* XmlDom.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46D21919B5B700EF8C75 /* XmlDom.h */; };
 		6DA7852B18F86C1000D9A6D3 /* ChorusEffectNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */; };
 		6DE6B8F618F86F5600F9E49B /* ChorusEffectNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */; };
 		6DE6B8F918F881B300F9E49B /* DistortionNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6B8F718F881B300F9E49B /* DistortionNode.cpp */; };
@@ -233,6 +260,19 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6D7D46DD1919B88300EF8C75 /* FileController.h in CopyFiles */,
+				6D7D46DE1919B88300EF8C75 /* XmlDictionary.h in CopyFiles */,
+				6D7D46DF1919B88300EF8C75 /* XmlDom.h in CopyFiles */,
+				6D7D46C51919B50D00EF8C75 /* CloudRequest.h in CopyFiles */,
+				6D7D46C61919B50D00EF8C75 /* CloudResponse.h in CopyFiles */,
+				6D7D46C71919B50D00EF8C75 /* User.h in CopyFiles */,
+				6D7D46C81919B50D00EF8C75 /* UserProfile.h in CopyFiles */,
+				6D7D46C91919B50D00EF8C75 /* UserProfiles.h in CopyFiles */,
+				6D7D46CA1919B50D00EF8C75 /* UserSong.h in CopyFiles */,
+				6D7D46CB1919B50D00EF8C75 /* UserSongs.h in CopyFiles */,
+				6D7D46CC1919B50D00EF8C75 /* UserSongSession.h in CopyFiles */,
+				6D7D46CD1919B50D00EF8C75 /* UserSongSessions.h in CopyFiles */,
+				6D7D46CE1919B50D00EF8C75 /* CloudController.h in CopyFiles */,
 				6D495E9F190F3773002530EB /* GtarControllerInternal.h in CopyFiles */,
 				6D495E9E190F3618002530EB /* Gtar.h in CopyFiles */,
 				6D495E9D190F3612002530EB /* GtarController.h in CopyFiles */,
@@ -620,6 +660,34 @@
 		6D495E8D190F3510002530EB /* GtarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GtarController.m; sourceTree = "<group>"; };
 		6D495E99190F3510002530EB /* GtarControllerInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarControllerInternal.h; sourceTree = "<group>"; };
 		6D495E9C190F3543002530EB /* Gtar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gtar.h; sourceTree = "<group>"; };
+		6D7D46A31919B46F00EF8C75 /* CloudController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudController.h; sourceTree = "<group>"; };
+		6D7D46A41919B46F00EF8C75 /* CloudController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudController.m; sourceTree = "<group>"; };
+		6D7D46A51919B46F00EF8C75 /* CloudRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudRequest.h; sourceTree = "<group>"; };
+		6D7D46A61919B46F00EF8C75 /* CloudRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudRequest.m; sourceTree = "<group>"; };
+		6D7D46A71919B46F00EF8C75 /* CloudResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudResponse.h; sourceTree = "<group>"; };
+		6D7D46A81919B46F00EF8C75 /* CloudResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudResponse.m; sourceTree = "<group>"; };
+		6D7D46A91919B46F00EF8C75 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		6D7D46AA1919B46F00EF8C75 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		6D7D46AB1919B46F00EF8C75 /* UserProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProfile.h; sourceTree = "<group>"; };
+		6D7D46AC1919B46F00EF8C75 /* UserProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProfile.m; sourceTree = "<group>"; };
+		6D7D46AD1919B46F00EF8C75 /* UserProfiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProfiles.h; sourceTree = "<group>"; };
+		6D7D46AE1919B46F00EF8C75 /* UserProfiles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProfiles.m; sourceTree = "<group>"; };
+		6D7D46AF1919B46F00EF8C75 /* UserSong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSong.h; sourceTree = "<group>"; };
+		6D7D46B01919B46F00EF8C75 /* UserSong.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSong.m; sourceTree = "<group>"; };
+		6D7D46B11919B46F00EF8C75 /* UserSongs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSongs.h; sourceTree = "<group>"; };
+		6D7D46B21919B46F00EF8C75 /* UserSongs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSongs.m; sourceTree = "<group>"; };
+		6D7D46B31919B46F00EF8C75 /* UserSongSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSongSession.h; sourceTree = "<group>"; };
+		6D7D46B41919B46F00EF8C75 /* UserSongSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSongSession.m; sourceTree = "<group>"; };
+		6D7D46B51919B46F00EF8C75 /* UserSongSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSongSessions.h; sourceTree = "<group>"; };
+		6D7D46B61919B46F00EF8C75 /* UserSongSessions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSongSessions.m; sourceTree = "<group>"; };
+		6D7D46D01919B5B700EF8C75 /* XmlDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlDictionary.h; sourceTree = "<group>"; };
+		6D7D46D11919B5B700EF8C75 /* XmlDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlDictionary.m; sourceTree = "<group>"; };
+		6D7D46D21919B5B700EF8C75 /* XmlDom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlDom.h; sourceTree = "<group>"; };
+		6D7D46D31919B5B700EF8C75 /* XmlDom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlDom.m; sourceTree = "<group>"; };
+		6D7D46D61919B5EF00EF8C75 /* FileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileController.h; sourceTree = "<group>"; };
+		6D7D46D71919B5EF00EF8C75 /* FileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileController.m; sourceTree = "<group>"; };
+		6D7D46D81919B5EF00EF8C75 /* FileRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileRequest.h; sourceTree = "<group>"; };
+		6D7D46D91919B5EF00EF8C75 /* FileRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileRequest.m; sourceTree = "<group>"; };
 		6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChorusEffectNode.cpp; sourceTree = "<group>"; };
 		6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChorusEffectNode.h; sourceTree = "<group>"; };
 		6DE6B8F718F881B300F9E49B /* DistortionNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistortionNode.cpp; sourceTree = "<group>"; };
@@ -728,10 +796,12 @@
 			children = (
 				2678705718D640C400779B81 /* Widgets */,
 				6D495E88190F3510002530EB /* GtarController */,
+				6D7D46A21919B41B00EF8C75 /* CloudController */,
 				2610F0E818AD6A31003F5CEB /* AudioController */,
 				2647908B1869304C0077987F /* Window */,
 				26478FFC18692BA50077987F /* Dimension */,
 				26057FF818691DE800F6668F /* DSS */,
+				6D7D46CF1919B5B700EF8C75 /* XML */,
 				2605800918691DE800F6668F /* XMPParser */,
 				2605803618691DE800F6668F /* test_data */,
 				2605803A18691DE800F6668F /* Console */,
@@ -1243,6 +1313,88 @@
 			path = GtarController;
 			sourceTree = "<group>";
 		};
+		6D7D46A21919B41B00EF8C75 /* CloudController */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46DC1919B5F200EF8C75 /* FileController */,
+				6D7D46C11919B47200EF8C75 /* CloudRequest */,
+				6D7D46C21919B48600EF8C75 /* Users */,
+				6D7D46C31919B49400EF8C75 /* UserSongs */,
+				6D7D46C41919B4A600EF8C75 /* UserSongSessions */,
+				6D7D46A31919B46F00EF8C75 /* CloudController.h */,
+				6D7D46A41919B46F00EF8C75 /* CloudController.m */,
+			);
+			path = CloudController;
+			sourceTree = "<group>";
+		};
+		6D7D46C11919B47200EF8C75 /* CloudRequest */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46A51919B46F00EF8C75 /* CloudRequest.h */,
+				6D7D46A61919B46F00EF8C75 /* CloudRequest.m */,
+				6D7D46A71919B46F00EF8C75 /* CloudResponse.h */,
+				6D7D46A81919B46F00EF8C75 /* CloudResponse.m */,
+			);
+			name = CloudRequest;
+			sourceTree = "<group>";
+		};
+		6D7D46C21919B48600EF8C75 /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46A91919B46F00EF8C75 /* User.h */,
+				6D7D46AA1919B46F00EF8C75 /* User.m */,
+				6D7D46AB1919B46F00EF8C75 /* UserProfile.h */,
+				6D7D46AC1919B46F00EF8C75 /* UserProfile.m */,
+				6D7D46AD1919B46F00EF8C75 /* UserProfiles.h */,
+				6D7D46AE1919B46F00EF8C75 /* UserProfiles.m */,
+			);
+			name = Users;
+			sourceTree = "<group>";
+		};
+		6D7D46C31919B49400EF8C75 /* UserSongs */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46AF1919B46F00EF8C75 /* UserSong.h */,
+				6D7D46B01919B46F00EF8C75 /* UserSong.m */,
+				6D7D46B11919B46F00EF8C75 /* UserSongs.h */,
+				6D7D46B21919B46F00EF8C75 /* UserSongs.m */,
+			);
+			name = UserSongs;
+			sourceTree = "<group>";
+		};
+		6D7D46C41919B4A600EF8C75 /* UserSongSessions */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46B31919B46F00EF8C75 /* UserSongSession.h */,
+				6D7D46B41919B46F00EF8C75 /* UserSongSession.m */,
+				6D7D46B51919B46F00EF8C75 /* UserSongSessions.h */,
+				6D7D46B61919B46F00EF8C75 /* UserSongSessions.m */,
+			);
+			name = UserSongSessions;
+			sourceTree = "<group>";
+		};
+		6D7D46CF1919B5B700EF8C75 /* XML */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46D01919B5B700EF8C75 /* XmlDictionary.h */,
+				6D7D46D11919B5B700EF8C75 /* XmlDictionary.m */,
+				6D7D46D21919B5B700EF8C75 /* XmlDom.h */,
+				6D7D46D31919B5B700EF8C75 /* XmlDom.m */,
+			);
+			path = XML;
+			sourceTree = "<group>";
+		};
+		6D7D46DC1919B5F200EF8C75 /* FileController */ = {
+			isa = PBXGroup;
+			children = (
+				6D7D46D61919B5EF00EF8C75 /* FileController.h */,
+				6D7D46D71919B5EF00EF8C75 /* FileController.m */,
+				6D7D46D81919B5EF00EF8C75 /* FileRequest.h */,
+				6D7D46D91919B5EF00EF8C75 /* FileRequest.m */,
+			);
+			name = FileController;
+			sourceTree = "<group>";
+		};
 		6DE6B90718F8918D00F9E49B /* Distortion */ = {
 			isa = PBXGroup;
 			children = (
@@ -1452,6 +1604,7 @@
 			files = (
 				6DE6B90F18F8925100F9E49B /* KSObjectNode.cpp in Sources */,
 				2610F15518AD9125003F5CEB /* CADebugPrintf.cpp in Sources */,
+				6D7D46C01919B46F00EF8C75 /* UserSongSessions.m in Sources */,
 				6DE6B92718F8A3EA00F9E49B /* CompressorNode.cpp in Sources */,
 				2647907718692BA50077987F /* DX9ShaderManager.cpp in Sources */,
 				2647907118692BA50077987F /* colord.cpp in Sources */,
@@ -1472,10 +1625,12 @@
 				2647908018692BA50077987F /* MeshMd3.cpp in Sources */,
 				264EC76C18B30741001F7224 /* AudioNodeFactory.mm in Sources */,
 				264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */,
+				6D7D46B81919B46F00EF8C75 /* CloudRequest.m in Sources */,
 				26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */,
 				6DE6B91518F892B000F9E49B /* ButterWorthFilterElementNode.cpp in Sources */,
 				2616855818E9443D00094BB0 /* XMPInstrument.mm in Sources */,
 				6D495E9A190F3510002530EB /* CoreMidiInterface.m in Sources */,
+				6D7D46BC1919B46F00EF8C75 /* UserProfiles.m in Sources */,
 				2616854318E8C18E00094BB0 /* FileoutNode.cpp in Sources */,
 				2610F12D18AD6A31003F5CEB /* AUMixerNode.mm in Sources */,
 				264EC77918B456E6001F7224 /* AudioNodeNetwork.cpp in Sources */,
@@ -1489,6 +1644,7 @@
 				6DE6B92118F8A33C00F9E49B /* OverdriveNode.cpp in Sources */,
 				2605804C18691DE800F6668F /* XMPObject.mm in Sources */,
 				2605804418691DE800F6668F /* XMPGtarNote.mm in Sources */,
+				6D7D46B71919B46F00EF8C75 /* CloudController.m in Sources */,
 				264790A9187681990077987F /* WindowFactory.cpp in Sources */,
 				2647907918692BA50077987F /* DX9Text.cpp in Sources */,
 				26057F4818691C7800F6668F /* IncidentPlatform.m in Sources */,
@@ -1505,15 +1661,18 @@
 				6D495E9B190F3510002530EB /* GtarController.m in Sources */,
 				6DE6B90418F8839500F9E49B /* FuzzExpDistortionNode.cpp in Sources */,
 				6DA7852B18F86C1000D9A6D3 /* ChorusEffectNode.cpp in Sources */,
+				6D7D46BF1919B46F00EF8C75 /* UserSongSession.m in Sources */,
 				2647907418692BA50077987F /* DX9Camera.cpp in Sources */,
 				2610F14218AD6A31003F5CEB /* ReverbNode.cpp in Sources */,
 				261641EE18DA804300AEF042 /* LevelNode.cpp in Sources */,
 				2647906F18692BA50077987F /* cmnPriv.cpp in Sources */,
 				2610F13C18AD6A31003F5CEB /* GeneratorNode.cpp in Sources */,
+				6D7D46D41919B5B700EF8C75 /* XmlDictionary.m in Sources */,
 				2605805418691DE800F6668F /* XMPTree.cpp in Sources */,
 				2610F13418AD6A31003F5CEB /* DelayNode.cpp in Sources */,
 				6DE6B91E18F8A32B00F9E49B /* SoftClippingOverdriveNode.cpp in Sources */,
 				2605804918691DE800F6668F /* XMPLoop.mm in Sources */,
+				6D7D46D51919B5B700EF8C75 /* XmlDom.m in Sources */,
 				2605805018691DE800F6668F /* XMPTrack.mm in Sources */,
 				2605805618691DE800F6668F /* Console.cpp in Sources */,
 				2610F13F18AD6A31003F5CEB /* LocalMax.cpp in Sources */,
@@ -1522,10 +1681,12 @@
 				2605805318691DE800F6668F /* XMPTokenizer.cpp in Sources */,
 				264790A718765B520077987F /* blit.cpp in Sources */,
 				6DE6B8FF18F8837500F9E49B /* TanhDistortionNode.cpp in Sources */,
+				6D7D46DA1919B5EF00EF8C75 /* FileController.m in Sources */,
 				2678706218D9135800779B81 /* UILevelSlider.m in Sources */,
 				26A5132D18875EE500478200 /* MeshObj.cpp in Sources */,
 				2647908A18692BA50077987F /* sphere.cpp in Sources */,
 				2647907018692BA50077987F /* color.cpp in Sources */,
+				6D7D46B91919B46F00EF8C75 /* CloudResponse.m in Sources */,
 				2647907618692BA50077987F /* DX9Plane.cpp in Sources */,
 				2647908518692BA50077987F /* vertex.vsh in Sources */,
 				2647907B18692BA50077987F /* ProtoDX9ShaderManager.cpp in Sources */,
@@ -1541,6 +1702,7 @@
 				2605804F18691DE800F6668F /* XMPText.mm in Sources */,
 				2647908318692BA50077987F /* ObjectStore.cpp in Sources */,
 				2610F13118AD6A31003F5CEB /* CAStreamBasicDescription.cpp in Sources */,
+				6D7D46BE1919B46F00EF8C75 /* UserSongs.m in Sources */,
 				2616855518E943E900094BB0 /* XMPBank.mm in Sources */,
 				2678705E18D7BD4400779B81 /* TouchTracker.m in Sources */,
 				264790A21869304C0077987F /* WindowNPAPIWin32.cpp in Sources */,
@@ -1551,8 +1713,12 @@
 				2610F12C18AD6A31003F5CEB /* AudioNode.cpp in Sources */,
 				2605803D18691DE800F6668F /* hash.cpp in Sources */,
 				2610F12A18AD6A31003F5CEB /* AUAudioNodeFactory.mm in Sources */,
+				6D7D46DB1919B5EF00EF8C75 /* FileRequest.m in Sources */,
+				6D7D46BB1919B46F00EF8C75 /* UserProfile.m in Sources */,
 				264790A5186A2BDD0077987F /* Text3D.cpp in Sources */,
+				6D7D46BD1919B46F00EF8C75 /* UserSong.m in Sources */,
 				2647907E18692BA50077987F /* ImageBMP.cpp in Sources */,
+				6D7D46BA1919B46F00EF8C75 /* User.m in Sources */,
 				2647907F18692BA50077987F /* MemTrack.cpp in Sources */,
 				6DE6B8F918F881B300F9E49B /* DistortionNode.cpp in Sources */,
 				2647907818692BA50077987F /* DX9Sphere.cpp in Sources */,
