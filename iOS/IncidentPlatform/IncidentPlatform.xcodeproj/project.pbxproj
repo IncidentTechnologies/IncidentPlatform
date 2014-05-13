@@ -1854,6 +1854,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
@@ -1867,6 +1868,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
 				ONLY_ACTIVE_ARCH = NO;

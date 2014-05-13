@@ -44,6 +44,17 @@ Error:
     return r;
 }
 
+RESULT SamplerBankNode::StopSample(int sample)
+{
+    RESULT r = R_SUCCESS;
+    
+    CBRM((sample < m_samples.length()), "SamplerBankNode: Not that many samples!");
+    m_samples[sample]->Stop();
+    
+Error:
+    return r;
+}
+
 RESULT SamplerBankNode::SetSampleGain(int sample, float gain) {
     RESULT r = R_SUCCESS;
     

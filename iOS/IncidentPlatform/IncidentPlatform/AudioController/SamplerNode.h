@@ -27,6 +27,7 @@ public:
     ~SamplerBankNode();
     
     RESULT TriggerSample(int sample);
+    RESULT StopSample(int sample);
     SampleNode *GetSample(int sample);
     
     RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
