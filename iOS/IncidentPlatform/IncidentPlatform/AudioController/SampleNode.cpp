@@ -28,16 +28,31 @@ SampleBuffer::~SampleBuffer() {
     }
 }
 
-inline bool SampleBuffer::SampleDone() {
+// todo: inline
+bool SampleBuffer::SampleDone() {
     return (m_pBuffer_c >= m_pBuffer_end);
 }
 
-inline RESULT SampleBuffer::ResetSampleCounter() {
+// todo: inline
+RESULT SampleBuffer::ResetSampleCounter() {
     m_pBuffer_c = m_pBuffer_start;
     return R_SUCCESS;
 }
 
-inline float SampleBuffer::GetNextSample(unsigned long int timestamp) {
+RESULT SampleBuffer::StartPlaying() {
+    
+    m_pBuffer_c++;
+    
+    return R_SUCCESS;
+}
+
+bool SampleBuffer::SamplePlaying() {
+    
+    return (m_pBuffer_c > m_pBuffer_start && m_pBuffer_c < m_pBuffer_end);
+}
+
+// todo: inline
+float SampleBuffer::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
     if(m_pBuffer != NULL && m_pBuffer_n > 0 && m_pBuffer_end > 0 && m_pBuffer_c < m_pBuffer_end) {

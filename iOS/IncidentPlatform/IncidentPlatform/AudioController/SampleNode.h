@@ -19,9 +19,12 @@ public:
     SampleBuffer(char *pszFilename);
     ~SampleBuffer();
     
-    float GetNextSample(unsigned long int timestamp);
+    RESULT LoadSampleBufferFromPath(char *pszPath);
+    float GetNextSample(unsigned long int timestamp); // inline
     RESULT ResetSampleCounter();
     bool SampleDone();
+    bool SamplePlaying();
+    RESULT StartPlaying();
     
     float GetSampleBufferLengthMS();
     RESULT SetStart(float msStart);
@@ -48,7 +51,6 @@ private:
     
 private:
     AudioStreamBasicDescription GetClientFormatDescription(bool fStereo);
-    RESULT LoadSampleBufferFromPath(char *pszPath);
     
 public:
     RESULT SaveToFile(char *pszFilepath, bool fOverwrite);

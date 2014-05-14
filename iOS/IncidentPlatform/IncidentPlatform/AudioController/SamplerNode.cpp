@@ -282,15 +282,18 @@ SamplerBankNode*& SamplerNode::operator[](const int& i) {
     
     return retVal;
 }
-
-
-
 /*
 float SamplerNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
+    for(int b = 0; b < m_banks.length(); b++){
+        for(int s = 0; s < m_banks[b]->m_samples.length(); s++){
+            retVal += m_banks[b]->m_samples[s]->GetNextSample(timestamp);
+        }
+    }
+    
     return retVal;
-}
- */
+}*/
+
 
 
