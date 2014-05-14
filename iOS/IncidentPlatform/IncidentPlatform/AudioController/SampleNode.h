@@ -20,11 +20,9 @@ public:
     ~SampleBuffer();
     
     RESULT LoadSampleBufferFromPath(char *pszPath);
-    float GetNextSample(unsigned long int timestamp); // inline
-    RESULT ResetSampleCounter();
-    bool SampleDone();
-    bool SamplePlaying();
-    RESULT StartPlaying();
+    inline float GetNextSample(unsigned long int timestamp);
+    inline RESULT ResetSampleCounter();
+    inline bool SampleDone();
     
     float GetSampleBufferLengthMS();
     RESULT SetStart(float msStart);
@@ -57,13 +55,14 @@ public:
     
 private:
     int m_SampleRate;
-    
+public:
     unsigned long int m_pBuffer_c;
     float *m_pBuffer;
     unsigned long int m_pBuffer_n;
 
     unsigned long int m_pBuffer_start;
     unsigned long int m_pBuffer_end;
+    
 };
 
 

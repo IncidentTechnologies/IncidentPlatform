@@ -9,20 +9,63 @@
 #ifndef __IncidentPlatform__GtarSamplerNode__
 #define __IncidentPlatform__GtarSamplerNode__
 
-#define NUM_BANKS 1
-
 #include "AudioNodeNetwork.h"
 #include "dss_list.h"
 #include "SampleNode.h"
 #include "SamplerNode.h"
 
+#define MAX_BANKS 5
+#define MAX_SAMPLES 102
+
 class SampleNode;
+
+using namespace dss;
+
+// The Gtar Sample Buffer extends the regular Sample Buffer with
+// added envelope functionality
+
+class GtarSampleBuffer : public SampleBuffer {
+public:
+    
+    GtarSampleBuffer(char *pszFilename);
+    ~GtarSampleBuffer();
+    
+    float GtarGetNextSample(unsigned long int timestamp);
+    RESULT GtarResetSampleCounter();
+    bool GtarSampleDone();
+    bool GtarSamplePlaying();
+    RESULT GtarStartPlaying();
+    
+    void NoteOn();
+    void NoteOff();
+    bool IsNoteOn();
+    
+private:
+    float EnvelopeSample(float retVal);
+    
+private:
+    int m_channel_n;
+    float m_CLK;
+    float m_msCLKIncrement;
+    float m_releaseCLK;
+    bool m_fNoteOn;
+    
+public:
+    float m_msAttack;
+    float m_AttackLevel;
+    
+    float m_msDecay;
+    float m_SustainLevel;
+    
+    float m_msRelease;
+    float m_ReleaseLevel;
+    
+    float m_releaseScaleFactor;
+};
 
 // A sampler is a collection of Sample nodes mixed into
 // a bank, and all the banks are mixed into the output
 // node.
-
-using namespace dss;
 
 class GtarSamplerNode : public GeneratorNode {
 public:
@@ -31,21 +74,24 @@ public:
     
     float GetNextSample(unsigned long int timestamp);
     
-    RESULT ReleaseBank();
-    RESULT CreateNewBank(int numSamples);
-    RESULT TriggerSample(int sample);
-    RESULT StopSample(int sample);
+    RESULT ReleaseBank(int bank);
+    int CreateNewBank(int bank, int numSamples);
+    RESULT TriggerSample(int bank, int sample);
+    RESULT StopSample(int bank, int sample);
+    RESULT NoteOff(int bank, int sample);
     
-    RESULT LoadSampleIntoBank(char *pszFilepath);
+    RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
     
 public:
-    SampleBuffer **m_ppSampleBuffers;
+    GtarSampleBuffer *m_buffers[MAX_BANKS][MAX_SAMPLES];
+    
     bool m_fPlaying;
-    int m_numSamples;
-    int m_nextSampleCounter;
-    //SamplerBankNode *m_samplerBankNode;
+    
+    int m_maxBank;
+    int m_numSamples[MAX_BANKS];
+    int m_nextSampleCounter[MAX_BANKS];
     
 };
- 
+
 
 #endif /* defined(__IncidentPlatform__SamplerNode__) */
