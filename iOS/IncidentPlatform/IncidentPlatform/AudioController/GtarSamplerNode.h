@@ -35,8 +35,11 @@ public:
     bool GtarSampleDone();
     bool GtarSamplePlaying();
     RESULT GtarStartPlaying();
+    RESULT GtarSampleInterrupt();
     
     void NoteOn();
+    void NoteMutedOn();
+    void NoteSlideOn();
     void NoteOff();
     bool IsNoteOn();
     
@@ -45,12 +48,13 @@ private:
     
 private:
     int m_channel_n;
-    float m_CLK;
     float m_msCLKIncrement;
     float m_releaseCLK;
     bool m_fNoteOn;
     
 public:
+    float m_CLK;
+    
     float m_msAttack;
     float m_AttackLevel;
     
@@ -76,9 +80,14 @@ public:
     
     RESULT ReleaseBank(int bank);
     int CreateNewBank(int bank, int numSamples);
+    
     RESULT TriggerSample(int bank, int sample);
+    RESULT TriggerMutedSample(int bank, int sample);
+    unsigned long int TriggerContinuousSample(int bank, int sampleLead, int sampleTrail);
+    
     RESULT StopSample(int bank, int sample);
     RESULT NoteOff(int bank, int sample);
+    bool IsNoteOn(int bank, int sample);
     
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
     
@@ -90,6 +99,9 @@ public:
     int m_maxBank;
     int m_numSamples[MAX_BANKS];
     int m_nextSampleCounter[MAX_BANKS];
+    
+    int m_sampleTransitionIndex[MAX_BANKS][MAX_SAMPLES];
+    unsigned long int m_sampleBufferTransitionIndex[MAX_BANKS][MAX_SAMPLES];
     
 };
 
