@@ -52,7 +52,7 @@ GtarSampleBuffer::~GtarSampleBuffer() {
     }
 }
 
-bool GtarSampleBuffer::GtarSampleDone() {
+inline bool GtarSampleBuffer::GtarSampleDone() {
     
     if(m_pBuffer_c >= m_pBuffer_end){
         m_fNoteOn = false;
@@ -61,30 +61,30 @@ bool GtarSampleBuffer::GtarSampleDone() {
     return (m_pBuffer_c >= m_pBuffer_end);
 }
 
-RESULT GtarSampleBuffer::GtarSampleInterrupt() {
+inline RESULT GtarSampleBuffer::GtarSampleInterrupt() {
     GtarResetSampleCounter();
     m_fNoteOn = false;
     
     return R_SUCCESS;
 }
 
-RESULT GtarSampleBuffer::GtarResetSampleCounter() {
+inline RESULT GtarSampleBuffer::GtarResetSampleCounter() {
     m_pBuffer_c = m_pBuffer_start;
     return R_SUCCESS;
 }
 
-RESULT GtarSampleBuffer::GtarStartPlaying() {
+inline RESULT GtarSampleBuffer::GtarStartPlaying() {
     m_pBuffer_c++;
     m_fNoteOn = true;
     return R_SUCCESS;
 }
 
-bool GtarSampleBuffer::GtarSamplePlaying() {
+inline bool GtarSampleBuffer::GtarSamplePlaying() {
     
     return (m_pBuffer_c > m_pBuffer_start && m_pBuffer_c < m_pBuffer_end);
 }
 
-float GtarSampleBuffer::GtarGetNextSample(unsigned long int timestamp) {
+inline float GtarSampleBuffer::GtarGetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
     if(m_pBuffer != NULL && m_pBuffer_n > 0 && m_pBuffer_end > 0 && m_pBuffer_c < m_pBuffer_end) {
@@ -98,7 +98,7 @@ float GtarSampleBuffer::GtarGetNextSample(unsigned long int timestamp) {
     return EnvelopeSample(retVal);
 }
 
-float GtarSampleBuffer::EnvelopeSample(float retVal){
+inline float GtarSampleBuffer::EnvelopeSample(float retVal){
     
     // Enveloping
     float scaleFactor = 0.0f;
@@ -191,7 +191,7 @@ GtarSamplerNode::~GtarSamplerNode() {
     }
 }
 
-float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
+inline float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
     if(m_fPlaying){

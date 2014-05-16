@@ -14,7 +14,7 @@
 #include "SampleNode.h"
 #include "SamplerNode.h"
 
-#define MAX_BANKS 5
+#define MAX_BANKS 2
 #define MAX_SAMPLES 102
 
 class SampleNode;
@@ -30,12 +30,12 @@ public:
     GtarSampleBuffer(char *pszFilename);
     ~GtarSampleBuffer();
     
-    float GtarGetNextSample(unsigned long int timestamp);
-    RESULT GtarResetSampleCounter();
-    bool GtarSampleDone();
-    bool GtarSamplePlaying();
-    RESULT GtarStartPlaying();
-    RESULT GtarSampleInterrupt();
+    inline float GtarGetNextSample(unsigned long int timestamp);
+    inline RESULT GtarResetSampleCounter();
+    inline bool GtarSampleDone();
+    inline bool GtarSamplePlaying();
+    inline RESULT GtarStartPlaying();
+    inline RESULT GtarSampleInterrupt();
     
     void NoteOn();
     void NoteMutedOn();
@@ -44,7 +44,7 @@ public:
     bool IsNoteOn();
     
 private:
-    float EnvelopeSample(float retVal);
+    inline float EnvelopeSample(float retVal);
     
 private:
     int m_channel_n;
