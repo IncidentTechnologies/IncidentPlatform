@@ -1,9 +1,9 @@
 //
-//  SampleNode.h
-//  IncidentPlatform
+// SampleNode.h
+// IncidentPlatform
 //
-//  Created by Idan Beck on 2/17/14.
-//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+// Created by Idan Beck on 2/17/14.
+// Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #ifndef __IncidentPlatform__SampleNode__
@@ -21,7 +21,7 @@ public:
     
     RESULT LoadSampleBufferFromPath(char *pszPath);
     inline float GetNextSample(unsigned long int timestamp);
-    inline RESULT ResetSampleCounter();
+    RESULT ResetSampleCounter();
     inline bool SampleDone();
     
     float GetSampleBufferLengthMS();
@@ -59,7 +59,7 @@ public:
     unsigned long int m_pBuffer_c;
     float *m_pBuffer;
     unsigned long int m_pBuffer_n;
-
+    
     unsigned long int m_pBuffer_start;
     unsigned long int m_pBuffer_end;
     

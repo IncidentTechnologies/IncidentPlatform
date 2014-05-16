@@ -1,9 +1,9 @@
 //
-//  GtarSamplerNode.h
-//  IncidentPlatform
+// GtarSamplerNode.h
+// IncidentPlatform
 //
-//  Created by Kate Schnippering on 5/13/14.
-//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+// Created by Kate Schnippering on 5/13/14.
+// Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #ifndef __IncidentPlatform__GtarSamplerNode__
@@ -31,7 +31,6 @@ public:
     ~GtarSampleBuffer();
     
     inline float GtarGetNextSample(unsigned long int timestamp);
-    inline RESULT GtarResetSampleCounter();
     inline bool GtarSampleDone();
     inline bool GtarSamplePlaying();
     inline RESULT GtarStartPlaying();

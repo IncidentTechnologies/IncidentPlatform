@@ -1,9 +1,9 @@
 //
-//  SampleNode.cpp
-//  IncidentPlatform
+// SampleNode.cpp
+// IncidentPlatform
 //
-//  Created by Idan Beck on 2/17/14.
-//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+// Created by Idan Beck on 2/17/14.
+// Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #include "SampleNode.h"
@@ -11,12 +11,12 @@
 #include <AudioToolbox/AudioFormat.h>
 
 SampleBuffer::SampleBuffer(char *pszFilenamePath) :
-    m_pBuffer_c(0),
-    m_pBuffer(NULL),
-    m_pBuffer_n(0),
-    m_SampleRate(DEFAULT_SAMPLE_RATE),
-    m_pBuffer_start(0),
-    m_pBuffer_end(0)
+m_pBuffer_c(0),
+m_pBuffer(NULL),
+m_pBuffer_n(0),
+m_SampleRate(DEFAULT_SAMPLE_RATE),
+m_pBuffer_start(0),
+m_pBuffer_end(0)
 {
     LoadSampleBufferFromPath(pszFilenamePath);
 }
@@ -32,7 +32,7 @@ inline bool SampleBuffer::SampleDone() {
     return (m_pBuffer_c >= m_pBuffer_end);
 }
 
-inline RESULT SampleBuffer::ResetSampleCounter() {
+RESULT SampleBuffer::ResetSampleCounter() {
     m_pBuffer_c = m_pBuffer_start;
     return R_SUCCESS;
 }
@@ -169,14 +169,14 @@ AudioStreamBasicDescription SampleBuffer::GetClientFormatDescription(bool fStere
     
     size_t bytesPerSample = sizeof (AudioSampleType);
     
-    ClientDataFormat.mFormatID          = kAudioFormatLinearPCM;
-    ClientDataFormat.mFormatFlags       = kLinearPCMFormatFlagIsSignedInteger;
-    ClientDataFormat.mChannelsPerFrame  = 1;                    // 1 indicates mono
-    ClientDataFormat.mBytesPerFrame     = bytesPerSample;       //ClientDataFormat.mChannelsPerFrame * sizeof(float);
-    ClientDataFormat.mFramesPerPacket   = 1;
-    ClientDataFormat.mBytesPerPacket    = bytesPerSample;       //ClientDataFormat.mBytesPerFrame * ClientDataFormat.mFramesPerPacket;
-    ClientDataFormat.mBitsPerChannel    = 8 * bytesPerSample;   //8 * sizeof(float);
-    ClientDataFormat.mSampleRate        = m_SampleRate;
+    ClientDataFormat.mFormatID = kAudioFormatLinearPCM;
+    ClientDataFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger;
+    ClientDataFormat.mChannelsPerFrame = 1; // 1 indicates mono
+    ClientDataFormat.mBytesPerFrame = bytesPerSample; //ClientDataFormat.mChannelsPerFrame * sizeof(float);
+    ClientDataFormat.mFramesPerPacket = 1;
+    ClientDataFormat.mBytesPerPacket = bytesPerSample; //ClientDataFormat.mBytesPerFrame * ClientDataFormat.mFramesPerPacket;
+    ClientDataFormat.mBitsPerChannel = 8 * bytesPerSample; //8 * sizeof(float);
+    ClientDataFormat.mSampleRate = m_SampleRate;
     
     return ClientDataFormat;
 }
@@ -190,14 +190,14 @@ Boolean IsAACHardwareEncoderAvailable() {
     UInt32 size;
     
     OSStatus status = AudioFormatGetPropertyInfo(kAudioFormatProperty_Encoders,
-                                                  sizeof(encoderSpecifier),
-                                                  &encoderSpecifier,
-                                                  &size);
+                                                 sizeof(encoderSpecifier),
+                                                 &encoderSpecifier,
+                                                 &size);
     if (status) {
         DEBUG_LINEOUT("AudioFormatGetPropertyInfo kAudioFormatProperty_Encoders error %lu %4.4s\n", status, CAX4CCString(status).get());
         return false;
     }
-                        
+    
     UInt32 numEncoders = size / sizeof(AudioClassDescription);
     AudioClassDescription encoderDescriptions[numEncoders];
     
@@ -210,7 +210,7 @@ Boolean IsAACHardwareEncoderAvailable() {
         DEBUG_LINEOUT("AudioFormatGetProperty kAudioFormatProperty_Encoders error %lu %4.4s\n", status, CAX4CCString(status).get());
         return false;
     }
-                        
+    
     for (UInt32 i=0; i < numEncoders; ++i)
         if (encoderDescriptions[i].mSubType == kAudioFormatMPEG4AAC && encoderDescriptions[i].mManufacturer == kAppleHardwareAudioCodecManufacturer)
             isAvailable = true;
@@ -226,27 +226,27 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     
     CFStringRef cfstrPath = CFStringCreateWithCStringNoCopy(NULL, pszFilepath, kCFStringEncodingMacRoman, NULL);
     CFURLRef outputFileURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
-                                                          cfstrPath,
-                                                          kCFURLPOSIXPathStyle,
-                                                          false);
- 
+                                                           cfstrPath,
+                                                           kCFURLPOSIXPathStyle,
+                                                           false);
+    
     // Create the file
     AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
-
+    
     AudioFileTypeID fileType = kAudioFileM4AType;
     
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
     
-    OutputDataFormat.mSampleRate         = 44100.0;
-    OutputDataFormat.mFormatID           = kAudioFormatMPEG4AAC;
-    OutputDataFormat.mFormatFlags        = kMPEG4Object_AAC_Main;
-    OutputDataFormat.mChannelsPerFrame   = 1;
-    OutputDataFormat.mBytesPerPacket     = 0;
-    OutputDataFormat.mBytesPerFrame      = 0;
-    OutputDataFormat.mFramesPerPacket    = 1024;
-    OutputDataFormat.mBitsPerChannel     = 0;
-    OutputDataFormat.mReserved           = 0;
+    OutputDataFormat.mSampleRate = 44100.0;
+    OutputDataFormat.mFormatID = kAudioFormatMPEG4AAC;
+    OutputDataFormat.mFormatFlags = kMPEG4Object_AAC_Main;
+    OutputDataFormat.mChannelsPerFrame = 1;
+    OutputDataFormat.mBytesPerPacket = 0;
+    OutputDataFormat.mBytesPerFrame = 0;
+    OutputDataFormat.mFramesPerPacket = 1024;
+    OutputDataFormat.mBitsPerChannel = 0;
+    OutputDataFormat.mReserved = 0;
     
     
     UInt32 flags = (fOverwrite) ? kAudioFileFlags_EraseFile : 0;
@@ -370,12 +370,12 @@ RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
     
     // Set the client format description
     AudioStreamBasicDescription ClientDataFormat = GetClientFormatDescription(false);
-    status =    ExtAudioFileSetProperty (fileRef,
-                                         kExtAudioFileProperty_ClientDataFormat,
-                                         sizeof (AudioStreamBasicDescription),
-                                         &ClientDataFormat
-                                         );
-
+    status = ExtAudioFileSetProperty (fileRef,
+                                      kExtAudioFileProperty_ClientDataFormat,
+                                      sizeof (AudioStreamBasicDescription),
+                                      &ClientDataFormat
+                                      );
+    
     // Set up the AudioBufferList to receive the data, and read it in
     AudioBufferList *pAudioData = new AudioBufferList();
     pAudioData->mNumberBuffers = 1;
@@ -417,8 +417,8 @@ Error:
 /*************************************/
 
 SampleNode::SampleNode(char *pszFilenamePath) :
-    m_pSampleBuffer(NULL),
-    m_fPlaying(FALSE)
+m_pSampleBuffer(NULL),
+m_fPlaying(FALSE)
 {
     SetChannelCount(1, CONN_OUT);
     m_pSampleBuffer = new SampleBuffer(pszFilenamePath);
@@ -469,7 +469,7 @@ float SampleNode::GetNextSample(unsigned long int timestamp) {
             m_pSampleBuffer->ResetSampleCounter();
         }
     }
-
+    
     return retVal;
 }
 

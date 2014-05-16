@@ -1,9 +1,9 @@
 //
-//  GtarSamplerNode.cpp
-//  IncidentPlatform
+// GtarSamplerNode.cpp
+// IncidentPlatform
 //
-//  Created by Kate Schnippering on 5/13/14.
-//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+// Created by Kate Schnippering on 5/13/14.
+// Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #include "GtarSamplerNode.h"
@@ -31,16 +31,15 @@
 
 // Envelope control for Gtar
 GtarSampleBuffer::GtarSampleBuffer(char *pszFilenamePath) :
-    SampleBuffer(pszFilenamePath),
-    m_msAttack(DEFAULT_MSATTACK),
-    m_AttackLevel(DEFAULT_ATTACKLEVEL),
-    m_msDecay(DEFAULT_MSDECAY),
-    m_SustainLevel(DEFAULT_SUSTAINLEVEL),
-    m_msRelease(DEFAULT_MSRELEASE),
-    m_CLK(0.0f),
-    m_releaseCLK(0.0f)
+SampleBuffer(pszFilenamePath),
+m_msAttack(DEFAULT_MSATTACK),
+m_AttackLevel(DEFAULT_ATTACKLEVEL),
+m_msDecay(DEFAULT_MSDECAY),
+m_SustainLevel(DEFAULT_SUSTAINLEVEL),
+m_msRelease(DEFAULT_MSRELEASE),
+m_CLK(0.0f),
+m_releaseCLK(0.0f)
 {
-    LoadSampleBufferFromPath(pszFilenamePath);
     m_fNoteOn = false;
     m_msCLKIncrement = 1000.0f / DEFAULT_SAMPLE_RATE;
 }
@@ -62,14 +61,9 @@ inline bool GtarSampleBuffer::GtarSampleDone() {
 }
 
 inline RESULT GtarSampleBuffer::GtarSampleInterrupt() {
-    GtarResetSampleCounter();
+    ResetSampleCounter();
     m_fNoteOn = false;
     
-    return R_SUCCESS;
-}
-
-inline RESULT GtarSampleBuffer::GtarResetSampleCounter() {
-    m_pBuffer_c = m_pBuffer_start;
     return R_SUCCESS;
 }
 
@@ -220,7 +214,7 @@ inline float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
                     retVal += m_buffers[b][s]->GtarGetNextSample(timestamp);
                     
                     if(m_buffers[b][s]->GtarSampleDone()) {
-                        m_buffers[b][s]->GtarResetSampleCounter();
+                        m_buffers[b][s]->ResetSampleCounter();
                     }
                 }
             }
@@ -245,7 +239,7 @@ Error:
 }
 
 int GtarSamplerNode::CreateNewBank(int bank, int numSamples){
-
+    
     if(bank >= MAX_BANKS){
         bank = 0;
     }
@@ -284,7 +278,7 @@ Error:
 RESULT GtarSamplerNode::TriggerSample(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
-    m_buffers[bank][sample]->GtarResetSampleCounter();
+    m_buffers[bank][sample]->ResetSampleCounter();
     m_buffers[bank][sample]->GtarStartPlaying();
     m_buffers[bank][sample]->NoteOn();
     m_fPlaying = TRUE;
@@ -299,7 +293,7 @@ Error:
 RESULT GtarSamplerNode::TriggerMutedSample(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
-    m_buffers[bank][sample]->GtarResetSampleCounter();
+    m_buffers[bank][sample]->ResetSampleCounter();
     m_buffers[bank][sample]->GtarStartPlaying();
     m_buffers[bank][sample]->NoteMutedOn();
     m_fPlaying = TRUE;
@@ -368,7 +362,7 @@ unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleL
     m_sampleBufferTransitionIndex[bank][sampleTrail] = nextIndex;
     m_sampleTransitionIndex[bank][sampleLead] = sampleTrail;
     
-    m_buffers[bank][sampleTrail]->GtarResetSampleCounter();
+    m_buffers[bank][sampleTrail]->ResetSampleCounter();
     
     m_fPlaying = TRUE;
     
@@ -381,7 +375,7 @@ RESULT GtarSamplerNode::StopSample(int bank, int sample) {
     
     if(m_buffers[bank][sample] != NULL){
         m_buffers[bank][sample]->NoteOff();
-        m_buffers[bank][sample]->GtarResetSampleCounter();
+        m_buffers[bank][sample]->ResetSampleCounter();
     }
     
     return r;
@@ -408,5 +402,4 @@ bool GtarSamplerNode::IsNoteOn(int bank, int sample) {
     return m_buffers[bank][sample]->IsNoteOn();
     
 }
-
 
