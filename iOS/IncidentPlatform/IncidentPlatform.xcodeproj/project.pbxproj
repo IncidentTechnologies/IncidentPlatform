@@ -76,6 +76,7 @@
 		2616855518E943E900094BB0 /* XMPBank.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616855418E943E900094BB0 /* XMPBank.mm */; };
 		2616855818E9443D00094BB0 /* XMPInstrument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2616855718E9443D00094BB0 /* XMPInstrument.mm */; };
 		261D09AB18DBA10D00C7A0FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */; };
+		261E343A191E4B7E0065C392 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 261E3439191E4B7E0065C392 /* CoreMIDI.framework */; };
 		2630B7F318B5B85100687D29 /* SamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 264EC77C18B55208001F7224 /* SamplerNode.h */; };
 		2630B84F18B6E3DF00687D29 /* AudioNodeCommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */; };
 		26478FEE186929130077987F /* XMPNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2605801018691DE800F6668F /* XMPNode.h */; };
@@ -489,6 +490,7 @@
 		2616855618E9443D00094BB0 /* XMPInstrument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPInstrument.h; sourceTree = "<group>"; };
 		2616855718E9443D00094BB0 /* XMPInstrument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPInstrument.mm; sourceTree = "<group>"; };
 		261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		261E3439191E4B7E0065C392 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		2630B84E18B6E3C500687D29 /* AudioNodeCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioNodeCommon.h; sourceTree = "<group>"; };
 		26478FF818692B8C0077987F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		26478FFA18692B910077987F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -719,6 +721,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261E343A191E4B7E0065C392 /* CoreMIDI.framework in Frameworks */,
 				261D09AB18DBA10D00C7A0FD /* AVFoundation.framework in Frameworks */,
 				2610F15118AD8A1D003F5CEB /* AudioToolbox.framework in Frameworks */,
 				26478FFB18692B910077987F /* OpenGLES.framework in Frameworks */,
@@ -775,6 +778,7 @@
 		26057F3F18691C7800F6668F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				261E3439191E4B7E0065C392 /* CoreMIDI.framework */,
 				261D09AA18DBA10D00C7A0FD /* AVFoundation.framework */,
 				2610F14F18AD8A1D003F5CEB /* AudioToolbox.framework */,
 				2610F15018AD8A1D003F5CEB /* AudioUnit.framework */,
@@ -1852,7 +1856,7 @@
 		26057F6118691C7800F6668F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
@@ -1865,7 +1869,7 @@
 		26057F6218691C7800F6668F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
