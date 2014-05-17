@@ -229,6 +229,9 @@ RESULT GtarSamplerNode::ReleaseBank(int bank){
     
     if(m_buffers != NULL) {
         for(int i = 0; i < MAX_SAMPLES; i++){
+            if(m_buffers[bank][i] != NULL && m_buffers[bank][i]->m_pBuffer != NULL){
+                free(m_buffers[bank][i]->m_pBuffer);
+            }
             m_buffers[bank][i] = NULL;
         }
         m_nextSampleCounter[bank] = 0;
