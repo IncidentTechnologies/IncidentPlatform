@@ -18,6 +18,7 @@
 
 #include "AudioNodeNetwork.h"
 #include "SamplerNode.h"
+#include "GtarSamplerNode.h"
 
 // Effects
 #include "DelayNode.h"

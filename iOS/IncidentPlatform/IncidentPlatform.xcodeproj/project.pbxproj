@@ -186,11 +186,13 @@
 		26EBC39818ADB7230068BEC6 /* EnvelopeNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */; };
 		26EBC39918ADB7230068BEC6 /* GeneratorNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11418AD6A31003F5CEB /* GeneratorNode.h */; };
 		26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26F72A9C18C9B16800D2D560 /* XMPData.mm */; };
+		6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */; };
 		6D495E9A190F3510002530EB /* CoreMidiInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D495E8A190F3510002530EB /* CoreMidiInterface.m */; };
 		6D495E9B190F3510002530EB /* GtarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D495E8D190F3510002530EB /* GtarController.m */; };
 		6D495E9D190F3612002530EB /* GtarController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E8C190F3510002530EB /* GtarController.h */; };
 		6D495E9E190F3618002530EB /* Gtar.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E9C190F3543002530EB /* Gtar.h */; };
 		6D495E9F190F3773002530EB /* GtarControllerInternal.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E99190F3510002530EB /* GtarControllerInternal.h */; };
+		6D637B161922FDA900D7D7AB /* GtarSamplerNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D346EF91922F3B200837F88 /* GtarSamplerNode.h */; };
 		6D7D46B71919B46F00EF8C75 /* CloudController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46A41919B46F00EF8C75 /* CloudController.m */; };
 		6D7D46B81919B46F00EF8C75 /* CloudRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46A61919B46F00EF8C75 /* CloudRequest.m */; };
 		6D7D46B91919B46F00EF8C75 /* CloudResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7D46A81919B46F00EF8C75 /* CloudResponse.m */; };
@@ -261,6 +263,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6D637B161922FDA900D7D7AB /* GtarSamplerNode.h in CopyFiles */,
 				6D7D46DD1919B88300EF8C75 /* FileController.h in CopyFiles */,
 				6D7D46DE1919B88300EF8C75 /* XmlDictionary.h in CopyFiles */,
 				6D7D46DF1919B88300EF8C75 /* XmlDom.h in CopyFiles */,
@@ -656,6 +659,8 @@
 		26A513331887985000478200 /* MatrixFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixFactory.h; sourceTree = "<group>"; };
 		26F72A9B18C9B16800D2D560 /* XMPData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPData.h; sourceTree = "<group>"; };
 		26F72A9C18C9B16800D2D560 /* XMPData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPData.mm; sourceTree = "<group>"; };
+		6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GtarSamplerNode.cpp; sourceTree = "<group>"; };
+		6D346EF91922F3B200837F88 /* GtarSamplerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarSamplerNode.h; sourceTree = "<group>"; };
 		6D495E89190F3510002530EB /* CoreMidiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreMidiInterface.h; sourceTree = "<group>"; };
 		6D495E8A190F3510002530EB /* CoreMidiInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreMidiInterface.m; sourceTree = "<group>"; };
 		6D495E8C190F3510002530EB /* GtarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarController.h; sourceTree = "<group>"; };
@@ -993,6 +998,8 @@
 			isa = PBXGroup;
 			children = (
 				266A221818BDDA13007027C1 /* Utility */,
+				6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */,
+				6D346EF91922F3B200837F88 /* GtarSamplerNode.h */,
 				264EC77B18B55208001F7224 /* SamplerNode.cpp */,
 				264EC77C18B55208001F7224 /* SamplerNode.h */,
 				6DE6B90918F891C300F9E49B /* Effects */,
@@ -1624,6 +1631,7 @@
 				2605805118691DE800F6668F /* XMPParser.cpp in Sources */,
 				2647907C18692BA50077987F /* FlatObject.cpp in Sources */,
 				264EC77318B43CC9001F7224 /* EffectNode.cpp in Sources */,
+				6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */,
 				2616854718E9278800094BB0 /* XMPClip.mm in Sources */,
 				2610F12E18AD6A31003F5CEB /* AUOutputNode.mm in Sources */,
 				2647908018692BA50077987F /* MeshMd3.cpp in Sources */,
@@ -1858,6 +1866,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
@@ -1871,6 +1880,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
 				ONLY_ACTIVE_ARCH = NO;

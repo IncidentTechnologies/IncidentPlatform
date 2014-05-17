@@ -1,9 +1,9 @@
 //
-//  SampleNode.h
-//  IncidentPlatform
+// SampleNode.h
+// IncidentPlatform
 //
-//  Created by Idan Beck on 2/17/14.
-//  Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
+// Created by Idan Beck on 2/17/14.
+// Copyright (c) 2014 Incident Technologies, Inc. All rights reserved.
 //
 
 #ifndef __IncidentPlatform__SampleNode__
@@ -19,9 +19,10 @@ public:
     SampleBuffer(char *pszFilename);
     ~SampleBuffer();
     
-    float GetNextSample(unsigned long int timestamp);
+    RESULT LoadSampleBufferFromPath(char *pszPath);
+    inline float GetNextSample(unsigned long int timestamp);
     RESULT ResetSampleCounter();
-    bool SampleDone();
+    inline bool SampleDone();
     
     float GetSampleBufferLengthMS();
     RESULT SetStart(float msStart);
@@ -48,20 +49,20 @@ private:
     
 private:
     AudioStreamBasicDescription GetClientFormatDescription(bool fStereo);
-    RESULT LoadSampleBufferFromPath(char *pszPath);
     
 public:
     RESULT SaveToFile(char *pszFilepath, bool fOverwrite);
     
 private:
     int m_SampleRate;
-    
+public:
     unsigned long int m_pBuffer_c;
     float *m_pBuffer;
     unsigned long int m_pBuffer_n;
-
+    
     unsigned long int m_pBuffer_start;
     unsigned long int m_pBuffer_end;
+    
 };
 
 
