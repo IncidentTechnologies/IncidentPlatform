@@ -7,8 +7,44 @@
 //
 
 #import "GtarControllerInternal.h"
-
 #import "CoreMidiInterface.h"
+
+#import <UIKit/UIKit.h>
+
+
+#include <assert.h>
+#include <stdbool.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/sysctl.h>
+
+// Returns true if the current process is being debugged (either
+// running under the debugger or has a debugger attached post facto).
+static bool AmIBeingDebugged(void) {
+    int                 junk;
+    int                 mib[4];
+    struct kinfo_proc   info;
+    size_t              size;
+    
+    // Initialize the flags so that, if sysctl fails for some bizarre
+    // reason, we get a predictable result.
+    info.kp_proc.p_flag = 0;
+    
+    // Initialize mib, which tells sysctl the info we want, in this case
+    // we're looking for information about a specific process ID.
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_PROC;
+    mib[2] = KERN_PROC_PID;
+    mib[3] = getpid();
+    
+    // Call sysctl.
+    size = sizeof(info);
+    junk = sysctl(mib, sizeof(mib) / sizeof(*mib), &info, &size, NULL, 0);
+    assert(junk == 0);
+    
+    // We're being debugged if the P_TRACED flag is set.
+    return ( (info.kp_proc.p_flag & P_TRACED) != 0 );
+}
 
 @implementation GtarController
 
@@ -27,13 +63,21 @@
 
 //@synthesize m_currentGuitarEffect;
 
-- (id)init
-{
-    
+- (id)init {
     self = [super init];
     
-    if ( self ) 
-    {
+    if ( self )  {
+        memset(m_sensitivity, 0, sizeof(unsigned char) * 6);
+        memset(m_ctmatrix, 0, sizeof(unsigned char) * 6 * 6);
+        
+        m_fPendingMatrixValue = false;
+        m_PendingMatrixValueRow = 0;
+        m_PendingMatrixValueColumn = 0;
+        
+        m_fPendingSensString = false;
+        m_PendingSensString = 0;
+        
+        m_fPendingRequest = false;
         
         m_info = @"GtarController v1.0.5";
         
@@ -75,23 +119,17 @@
         
         // Initialize the previous pluck times to zero
         for ( GtarString str = 0; str < GtarStringCount; str++ )
-        {
             for ( GtarFret fret = 0; fret < GtarFretCount; fret++ )
-            {
                 m_previousPluckTime[str][fret] = 0;
-            }
-        }
         
         [self logMessage:@"GtarController initializing"
               atLogLevel:GtarControllerLogLevelInfo];
 
         // Create the midi interface
         m_coreMidiInterface = [[CoreMidiInterface alloc] initWithGtarController:self];
-        
         m_observerList = [[NSMutableArray alloc] init];
         
-        if ( m_coreMidiInterface == nil )
-        {
+        if ( m_coreMidiInterface == nil ) {
             [self logMessage:@"CoreMidiInterface failed to init"
                   atLogLevel:GtarControllerLogLevelError];
             
@@ -105,17 +143,82 @@
     }
     
     return self;
-    
 }
 
-+ (GtarController *)sharedInstance
-{
+- (BOOL) SetPendingMatrixValueRow:(unsigned char)row col:(unsigned char)col {
+    if(m_fPendingMatrixValue)
+        return false;
+    
+    m_PendingMatrixValueRow = row;
+    m_PendingMatrixValueColumn = col;
+    m_fPendingMatrixValue = true;
+    
+    return true;
+}
+
+
+- (BOOL) ReleasePendingMatrixValue {
+    if(m_fPendingMatrixValue) {
+        m_fPendingMatrixValue = false;
+        return true;
+    }
+    else
+        return false;
+}
+
+- (BOOL) IsPendingMatrixValue {
+    return m_fPendingMatrixValue;
+}
+
+- (BOOL) SetPendingSensitivityValueString:(unsigned char)str {
+    if(m_fPendingSensString)
+        return false;
+    
+    m_PendingSensString = str;
+    m_fPendingSensString = true;
+    
+    return true;
+}
+
+- (BOOL) ReleasePendingSensitivityValue {
+    if(m_fPendingSensString) {
+        m_fPendingSensString = false;
+        return true;
+    }
+    else
+        return false;
+}
+
+- (BOOL) IsPendingSensitivityValue {
+    return m_fPendingSensString;
+}
+
+- (BOOL) SetPendingRequest {
+    if(m_fPendingRequest)
+        return false;
+    
+    m_fPendingRequest = true;
+    return true;
+}
+
+- (BOOL) IsPendingRequest {
+    return m_fPendingRequest;
+}
+
+- (BOOL) ReleasePendingRequest {
+    if(m_fPendingRequest) {
+        m_fPendingRequest = false;
+        return true;
+    }
+    else
+        return false;
+}
+
++ (GtarController *)sharedInstance {
     static GtarController *sharedSingleton;
     
-    @synchronized(self)
-    {
-        if (!sharedSingleton)
-        {
+    @synchronized(self) {
+        if (!sharedSingleton) {
             sharedSingleton = [[GtarController alloc] init];
         }
         
@@ -123,8 +226,7 @@
     }
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     
     //[m_coreMidiInterface release];
     
@@ -138,8 +240,7 @@
 
 #pragma mark - External debug functions
 
-- (GtarControllerStatus)debugSpoofConnected
-{
+- (GtarControllerStatus)debugSpoofConnected {
     
     // Pretend we are connected for debug purposes
     
@@ -161,8 +262,7 @@
     
 }
 
-- (GtarControllerStatus)debugSpoofDisconnected
-{
+- (GtarControllerStatus)debugSpoofDisconnected {
     // Pretend we are connected for debug purposes
     
     [self logMessage:@"Spoofing device disconnected"
@@ -185,58 +285,60 @@
 
 #pragma mark - Internal Functions
 
-- (BOOL)checkNoteInterarrivalTime:(double)time forFret:(GtarFret)fret andString:(GtarString)str
-{
-    
+- (BOOL)checkNoteInterarrivalTime:(double)time forFret:(GtarFret)fret andString:(GtarString)str {
     // zero base the string
     str--;
     
-    if ( (time - m_previousPluckTime[str][fret]) >= m_minimumInterarrivalTime )
-    {
+    if ( (time - m_previousPluckTime[str][fret]) >= m_minimumInterarrivalTime ) {
         m_previousPluckTime[str][fret] = time;
         
         return YES;
     }
-    else
-    {
+    else {
         [self logMessage:[NSString stringWithFormat:@"Dropping double-triggered note: %f secs", (time - m_previousPluckTime[str][fret])]
               atLogLevel:GtarControllerLogLevelInfo];
         
         return NO;
     }
-    
 }
 
-- (void)logMessage:(NSString*)str atLogLevel:(GtarControllerLogLevel)level
-{
+- (void)logMessage:(NSString*)str atLogLevel:(GtarControllerLogLevel)level {
+    NSString *outputString = NULL;
     
-    if ( level <= m_logLevel )
-    {
-        switch (level)
-        {
-            case GtarControllerLogLevelError:
-            {
-                NSLog(@"GtarController: Error: %@", str );
+    if (level <= m_logLevel) {
+        switch (level) {
+            case GtarControllerLogLevelError: {
+                outputString = [[NSString alloc] initWithFormat:@"GtarController: Error: %@", str];
             } break;
                 
-            case GtarControllerLogLevelWarn:
-            {
-                NSLog(@"GtarController: Warning: %@", str );
+            case GtarControllerLogLevelWarn: {
+                outputString = [[NSString alloc] initWithFormat:@"GtarController: Warning: %@", str];
             } break;
                 
-            case GtarControllerLogLevelInfo:
-            {
-                NSLog(@"GtarController: Info: %@", str );
+            case GtarControllerLogLevelInfo: {
+                outputString = [[NSString alloc] initWithFormat:@"GtarController: Info: %@", str];
             } break;
                 
-            default:
-            {
-                NSLog(@"GtarController: %@", str );
+            default: {
+                outputString = [[NSString alloc] initWithFormat:@"GtarController: %@", str];
             } break;
                 
         }
     }
     
+    if(AmIBeingDebugged()) {
+        NSLog(@"%@", outputString);
+    }
+#ifdef GTAR_ALERT_LOG
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Gtar Log Message"
+                                                        message:outputString
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Thanks gTar!"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+#endif
 }
 
 - (int)getFretFromMidiNote:(int)midiNote andString:(int)str
@@ -471,22 +573,91 @@
 
                 } break;
                     
-                case RX_BATTERY_CHARGE:
-                {
+                case RX_BATTERY_CHARGE: {
                     // Battery charge Ack
                     unsigned char percentage = data[2];
                     
-                    if ( [m_delegate respondsToSelector:@selector(receivedBatteryCharge:)] == YES )
-                    {
+                    if ( [m_delegate respondsToSelector:@selector(receivedBatteryCharge:)] == YES ) {
                         [m_delegate receivedBatteryCharge:percentage];
                     }
-                    else
-                    {
+                    else {
                         [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxBatteryCharge %@", m_delegate]
                               atLogLevel:GtarControllerLogLevelWarn];
-
                     }
-
+                } break;
+                    
+                case RX_GET_PIEZO_CT_MATRIX_ACK: {
+                    unsigned char ratio = data[2];
+                    unsigned char row = m_PendingMatrixValueRow;
+                    unsigned char col = m_PendingMatrixValueColumn;
+                    
+                    [self ReleasePendingMatrixValue];
+                    
+                    m_ctmatrix[row][col] = ratio;
+                    if ( [m_delegate respondsToSelector:@selector(receivedCTMatrixValue:row:col:)] == YES ) {
+                        [m_delegate receivedCTMatrixValue:ratio row:row col:col];
+                    }
+                    else {
+                        [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxCTMatrixRatio %@", m_delegate]
+                              atLogLevel:GtarControllerLogLevelWarn];
+                    }
+                } break;
+                
+                    // TODO
+                case RX_GET_PIEZO_SENSITIVITY_ACK:{
+                    unsigned char value = data[2];
+                    unsigned char string = m_PendingSensString;
+                    
+                    [self ReleasePendingSensitivityValue];
+                    
+                    m_sensitivity[str] = value;
+                    if ( [m_delegate respondsToSelector:@selector(receivedSensitivityValue:string:)] == YES ) {
+                        [m_delegate receivedSensitivityValue:value string:string];
+                    }
+                    else {
+                        [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxSensitivityValue %@", m_delegate]
+                              atLogLevel:GtarControllerLogLevelWarn];
+                    }
+                } break;
+                    
+                case RX_GET_PIEZO_WINDOW_ACK: {
+                    unsigned char window = data[2];
+                    
+                    if ( [m_delegate respondsToSelector:@selector(receivedPiezoWindow:)] == YES ) {
+                        [m_delegate receivedPiezoWindow:window];
+                    }
+                    else {
+                        [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxPiezoWindow %@", m_delegate]
+                              atLogLevel:GtarControllerLogLevelWarn];
+                    }
+                } break;
+                    
+                case GTAR_COMMIT_USERSPACE_ACK: {
+                    unsigned char status = data[2];
+                    
+                    [self ReleasePendingRequest];
+                    
+                    if ( [m_delegate respondsToSelector:@selector(receivedCommitUserspaceAck:)] == YES ) {
+                        [m_delegate receivedCommitUserspaceAck:status];
+                    }
+                    else {
+                        [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxCommitUserspaceAck%@", m_delegate]
+                              atLogLevel:GtarControllerLogLevelWarn];
+                    }
+                } break;
+                    
+                case GTAR_RESET_USERSPACE_ACK: {
+                    unsigned char status = data[2];
+                    
+                    [self ReleasePendingRequest];
+                    
+                    if ( [m_delegate respondsToSelector:@selector(receivedResetUserspaceAck:)] == YES ) {
+                        [m_delegate receivedResetUserspaceAck:status];
+                    }
+                    else {
+                        [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxResetUserspaceAck%@", m_delegate]
+                              atLogLevel:GtarControllerLogLevelWarn];
+                    }
                 } break;
                     
                 default:
@@ -510,6 +681,14 @@
         } break;
     }
     
+}
+
+- (unsigned char)GetSensitivityString:(unsigned char)str {
+    return m_sensitivity[str];
+}
+
+- (unsigned char)GetCTMatrixRow:(unsigned char)row Column:(unsigned char)col {
+    return m_ctmatrix[row][col];
 }
 
 - (void)midiCallbackDispatch:(NSDictionary*)dictionary
@@ -835,20 +1014,17 @@
 - (BOOL)sendFirmwarePage:(int)page
 {
     
-    if ( [m_firmware length] == 0 )
-    {
+    if ( [m_firmware length] == 0 ) {
+        [self logMessage:@"SendFirmwarePAge: Firmware length 0" atLogLevel:GtarControllerLogLevelWarn];
         return false;
     }
     
     unsigned char * firmwareBytes = (unsigned char *)[m_firmware bytes];
-    
     unsigned char checksum = 0;
     
     // Sum all the bytes
     for ( int i = 0; i < GTAR_CONTROLLER_PAGE_SIZE; i++ )
-    {
         checksum += firmwareBytes[(page*GTAR_CONTROLLER_PAGE_SIZE) + i];
-    }
     
     BOOL result = [m_coreMidiInterface sendFirmwarePackagePage:(firmwareBytes + (page * GTAR_CONTROLLER_PAGE_SIZE))
                                                    andPageSize:GTAR_CONTROLLER_PAGE_SIZE
@@ -1053,8 +1229,7 @@
     
 }
 
-- (GtarControllerStatus)turnOnLedAtPosition:(GtarPosition)position withColor:(GtarLedColor)color
-{
+- (GtarControllerStatus)turnOnLedAtPosition:(GtarPosition)position withColor:(GtarLedColor)color {
     
     GtarFret fret = position.fret;
     GtarString str = position.string;
@@ -1065,46 +1240,33 @@
     
     GtarControllerStatus status = GtarControllerStatusOk;
     
-    if ( m_spoofed == YES )
-    {
-        
+    if ( m_spoofed == YES ) {
         [self logMessage:@"turnOnLedAtStr: Connection spoofed, no-op"
               atLogLevel:GtarControllerLogLevelInfo];
         
         status = GtarControllerStatusOk;
-        
     }
-    else if ( m_connected == NO )
-    {
-        
+    else if ( m_connected == NO ){
         [self logMessage:@"turnOnLedAtStr: Not connected"
               atLogLevel:GtarControllerLogLevelWarn];
         
         status = GtarControllerStatusNotConnected;
-        
     }
-    else if ( m_coreMidiInterface == nil )
-    {
-        
+    else if ( m_coreMidiInterface == nil ) {
         [self logMessage:@"turnOnLedAtStr: CoreMidiInterface is invalid"
               atLogLevel:GtarControllerLogLevelError];
         
         status = GtarControllerStatusError;
-        
     }
-    else
-    {
-        
+    else {
         BOOL result = [m_coreMidiInterface sendSetLedStateFret:fret andString:str andRed:red andGreen:green andBlue:blue andMessage:0];
         
-        if ( result == NO )
-        {
+        if ( result == NO ) {
             [self logMessage:@"turnOnLedAtStr: Setting LED state failed"
                   atLogLevel:GtarControllerLogLevelError];
             
             status = GtarControllerStatusError;
         }
-        
     }
     
     return status;
@@ -1382,6 +1544,214 @@
 */
 #endif
 
+#define WAIT_INT 0.25f
+
+#pragma mark - Piezo Set Values
+
+- (BOOL)sendPiezoSensitivityString:(unsigned char)str thresh:(unsigned char)thresh {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendPiezoSensitivityString: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendPiezoSensitivityString: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendPiezoSensitivityString: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    m_sensitivity[str] = thresh;
+    BOOL result = [m_coreMidiInterface sendPiezoSensitivityString:str thresh:m_sensitivity[str]];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendPiezoSensitivityString: sendRequestPiezoSensitivityString failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendPiezoCrossTalkMatrixRow:(unsigned char)row Column:(unsigned char)column value:(unsigned char)value {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendPiezoCrossTalkMatrixRow: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendPiezoCrossTalkMatrixRow: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendPiezoCrossTalkMatrixRow: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    m_ctmatrix[row][column] = value;
+    BOOL result = [m_coreMidiInterface sendPiezoCrossTalkMatrixRow:row Column:column value:m_ctmatrix[row][column]];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendPiezoCrossTalkMatrixRow: SendRequestBatteryStatus failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendPiezoWindowIndex:(unsigned char)index value:(unsigned char)value {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendPiezoWindowIndex: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendPiezoWindowIndex: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendPiezoWindowIndex: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendPiezoWindowIndex:index value:value];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendPiezoWindowIndex: SendRequestBatteryStatus failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+#pragma mark - Piezo Requests
+
+- (BOOL)sendRequestPiezoSensitivityString:(unsigned char)str {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendRequestPiezoSensitivityString: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendRequestPiezoSensitivityString: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendRequestPiezoSensitivityString: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestPiezoSensitivityString:str];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendRequestPiezoSensitivityString: sendRequestPiezoSensitivityString failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendRequestPiezoCrossTalkMatrixRow:(unsigned char)row Column:(unsigned char)column {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendRequestPiezoCrossTalkMatrixRow: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendRequestPiezoCrossTalkMatrixRow: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendRequestPiezoCrossTalkMatrixRow: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestPiezoCrossTalkMatrixRow:row Column:column];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendRequestPiezoCrossTalkMatrixRow: SendRequestBatteryStatus failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendRequestPiezoWindowIndex:(unsigned char)index {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendRequestPiezoWindowIndex: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendRequestPiezoWindowIndex: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendRequestPiezoWindowIndex: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestPiezoWindowIndex:index];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendRequestPiezoWindowIndex: SendRequestBatteryStatus failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendRequestCommitUserspace {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendRequestCommitUserspace: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendRequestCommitUserspace: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendRequestCommitUserspace: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestCommitUserspace];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendRequestCommitUserspace: sendRequestCommitUserspace failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendRequestResetUserspace {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendRequestResetUserspace: Connection spoofed, no-op" atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendRequestResetUserspace: Not connected" atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendRequestResetUserspace: CoreMidiInterface is invalid" atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestResetUserspace];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [NSThread sleepForTimeInterval:WAIT_INT];
+    }];
+    
+    if ( result == NO )
+        [self logMessage:@"sendRequestResetUserspace: sendRequestResetUserspace failed" atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
 #pragma mark - Requests
 
 - (BOOL)sendRequestBatteryStatus
@@ -1415,7 +1785,6 @@
     }
     
     return result;
-
 }
 
 - (BOOL)sendEnableDebug
@@ -1596,57 +1965,46 @@
 //    return result; 
 //}
 
-- (BOOL)sendFirmwareUpdate:(NSData*)firmware
-{
+- (BOOL)sendFirmwareUpdate:(NSData*)firmware {
     
-    if ( m_spoofed == YES )
-    {
+    if ( m_spoofed == YES ) {
         [self logMessage:@"SendFirmwareUpdate: Connection spoofed, no-op"
               atLogLevel:GtarControllerLogLevelInfo];
         return NO;
     }
-    else if ( m_connected == NO )
-    {
+    else if ( m_connected == NO ) {
         [self logMessage:@"SendFirmwareUpdate: Not connected"
               atLogLevel:GtarControllerLogLevelWarn];
         return NO;
     }
-    else if ( m_coreMidiInterface == nil )
-    {
+    else if ( m_coreMidiInterface == nil ) {
         [self logMessage:@"SendFirmwareUpdate: CoreMidiInterface is invalid"
               atLogLevel:GtarControllerLogLevelError];
         return NO;
     }
     
-    @synchronized ( self )
-    {
+    @synchronized ( self ) {
         
-        if ( m_firmwareCancelation == YES )
-        {
+        if ( m_firmwareCancelation == YES ) {
             [self logMessage:@"SendFirmwareUpdate: Cancellation in progress"
                   atLogLevel:GtarControllerLogLevelWarn];
             return NO;
         }
         
-        if ( m_firmwareUpdating == YES )
-        {
+        if ( m_firmwareUpdating == YES ) {
             [self logMessage:@"SendFirmwareUpdate: Firmware update in progress"
                   atLogLevel:GtarControllerLogLevelWarn];
             return NO;
         }
         
         //[m_firmware release];
-        
-        //m_firmware = [firmware retain];
+        m_firmware = [[NSData alloc] initWithData:firmware];
         
         m_firmwareCurrentPage = 0;
-        
         m_firmwareUpdating = YES;
-        
         BOOL result = [self sendFirmwarePage:m_firmwareCurrentPage];
         
-        if ( result == NO )
-        {
+        if ( result == NO ) {
             [self logMessage:@"SendFirmwareUpdate: Failed to send firmware package page"
                   atLogLevel:GtarControllerLogLevelError];
         }
@@ -1655,14 +2013,10 @@
     }
 }
 
-- (BOOL)sendFirmwareUpdateCancelation
-{
-    
-    @synchronized ( self )
-    {
+- (BOOL)sendFirmwareUpdateCancelation {
+    @synchronized ( self ) {
         // Only cancel if we are updating a firmware
-        if ( m_firmwareUpdating == YES )
-        {
+        if ( m_firmwareUpdating == YES ) {
             
             [self logMessage:@"Canceling firmware update"
                   atLogLevel:GtarControllerLogLevelInfo];
@@ -1674,26 +2028,20 @@
             
             m_firmware = nil;
             
-            if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateStatusFailed)] == YES )
-            {
+            if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateStatusFailed)] == YES ) {
                 [m_delegate receivedFirmwareUpdateStatusFailed];
             }
-            else
-            {
+            else {
                 [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusFailed %@", m_delegate]
                       atLogLevel:GtarControllerLogLevelWarn];
-                
             }
         }
-        else
-        {
+        else {
             [self logMessage:@"Cannot cancel, no firmware update in progress"
                   atLogLevel:GtarControllerLogLevelWarn];
         }
     }
-    
     return YES;
-    
 }
 
 #pragma mark - Color mapping manipulation
@@ -1777,18 +2125,14 @@
     
 }
 
-- (GtarControllerStatus)turnOnEffect:(GtarControllerEffect)effect withColor:(GtarLedColor)color
-{
-    
+- (GtarControllerStatus)turnOnEffect:(GtarControllerEffect)effect withColor:(GtarLedColor)color {
     char red = color.red;
     char green = color.green;
     char blue = color.blue;
     
     GtarControllerStatus status = GtarControllerStatusOk;
     
-    switch ( effect ) 
-    {
-            
+    switch ( effect )  {
         case GtarControllerEffectFretFollow:
         {
             // Enable FF mode
