@@ -91,7 +91,7 @@ public:
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
     
 public:
-    GtarSampleBuffer *m_buffers[MAX_BANKS][MAX_SAMPLES];
+    GtarSampleBuffer *m_buffers[MAX_BANKS][MAX_SAMPLES] = {{NULL}};
     
     bool m_fPlaying;
     
