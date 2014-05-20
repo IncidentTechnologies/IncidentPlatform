@@ -19,16 +19,19 @@
 
 - (id)initWithGtarController:(GtarController*)gtarController
 {
-    
     self = [super init];
     
-    if ( self ) 
-    {
-        
+    if ( self ) {
         m_gtarController = gtarController;
-        
         [m_gtarController logMessage:[NSString stringWithFormat:@"CoreMidiInterface initializing"]
                           atLogLevel:GtarControllerLogLevelInfo];
+        
+        m_fPendingMatrixValue = false;
+        m_PendingMatrixValueRow = 0;
+        m_PendingMatrixValueColumn = 0;
+        
+        m_fPendingSensString = false;
+        m_PendingSensString = 0;
         
         // Create arrays
         m_midiSources = [[NSMutableArray alloc] init];
@@ -401,9 +404,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
 
 #pragma mark - Send Primitives
 
-- (BOOL)sendBuffer:(unsigned char*)buffer withLength:(int)bufferLength
-{
-    
+- (BOOL)sendBuffer:(unsigned char*)buffer withLength:(int)bufferLength {
     // Create the packet 
     MIDIPacket packet;
     
@@ -442,16 +443,54 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     return YES;
 }
 
-- (BOOL)sendSysExBuffer:(unsigned char*)buffer withLength:(int)bufferLength
-{
-    
-    @synchronized(m_sendQueue)
-    {
+- (BOOL)sendSyncSysExBuffer:(unsigned char*)buffer withLength:(int)bufferLength {
+
+    // There is currently only a single destination in this loop
+    for ( NSValue * destPtr in m_midiDestinations ) {
+        // Allocate the packet and the buffer simultaneously
+        unsigned char * allocationBuffer = (unsigned char*)malloc(sizeof(MIDISysexSendRequest) + bufferLength*sizeof(char));
+        MIDISysexSendRequest * sendRequest = (MIDISysexSendRequest*)allocationBuffer;
+        unsigned char * sendBuffer = (unsigned char*)&sendRequest[1];
         
-        // There is currently only a single destination in this loop
-        for ( NSValue * destPtr in m_midiDestinations )
-        {
+        // Each packet needs it's own copy -- in the future we could remove this step
+        // by referencing the same buffer, but multiple destinations can't even occur
+        // in the current implementation. Also the copy is cheap and we need to alloc
+        // the packet anyways.
+        memcpy(sendBuffer, buffer, bufferLength);
+        
+        sendRequest->destination = (MIDIEndpointRef)[destPtr pointerValue];
+        sendRequest->data = sendBuffer;
+        sendRequest->bytesToSend = bufferLength;
+        sendRequest->complete = false;
+        
+        sendRequest->completionProc = MIDICompletionHander;
+        sendRequest->completionRefCon = (__bridge void *)(self);
+        
+        NSValue * sendPtr = [NSValue valueWithPointer:sendRequest];
+        
+        [m_sendQueue addObject:sendPtr];
+        
+        // If nothing else is on the queue, send this now
+        if ( [m_sendQueue count] == 1 ) {
+            OSStatus oss = MIDISendSysex(sendRequest);
             
+            if ( oss == -1 ) {
+                [m_gtarController logMessage:[NSString stringWithFormat:@"SendSysExBuffer: MIDISend failed with status 0x%lx", oss]
+                                  atLogLevel:GtarControllerLogLevelError];
+                
+                return NO;
+            }
+        }
+    }
+
+    
+    return YES;
+}
+
+- (BOOL)sendSysExBuffer:(unsigned char*)buffer withLength:(int)bufferLength {
+    @synchronized(m_sendQueue) {
+        // There is currently only a single destination in this loop
+        for ( NSValue * destPtr in m_midiDestinations ) {
             // Allocate the packet and the buffer simultaneously
             unsigned char * allocationBuffer = (unsigned char*)malloc(sizeof(MIDISysexSendRequest) + bufferLength*sizeof(char));
             
@@ -478,12 +517,13 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
             [m_sendQueue addObject:sendPtr];
             
             // If nothing else is on the queue, send this now
-            if ( [m_sendQueue count] == 1 )
-            {
+            if ( [m_sendQueue count] == 1 ) {
                 OSStatus oss = MIDISendSysex(sendRequest);
                 
-                if ( oss == -1 )
-                {
+                if ( oss == -1 ) {
+                    UIAlertView *err = [[UIAlertView alloc] initWithTitle:@"error" message:@"sendsysex failed" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:NULL, nil];
+                    [err show];
+                    
                     [m_gtarController logMessage:[NSString stringWithFormat:@"SendSysExBuffer: MIDISend failed with status 0x%lx", oss]
                                       atLogLevel:GtarControllerLogLevelError];
                     
@@ -492,7 +532,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
             }
         }
     }
-    
+
     return YES;
 }
 
@@ -537,20 +577,15 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     sendBuffer[4] = 0xF7; // End SysEx Message    
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
-    
     if ( result == NO )
-    {
-        [m_gtarController logMessage:[NSString stringWithFormat:@"SendSetFretFollow: Failed to send SysEx Buffer"]
-                          atLogLevel:GtarControllerLogLevelError];
-    }
+        [m_gtarController logMessage:[NSString stringWithFormat:@"SendSetFretFollow: Failed to send SysEx Buffer"] atLogLevel:GtarControllerLogLevelError];
     
     return result;
 }
 
 #pragma mark - State Requests
 
-- (BOOL)sendRequestBatteryStatus
-{
+- (BOOL)sendRequestBatteryStatus {
     
     int sendBufferLength = 3;
     unsigned char sendBuffer[sendBufferLength];
@@ -563,13 +598,9 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
     if ( result == NO )
-    {
-        [m_gtarController logMessage:[NSString stringWithFormat:@"SendRequestBatteryStatus: Failed to send SysEx Buffer"]
-                          atLogLevel:GtarControllerLogLevelError];
-    }
+        [m_gtarController logMessage:[NSString stringWithFormat:@"SendRequestBatteryStatus: Failed to send SysEx Buffer"] atLogLevel:GtarControllerLogLevelError];
     
     return result;
-
 }
 
 - (BOOL)sendEnableDebug
@@ -595,9 +626,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     
 }
 
-- (BOOL)sendDisableDebug
-{
-    
+- (BOOL)sendDisableDebug {
     int sendBufferLength = 3;
     unsigned char sendBuffer[sendBufferLength];
     
@@ -609,13 +638,46 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
     if ( result == NO )
-    {
-        [m_gtarController logMessage:[NSString stringWithFormat:@"SendDisableDebug: Failed to send SysEx Buffer"]
-                          atLogLevel:GtarControllerLogLevelError];
-    }
+        [m_gtarController logMessage:[NSString stringWithFormat:@"SendDisableDebug: Failed to send SysEx Buffer"] atLogLevel:GtarControllerLogLevelError];
     
     return result;
+}
 
+- (BOOL)sendRequestCommitUserspace {
+    int sendBufferLength = 4;
+    unsigned char sendBuffer[sendBufferLength];
+    
+    sendBuffer[0] = 0xF0; // SysEx Message
+    sendBuffer[1] = GTAR_DEVICE_ID;
+    sendBuffer[2] = (unsigned char)GTAR_COMMIT_USERSPACE;
+    sendBuffer[4] = 0xF7; // End SysEx Message
+    
+    [m_gtarController SetPendingRequest];
+    
+     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
+    
+    if ( result == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestCommitUserspace: Failed to send SysEx Buffer"] atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendRequestResetUserspace {
+    int sendBufferLength = 4;
+    unsigned char sendBuffer[sendBufferLength];
+    
+    sendBuffer[0] = 0xF0; // SysEx Message
+    sendBuffer[1] = GTAR_DEVICE_ID;
+    sendBuffer[2] = (unsigned char)GTAR_RESET_USERSPACE;
+    sendBuffer[4] = 0xF7; // End SysEx Message
+    
+    [m_gtarController SetPendingRequest];
+    
+    BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
+    if ( result == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestResetUserspace: Failed to send SysEx Buffer"] atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
 }
 
 #pragma mark - Firmware and Certs
@@ -739,6 +801,144 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendFirmwarePackagePage: Failed to send SysEx Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
     }
+    
+    return result;
+}
+
+#pragma mark - Piezo Functions
+
+- (BOOL)sendRequestPiezoSensitivityString:(unsigned char)str {
+    BOOL result = false;
+    
+    if([m_gtarController IsPendingSensitivityValue]) {
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestPiezoSensitivityString: String sens currently pending"] atLogLevel:GtarControllerLogLevelError];
+        return false;
+    }
+    
+    unsigned char SysExBuffer[] = {
+        0xF0,
+        GTAR_DEVICE_ID,
+        GTAR_GET_PIEZO_SENSITIVITY,
+        (unsigned char)(str),
+        0xF7
+    };
+    int SysExBuffer_n = sizeof(SysExBuffer)/sizeof(SysExBuffer[0]);
+    
+    [m_gtarController SetPendingSensitivityValueString:str];
+    
+    if( (result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n]) == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestPiezoSensitivityString: Failed to send Buffer"] atLogLevel:GtarControllerLogLevelError];
+    else
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestPiezoSensitivityString: Sent Request"] atLogLevel:GtarControllerLogLevelInfo];
+    
+    return result;
+}
+
+- (BOOL)sendRequestPiezoCrossTalkMatrixRow:(unsigned char)row Column:(unsigned char)column {
+    BOOL result = false;
+    
+    if([m_gtarController IsPendingMatrixValue]) {
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendPiezoCrossTalkMatrixRow: Ratio currently pending"] atLogLevel:GtarControllerLogLevelError];
+        return false;
+    }
+    
+    unsigned char RowColValue = ((row & 0x0F) << 4) + (column & 0x0F);
+    
+    [m_gtarController SetPendingMatrixValueRow:row col:column];
+    
+    unsigned char SysExBuffer[] = {
+        0xF0,
+        GTAR_DEVICE_ID,
+        GTAR_GET_PIEZO_CT_MATRIX,
+        (unsigned char)(RowColValue),
+        0xF7
+    };
+    int SysExBuffer_n = sizeof(SysExBuffer)/sizeof(SysExBuffer[0]);
+    
+    if( (result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n]) == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendPiezoCrossTalkMatrixRow: Failed to send Buffer"] atLogLevel:GtarControllerLogLevelError];
+    else
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendPiezoCrossTalkMatrixRow: Sent Request"] atLogLevel:GtarControllerLogLevelInfo];
+    
+    return result;
+}
+
+- (BOOL)sendRequestPiezoWindowIndex:(unsigned char)index {
+    BOOL result = false;
+    
+    unsigned char SysExBuffer[] = {
+        0xF0,
+        GTAR_DEVICE_ID,
+        GTAR_GET_PIEZO_WINDOW,
+        (unsigned char)(index),
+        0xF7
+    };
+    
+    int SysExBuffer_n = sizeof(SysExBuffer)/sizeof(SysExBuffer[0]);
+    
+    if( (result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n]) == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestPiezoWindowIndex: Failed to send Buffer"] atLogLevel:GtarControllerLogLevelError];
+    else
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendRequestPiezoWindowIndex: Sent Request"] atLogLevel:GtarControllerLogLevelInfo];
+    
+    return result;
+}
+
+- (BOOL)sendPiezoSensitivityString:(unsigned char)str thresh:(unsigned char)thresh {
+    BOOL result = false;
+    
+    unsigned char SysExBuffer[] = {
+        0xF0,
+        GTAR_DEVICE_ID,
+        GTAR_SET_PIEZO_SENSITIVITY,
+        (unsigned char)(str),
+        (unsigned char)(thresh),
+        0xF7
+    };
+    
+    int SysExBuffer_n = sizeof(SysExBuffer)/sizeof(SysExBuffer[0]);
+    
+    if( (result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n]) == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendPiezoSensitivityString: Failed to send Buffer"] atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+-(BOOL)sendPiezoCrossTalkMatrixRow:(unsigned char)row Column:(unsigned char)column value:(unsigned char)value {
+    BOOL result = false;
+    
+    unsigned char RowColValue = ((row & 0x0F) << 4) + (column & 0x0F);
+    unsigned char SysExBuffer[] = {
+        0xF0,
+        GTAR_DEVICE_ID,
+        GTAR_SET_PIEZO_CT_MATRIX,
+        (unsigned char)(RowColValue),
+        (unsigned char)(value),
+        0xF7
+    };
+    int SysExBuffer_n = sizeof(SysExBuffer)/sizeof(SysExBuffer[0]);
+    
+    if( (result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n]) == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendPiezoCrossTalkMatrixRow: Failed to send Buffer"] atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+-(BOOL) sendPiezoWindowIndex:(unsigned char)index value:(unsigned char)value {
+    BOOL result = false;
+    
+    unsigned char SysExBuffer[] = {
+        0xF0,
+        GTAR_DEVICE_ID,
+        GTAR_SET_PIEZO_WINDOW,
+        (unsigned char)(index),
+        (unsigned char)(value),
+        0xF7
+    };
+    int SysExBuffer_n = sizeof(SysExBuffer)/sizeof(SysExBuffer[0]);
+    
+    if( (result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n]) == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"sendPiezoWindowIndex: Failed to send Buffer"] atLogLevel:GtarControllerLogLevelError];
     
     return result;
 }

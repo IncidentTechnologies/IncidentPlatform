@@ -9,8 +9,10 @@
  */
 
 #import <Foundation/Foundation.h>
-
 #import "Gtar.h"
+
+// Debug Defines
+//#define GTAR_ALERT_LOG
 
 /*!
  @abstract The result status code used by the GtarController.
