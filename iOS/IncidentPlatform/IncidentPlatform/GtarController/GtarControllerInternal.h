@@ -19,8 +19,10 @@
 // only goes to the public observers
 @protocol GtarControllerDelegate <NSObject>
 @optional
+- (void)receivedResponse:(unsigned char)response;
 - (void)receivedBatteryStatus:(BOOL)charging;
 - (void)receivedBatteryCharge:(unsigned char)percentage;
+- (void)receivedSerialNumber:(unsigned char *)number;
 - (void)receivedFirmwareMajorVersion:(int)majorVersion andMinorVersion:(int)minorVersion;
 - (void)receivedFirmwareUpdateProgress:(unsigned char)percentage;
 - (void)receivedFirmwareUpdateStatusSucceeded;
@@ -49,6 +51,8 @@ typedef enum GTAR_RX_MSG_TYPE
     RX_GET_PIEZO_CT_MATRIX_ACK = 0x38,
 	RX_GET_PIEZO_SENSITIVITY_ACK = 0x39,
 	RX_GET_PIEZO_WINDOW_ACK = 0x3A,
+    
+    RX_SERIAL_NUMBER_ACK = 0x3C,
     /*
     RX_GET_PIEZO_TIMEOUT_ACK = 0x3B,
     RX_CALIBRATE_PIEZO_STRING_ACK = 0x3D,
@@ -89,13 +93,20 @@ typedef enum GTAR_RX_MSG_TYPE
     unsigned char m_PendingSensString;
     
     BOOL m_fPendingRequest;
-
+    
+    int m_pendingSerialByte;
+    unsigned char m_serialNumber[16];
+    
     unsigned char m_sensitivity[6];
     unsigned char m_ctmatrix[6][6];
 }
 
 - (unsigned char)GetSensitivityString:(unsigned char)str;
 - (unsigned char)GetCTMatrixRow:(unsigned char)row Column:(unsigned char)col;
+
+- (BOOL) InitiateSerialNumberRequest;
+- (BOOL) InterruptSerialNumberRequest;
+- (NSString *) GetSerialNumber;
 
 - (BOOL) SetPendingRequest;
 - (BOOL) IsPendingRequest;
@@ -139,6 +150,7 @@ typedef enum GTAR_RX_MSG_TYPE
 
 // Requests
 - (BOOL)sendRequestBatteryStatus;
+- (BOOL)sendRequestSerialNumber;
 - (BOOL)sendEnableDebug;
 - (BOOL)sendDisableDebug;
 

@@ -117,6 +117,9 @@ static bool AmIBeingDebugged(void) {
         
         self.colorMap = colorMap;
         
+        // Initialize the Serial Number
+        [self InterruptSerialNumberRequest];
+        
         // Initialize the previous pluck times to zero
         for ( GtarString str = 0; str < GtarStringCount; str++ )
             for ( GtarFret fret = 0; fret < GtarFretCount; fret++ )
@@ -632,6 +635,20 @@ static bool AmIBeingDebugged(void) {
                     }
                 } break;
                     
+                case GTAR_SERIAL_NUMBER_ACK: {
+                    
+                    unsigned char number = data[2];
+                    
+                    [self ReleasePendingRequest];
+                    
+                    if(m_pendingSerialByte >= 0 && m_pendingSerialByte < 16){
+                        m_serialNumber[m_pendingSerialByte] = number;
+                    }
+                    
+                    m_pendingSerialByte = -1;
+                    
+                } break;
+                    
                 case GTAR_COMMIT_USERSPACE_ACK: {
                     unsigned char status = data[2];
                     
@@ -1036,6 +1053,77 @@ static bool AmIBeingDebugged(void) {
     return result;
 }
 
+#pragma mark - Serial Number management
+#define WAIT_INT 0.25f
+
+- (BOOL) InitiateSerialNumberRequest
+{
+    if(m_pendingSerialByte == -1){
+        
+        // First initialize all to zero
+        [self InterruptSerialNumberRequest];
+        
+        for(int i = 0; i < 16; i++){
+            
+            m_pendingSerialByte = i;
+            
+            [self sendRequestSerialNumber];
+            
+            while(m_pendingSerialByte >= 0){
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                    [NSThread sleepForTimeInterval:WAIT_INT];
+                }];
+            }
+        }
+        
+        // Delegate callback
+        if ( [m_delegate respondsToSelector:@selector(receivedSerialNumber:)] == YES ) {
+            [m_delegate receivedSerialNumber:m_serialNumber];
+        }
+        else {
+            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxSerialNumber %@", m_delegate]
+                  atLogLevel:GtarControllerLogLevelWarn];
+        }
+        
+        return TRUE;
+        
+    }else{
+        
+        return FALSE;
+    }
+    
+}
+
+- (BOOL) InterruptSerialNumberRequest
+{
+    for(int i = 0; i < 16; i++){
+        m_serialNumber[i] = 0;
+    }
+    
+    m_pendingSerialByte = -1;
+    
+    return TRUE;
+}
+
+- (NSString *) GetSerialNumber
+{
+    NSString * hexString = @"";
+    
+    // Build a hex string
+    for(int i = 0; i < 16; i++){
+        hexString = [hexString stringByAppendingFormat:@"%x",m_serialNumber[i]];
+    }
+    
+    // Convert to long string
+    NSScanner * pScanner = [NSScanner scannerWithString:hexString];
+    
+    unsigned long long iValue;
+    [pScanner scanHexLongLong:&iValue];
+    
+    NSString * serialString = [NSString stringWithFormat:@"%016qu",iValue];
+    
+    return serialString;
+}
 
 #pragma mark - Observer management
 
@@ -1781,6 +1869,38 @@ static bool AmIBeingDebugged(void) {
     if ( result == NO )
     {
         [self logMessage:@"SendRequestBatteryStatus: SendRequestBatteryStatus failed"
+              atLogLevel:GtarControllerLogLevelError];
+    }
+    
+    return result;
+}
+
+- (BOOL)sendRequestSerialNumber
+{
+    if( m_spoofed == YES )
+    {
+        [self logMessage:@"SendRequestSerialNumber: Connection spoofed, no-op"
+              atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO )
+    {
+        [self logMessage:@"SendRequestSerialNumber: Not connected"
+              atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil )
+    {
+        [self logMessage:@"SendRequestSerialNumber: CoreMidiInterface is invalid"
+              atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestSerialNumber:m_pendingSerialByte];
+    
+    if ( result == NO )
+    {
+        [self logMessage:@"SendRequestSerialNumber: SendRequestBatteryStatus failed"
               atLogLevel:GtarControllerLogLevelError];
     }
     
