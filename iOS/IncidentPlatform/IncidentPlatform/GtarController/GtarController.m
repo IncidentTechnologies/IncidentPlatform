@@ -1067,7 +1067,11 @@ static bool AmIBeingDebugged(void) {
             
             m_pendingSerialByte = i;
             
-            [self sendRequestSerialNumber];
+            BOOL request = [self sendRequestSerialNumber];
+            
+            if(!request){
+                return FALSE;
+            }
             
             while(m_pendingSerialByte >= 0){
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -1108,10 +1112,20 @@ static bool AmIBeingDebugged(void) {
 - (NSString *) GetSerialNumber
 {
     NSString * hexString = @"";
+    BOOL isAllZero = YES;
+    
     
     // Build a hex string
     for(int i = 0; i < 16; i++){
         hexString = [hexString stringByAppendingFormat:@"%x",m_serialNumber[i]];
+        
+        if(m_serialNumber[i] > 0){
+            isAllZero = NO;
+        }
+    }
+    
+    if(isAllZero){
+        //return nil;
     }
     
     // Convert to long string
