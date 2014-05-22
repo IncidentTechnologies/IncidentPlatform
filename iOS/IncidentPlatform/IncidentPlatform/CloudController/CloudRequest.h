@@ -22,8 +22,7 @@ typedef enum
     CloudRequestStatusOffline
 } CloudRequestStatus;
 
-typedef enum
-{
+typedef enum {
     CloudRequestTypeUnknown = 0,
     
     CloudRequestTypeGetServerStatus,
@@ -60,15 +59,14 @@ typedef enum
     CloudRequestTypeGetUserGlobalSongSessions,
     
     CloudRequestTypeRedeemCreditCode,
-    
     CloudRequestTypePutLog,
+    CloudRequestTypeGetCurrentFirmwareVersion,
     
-    CloudRequestTypeGetCurrentFirmwareVersion
+    CloudRequestTypeRegisterGtar
     
 } CloudRequestType;
 
-@interface CloudRequest : NSObject
-{
+@interface CloudRequest : NSObject {
     
    // CloudResponse * __weak m_cloudResponse;
     CloudResponse * m_cloudResponse;
@@ -127,7 +125,6 @@ typedef enum
     NSString * m_versionString;
     NSString * m_deviceString;
     NSString * m_appString;
-    
 }
 
 @property (nonatomic, strong) CloudResponse * m_cloudResponse;
@@ -157,6 +154,9 @@ typedef enum
 @property (nonatomic, strong) NSString * m_versionString;
 @property (nonatomic, strong) NSString * m_deviceString;
 @property (nonatomic, strong) NSString * m_appString;
+
+@property (nonatomic, strong) NSString *m_serial_lower;
+@property (nonatomic, strong) NSString *m_serial_upper;
 
 - (id)initWithType:(CloudRequestType)type;
 - (id)initWithType:(CloudRequestType)type andCallbackObject:(id)obj andCallbackSelector:(SEL)sel;

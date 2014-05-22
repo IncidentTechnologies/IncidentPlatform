@@ -15,9 +15,9 @@
 @class CloudResponse;
 
 //#define MAMP_SERVER
-//#define DEV_SERVER
+#define DEV_SERVER
 //#define DEV_SERVER_2_0
-#define PROD_SERVER
+//#define PROD_SERVER
 
 #ifdef PROD_SERVER
     #define kServerAddress @"http://184.169.154.56/ios_main"
@@ -32,12 +32,11 @@
 #endif
 
 #ifdef MAMP_SERVER
-    #define kServerAddress @"http://localhost:8888/gtaronline"
+    //#define kServerAddress @"http://localhost:8888/gtaronline"
+    #define kServerAddress @"http://cloud.incidenttech.dev/"
 #endif
 
-@interface CloudController : NSObject
-{
-    
+@interface CloudController : NSObject {
     BOOL m_online;
     BOOL m_loggedIn;
     
@@ -56,7 +55,6 @@
     NSString * m_serverRoot;
     
     NSInteger m_errorsRecently;
-	
 }
 
 @property (nonatomic, readonly) BOOL m_loggedIn;
@@ -76,16 +74,13 @@
 - (void)queryOnlineStatus;
 - (void)receiveOnlineStatus:(CloudResponse*)cloudResponse;
 
-//
 // Syncronous convenience functions
-//
 - (BOOL)requestServerStatus;
 - (BOOL)requestItunesServerStatus;
 - (NSNumber*)requestUserCredits;
 
-//
+
 // external request access
-//
 - (CloudRequest*)requestServerStatusCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 - (CloudRequest*)requestFile:(NSInteger)fileId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
@@ -118,7 +113,9 @@
 - (CloudRequest*)requestFollowsSessions:(NSInteger)userId andPage:(NSInteger)page andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 - (CloudRequest*)requestGlobalSessionsPage:(NSInteger)page andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 - (CloudRequest*)requestLogUpload:(NSString*)log andVersion:(NSString*)version andDevice:(NSString*)device andApp:(NSString*)app andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 - (CloudRequest*)requestCurrentFirmwareVersionCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+- (CloudRequest*)requestRegisterGtarSerialUpper:(NSString*)serial_upper SerialLower:(NSString*)serial_lower andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 // new
 
 - (void)registerConnection:(NSURLConnection*)connection toResponse:(CloudResponse*)cloudResponse;

@@ -47,9 +47,11 @@
 
 #define GET_SERVER_STATUS @"Main/ServerStatus"
 #define GET_ITUNES_STATUS @"Main/ItunesStatus"
-
 #define CloudRequestTypeGetServerStatusUrl @"Main/ServerStatus"
+
 #define CloudRequestTypeGetFileUrl @"UserFiles/GetFile"
+
+// Users
 #define CloudRequestTypeRegisterUrl @"Users/Register"
 #define CloudRequestTypeLoginFacebookUrl @"Users/LoginWithFacebookAccessToken"
 #define CloudRequestTypeLoginUrl @"Users/Login"
@@ -60,28 +62,36 @@
 #define CloudRequestTypeEditUserProfileUrl @"Users/EditUserProfile"
 #define CloudRequestTypeSearchUserProfileFacebookUrl @"Users/FindFacebookFriendsUserProfile"
 #define CloudRequestTypeGetUserCreditsUrl @"Users/GetUserCredits"
-
 #define CloudRequestTypeVerifyItunesReceiptUrl @"Users/VerifyItunesPurchase"
+#define CloudRequestTypeRedeemCreditCodeUrl @"Users/RedeemCreditCode"
+
+// User Songs
 #define CloudRequestTypeGetAllSongsListUrl @"UserSongs/GetAllSongsList"
 #define CloudRequestTypeGetAllSongPidsUrl @"UserSongs/GetAllSongPids"
 #define CloudRequestTypeGetUserSongListUrl @"UserSongs/GetUserSongsList"
-
 #define CloudRequestTypeGetStoreSongListUrl @"UserSongs/GetStoreSongsList"
 #define CloudRequestTypePurchaseSongUrl @"UserSongs/PurchaseSong"
-
 //#define CloudRequestTypeGetStoreSongListUrl @"UserSongs/GetAllSongsList"
 #define CloudRequestTypeGetStoreFeaturesSongListUrl @"UserSongs/GetFeaturedNewAndPopularSongsList"
+
+// User Song Sessions
 #define CloudRequestTypePutUserSongSessionUrl @"UserSongSessions/UploadSession"
 #define CloudRequestTypeGetUserSongSessionsUrl @"UserSongSessions/GetUserSongSessions"
 #define CloudRequestTypeGetUserGlobalSongSessionsUrl @"UserSongSessions/GetGlobalUserSongSessions"
+
+// User Follows
 #define CloudRequestTypeAddUserFollowsUrl @"UserFollows/AddFollows"
 #define CloudRequestTypeRemoveUserFollowsUrl @"UserFollows/RemoveFollows"
 #define CloudRequestTypeGetUserFollowsListUrl @"UserFollows/GetFollowsList"
 #define CloudRequestTypeGetUserFollowedListUrl @"UserFollows/GetFollowedByList"
 #define CloudRequestTypeGetUserFollowsSongSessionsUrl @"UserFollows/GetFollowsSessions"
-#define CloudRequestTypeRedeemCreditCodeUrl @"Users/RedeemCreditCode"
+
+// Telemtry
 #define CloudRequestTypePutLogUrl @"Telemetry/UploadLog"
+
+// gTar
 #define CloudRequestTypeGetCurrentFirmwareVersionUrl @"GtarFirmwares/GetCurrentFirmwareVersion"
+#define CloudRequestTypeRegisterGtarUrl @"GtarFirmwares/RegisterGtar"
 
 // maybe append a clock() or tick() to this thing
 #define POST_BOUNDARY @"------gTarPlayFormBoundary0123456789"
@@ -101,14 +111,10 @@
 @synthesize m_username;
 @synthesize m_facebookAccessToken;
 
-- (id)init
-{
-	
+- (id)init {
     self = [super init];
     
-	if ( self )
-	{
-		
+	if ( self ) {
         // Assume we are online initially
         m_online = YES;
         m_loggedIn = NO;
@@ -122,20 +128,16 @@
         
         // Set the cookie storage appropriately
 //        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
-		
 	}
 	
 	return self;
-	
 }
 
-- (id)initWithServer:(NSString*)serverName
-{
+- (id)initWithServer:(NSString*)serverName {
     // Note this is 'self' not 'super'
     self = [self init];
     
-    if ( self ) 
-    {
+    if ( self )  {
         m_serverName = serverName;
         m_serverRoot = [[NSString alloc] initWithFormat:@"%@/app_iphone", serverName];                
     }
@@ -199,13 +201,11 @@
 //}
 
 // This should always run on the main thread for the timer
-- (void)handleError
-{
+- (void)handleError {
     
     m_errorsRecently++;
     
-    if ( m_errorsRecently == 1 )
-    {
+    if ( m_errorsRecently == 1 ) {
         [NSTimer scheduledTimerWithTimeInterval:ERROR_WINDOW target:self selector:@selector(errorWindowFinished) userInfo:nil repeats:NO];
     }
     else if ( m_errorsRecently >= ERRORS_BEFORE_OFFLINE )
@@ -249,76 +249,49 @@
 #pragma mark Syncronous convenience
 
 // These functions haven't been used in a long time and are probably dead
-- (BOOL)requestServerStatus
-{
-    
+- (BOOL)requestServerStatus {
     NSString * urlString = [NSString stringWithFormat:@"%@/%@", SERVER_ROOT, GET_SERVER_STATUS];
-    
     XmlDom * dom = [[XmlDom alloc] initWithXmlData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]];
-    
     NSString * response = [dom getTextFromChildWithName:@"StatusText"];
     
     BOOL status = NO;
     
     // The request succeeded, the server is there
     if ( [response isEqualToString:@"Ok"] )
-    {
         status = YES;
-    }
-    else 
-    {
+    else
         status = NO;
-    }
-    
     
     return status;
-    
 }
 
 
-- (BOOL)requestItunesServerStatus
-{
-    
+- (BOOL)requestItunesServerStatus {
     NSString * urlString = [NSString stringWithFormat:@"%@/%@", SERVER_ROOT, GET_ITUNES_STATUS];
-    
     XmlDom * dom = [[XmlDom alloc] initWithXmlData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]];
-    
     NSString * response = [dom getTextFromChildWithName:@"StatusText"];
     
     BOOL status = NO;
     
     // The request succeeded, the server is there
     if ( [response isEqualToString:@"Ok"] )
-    {
         status = YES;
-    }
-    else 
-    {
+    else
         status = NO;
-    }
-    
     
     return status;
-    
 }
 
-- (NSNumber*)requestUserCredits
-{
-    
+- (NSNumber*)requestUserCredits {
     // Create sync request
     CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeGetUserCredits];
-    
     CloudResponse * cloudResponse = [self cloudSendRequest:cloudRequest];
-    
     NSNumber * credits = nil;
     
     if ( cloudResponse.m_status == CloudResponseStatusSuccess )
-    {
         credits = cloudResponse.m_responseUserCredits;
-    }
     
     return credits;
-    
 }
 
 
@@ -793,17 +766,23 @@
 
 }
 
-- (CloudRequest*)requestCurrentFirmwareVersionCallbackObj:(id)obj
-                                           andCallbackSel:(SEL)sel
-{
-    
+- (CloudRequest*)requestCurrentFirmwareVersionCallbackObj:(id)obj andCallbackSel:(SEL)sel {
     // Create async request
     CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeGetCurrentFirmwareVersion andCallbackObject:obj andCallbackSelector:sel];
     
     [self cloudSendRequest:cloudRequest];
-    
     return cloudRequest;
+}
+
+- (CloudRequest*)requestRegisterGtarSerialUpper:(NSString*)serial_upper SerialLower:(NSString*)serial_lower andCallbackObj:(id)obj andCallbackSel:(SEL)sel {
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeRegisterGtar andCallbackObject:obj andCallbackSelector:sel];
     
+    cloudRequest.m_serial_lower = [[NSString alloc] initWithString:serial_lower];
+    cloudRequest.m_serial_upper = [[NSString alloc] initWithString:serial_upper];
+    
+    [self cloudSendRequest:cloudRequest];
+    return cloudRequest;
 }
 
 #pragma mark -
@@ -1038,8 +1017,7 @@
     id callbackObject = cloudRequest.m_callbackObject;
     SEL callbackSelector = cloudRequest.m_callbackSelector;
     
-    if ( [callbackObject respondsToSelector:callbackSelector] == YES )
-    {
+    if ( [callbackObject respondsToSelector:callbackSelector] == YES ) {
         // Send this back to the original caller
 //        [callbackObject performSelector:callbackSelector withObject:cloudResponse];
         [callbackObject performSelectorOnMainThread:callbackSelector withObject:cloudResponse waitUntilDone:NO];
@@ -1076,8 +1054,7 @@
 #pragma mark -
 #pragma mark Cloud helpers
 
-- (NSURLRequest*)createPostForRequest:(CloudRequest*)cloudRequest
-{
+- (NSURLRequest*)createPostForRequest:(CloudRequest*)cloudRequest {
     
     NSString * urlString = nil;
     NSArray * paramsArray = nil;
@@ -1288,8 +1265,7 @@
             
         } break;
             
-        case CloudRequestTypeGetUserProfile:
-        {
+        case CloudRequestTypeGetUserProfile: {
             
             url = CloudRequestTypeGetUserProfileUrl;
             
@@ -1590,6 +1566,17 @@
             url = CloudRequestTypeGetCurrentFirmwareVersionUrl;
         } break;
             
+        case CloudRequestTypeRegisterGtar: {
+            //url = CloudRequestTypeRegisterGtarUrl;
+            /*NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"data[User][id]", @"Name",
+                                    [NSNumber numberWithInteger:cloudRequest.m_userId], @"Value", nil];
+            
+            params = [NSArray arrayWithObject:param];*/
+            
+            url = [[NSString alloc] initWithFormat:@"%@/?serial_lower=%@", CloudRequestTypeRegisterGtarUrl, cloudRequest.m_serial_lower];
+        } break;
+            
         default: break;
     }
     
@@ -1789,23 +1776,14 @@
 //            
 //        } break;
             
-        case CloudRequestTypeLogout:
-        {
-            
+        case CloudRequestTypeLogout: {
             m_loggedIn = NO;
-            
-            
             m_facebookAccessToken = nil;
-            
         } break;
             
-        case CloudRequestTypeGetUserProfile:
-        {
-            
+        case CloudRequestTypeGetUserProfile: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
-            
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
             
             cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
@@ -1813,53 +1791,36 @@
             
         } break;
             
-        case CloudRequestTypeEditUserProfile:
-        {
-            
+        case CloudRequestTypeEditUserProfile: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
-            
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
             
             cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
             cloudResponse.m_responseUserProfile = userProfile;
-            
         } break;
             
-        case CloudRequestTypeSearchUserProfile:
-        {
-            
+        case CloudRequestTypeSearchUserProfile: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * profilesDom = [dom getChildWithName:@"UserProfiles"];
+            UserProfiles * userProfiles = [[UserProfiles alloc] initWithXmlDom:profilesDom];
             
+            cloudResponse.m_responseUserProfiles = userProfiles;
+        } break;
+            
+        case CloudRequestTypeSearchUserProfileFacebook: {
+            XmlDom * dom = cloudResponse.m_responseXmlDom;
+            XmlDom * profilesDom = [dom getChildWithName:@"UserProfiles"];
             UserProfiles * userProfiles = [[UserProfiles alloc] initWithXmlDom:profilesDom];
             
             cloudResponse.m_responseUserProfiles = userProfiles;
             
         } break;
             
-        case CloudRequestTypeSearchUserProfileFacebook:
-        {
-            
-            XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
-            XmlDom * profilesDom = [dom getChildWithName:@"UserProfiles"];
-            
-            UserProfiles * userProfiles = [[UserProfiles alloc] initWithXmlDom:profilesDom];
-            
-            cloudResponse.m_responseUserProfiles = userProfiles;
-            
-        } break;
-            
-        case CloudRequestTypeGetUserCredits:
-        {
-            
+        case CloudRequestTypeGetUserCredits: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
             
             cloudResponse.m_responseUserCredits = [dom getNumberFromChildWithName:@"Credits"];
-            
         } break;
             
         case CloudRequestTypePurchaseSong: {
@@ -1867,110 +1828,73 @@
         } break;
             
         case CloudRequestTypeVerifyItunesReceipt: {
-            
             // Nothing else to do for this
-            
         } break;
             
-        case CloudRequestTypeGetAllSongPids:
-        {
-            
+        case CloudRequestTypeGetAllSongPids: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * pidsDom = [dom getChildWithName:@"AllProductIdentifiers"];
             
             NSArray * pidDomArray = [pidsDom getChildArrayWithName:@"ProductIdentifiers"];
-            
             NSMutableArray * pidArray = [[NSMutableArray alloc] init];
             
             // Each element in the array is in a DOM, which is kind of annoying.
             // Iterate through and pull them out of the DOM and put into an array.
-            for ( XmlDom * pidDom in pidDomArray )
-            {
+            for ( XmlDom * pidDom in pidDomArray ) {
                 NSString * pid = [pidDom getText];
-                
                 [pidArray addObject:pid];
             }
             
             cloudResponse.m_responseProductIds = pidArray;
-            
         } break;
             
-        case CloudRequestTypeGetAllSongsList:
-        {
-            
+        case CloudRequestTypeGetAllSongsList: {
             // Note that this is effectively just an allias of 
             // the CloudRequestTypeGetStoreSongList request right now.
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * songsDom = [dom getChildWithName:@"AllSongsList"];
-            
             UserSongs * userSongs = [[UserSongs alloc] initWithXmlDom:songsDom];
             
             cloudResponse.m_responseUserSongs = userSongs;
-            
         } break;
             
-        case CloudRequestTypeGetUserSongList:
-        {
-            
+        case CloudRequestTypeGetUserSongList: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * songsDom = [dom getChildWithName:@"UserSongsList"];
-            
             UserSongs * userSongs = [[UserSongs alloc] initWithXmlDom:songsDom];
             
             cloudResponse.m_responseUserSongs = userSongs;
-            
         } break;
             
-        case CloudRequestTypeGetStoreSongList:
-        {
-            
+        case CloudRequestTypeGetStoreSongList: {
             XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * songsDom = [dom getChildWithName:@"StoreSongsList"];
-            
             UserSongs * userSongs = [[UserSongs alloc] initWithXmlDom:songsDom];
             
             cloudResponse.m_responseUserSongs = userSongs;
-            
         } break;
             
-        case CloudRequestTypeGetStoreFeaturesSongList:
-        {
-            
+        case CloudRequestTypeGetStoreFeaturesSongList: {
 //            XmlDom * responseDom = cloudResponse.m_responseXmlDom;
 //            
 //            // create the collection
 //            cloudResponse.m_responseStoreFeatureCollection = [[[StoreFeatureCollection alloc] initWithXmlDom:responseDom] autorelease];
-            
         } break;
             
-        case CloudRequestTypePutUserSongSession:
-        {
-            
+        case CloudRequestTypePutUserSongSession: {
             cloudResponse.m_responseUserSongSession = cloudResponse.m_cloudRequest.m_userSongSession;
-        
         } break;
             
-        case CloudRequestTypeGetUserSongSessions:
-        {
-            
+        case CloudRequestTypeGetUserSongSessions: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
-            
             UserSongSessions * userSongSessions = [[UserSongSessions alloc] initWithXmlDom:responseDom];
             
             cloudResponse.m_responseUserSongSessions = userSongSessions;
             cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
-            
         } break;
             
-        case CloudRequestTypeAddUserFollows:
-        {
-            
+        case CloudRequestTypeAddUserFollows: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * userProfilesFollowsDom = [responseDom getChildWithName:@"FollowsUsers"];
             XmlDom * userProfilesFollowedDom = [responseDom getChildWithName:@"FollowedByUsers"];
             
@@ -1982,14 +1906,10 @@
             cloudResponse.m_responseUserProfilesFollows = userProfilesFollows;
             cloudResponse.m_responseUserProfilesFollowedBy = userProfilesFollowedBy;
             cloudResponse.m_responseUserSongSessions = userSongSessions;
-            
         } break;
             
-        case CloudRequestTypeRemoveUserFollows:
-        {
-            
+        case CloudRequestTypeRemoveUserFollows: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * userProfilesFollowsDom = [responseDom getChildWithName:@"FollowsUsers"];
             XmlDom * userProfilesFollowedDom = [responseDom getChildWithName:@"FollowedByUsers"];
             
@@ -2001,159 +1921,108 @@
             cloudResponse.m_responseUserProfilesFollows = userProfilesFollows;
             cloudResponse.m_responseUserProfilesFollowedBy = userProfilesFollowedBy;
             cloudResponse.m_responseUserSongSessions = userSongSessions;
-            
         } break;
             
-        case CloudRequestTypeGetUserFollowsList:
-        {
-            
+        case CloudRequestTypeGetUserFollowsList: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * userProfilesDom = [responseDom getChildWithName:@"FollowsUsers"];
-            
             UserProfiles * userProfiles = [[UserProfiles alloc] initWithXmlDom:userProfilesDom];
             
             cloudResponse.m_responseUserProfiles = userProfiles;
             cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
-            
         } break;
             
-        case CloudRequestTypeGetUserFollowedList:
-        {
-            
+        case CloudRequestTypeGetUserFollowedList: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
-            
             XmlDom * userProfilesDom = [responseDom getChildWithName:@"FollowedByUsers"];
-            
             UserProfiles * userProfiles = [[UserProfiles alloc] initWithXmlDom:userProfilesDom];
             
             cloudResponse.m_responseUserProfiles = userProfiles;
             cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
-            
         } break;
             
-        case CloudRequestTypeGetUserFollowsSongSessions:
-        {
+        case CloudRequestTypeGetUserFollowsSongSessions: {
+            XmlDom * responseDom = cloudResponse.m_responseXmlDom;
+            UserSongSessions * userSongSessions = [[UserSongSessions alloc] initWithXmlDom:responseDom];
             
+            cloudResponse.m_responseUserSongSessions = userSongSessions;
+            cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
+        } break;
+            
+        case CloudRequestTypeGetUserGlobalSongSessions: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
             
             UserSongSessions * userSongSessions = [[UserSongSessions alloc] initWithXmlDom:responseDom];
             
             cloudResponse.m_responseUserSongSessions = userSongSessions;
             cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
-            
         } break;
             
-        case CloudRequestTypeGetUserGlobalSongSessions:
-        {
-            
-            XmlDom * responseDom = cloudResponse.m_responseXmlDom;
-            
-            UserSongSessions * userSongSessions = [[UserSongSessions alloc] initWithXmlDom:responseDom];
-            
-            cloudResponse.m_responseUserSongSessions = userSongSessions;
-            cloudResponse.m_responseUserId = cloudResponse.m_cloudRequest.m_userId;
-            
-        } break;
-            
-        case CloudRequestTypeRedeemCreditCode:
-        {
-            
+        case CloudRequestTypeRedeemCreditCode: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
             
             cloudResponse.m_responseUserCredits = [responseDom getNumberFromChildWithName:@"Credits"];
-            
         } break;
             
-        case CloudRequestTypePutLog:
-        {
+        case CloudRequestTypePutLog: {
             // Nothing to do
         } break;
             
-        case CloudRequestTypeGetCurrentFirmwareVersion:
-        {
-            
+        case CloudRequestTypeGetCurrentFirmwareVersion: {
             XmlDom * responseDom = cloudResponse.m_responseXmlDom;
             
             cloudResponse.m_responseFirmwareMajorVersion = [responseDom getIntegerFromChildWithName:@"MajorVersion"];
             cloudResponse.m_responseFirmwareMinorVersion = [responseDom getIntegerFromChildWithName:@"MinorVersion"];
             cloudResponse.m_responseFileId = [responseDom getIntegerFromChildWithName:@"FileId"];
-            
-            
         } break;
             
-        default:
-        {
+        case CloudRequestTypeRegisterGtar: {
+            XmlDom *responseDom = cloudResponse.m_responseXmlDom;
+            NSLog(@"Register Gtar Status %d: %@", cloudResponse.m_statusCode, cloudResponse.m_statusText);
+        } break;
             
+        default: {
             // nothing
-            
         } break;
     }
-
-    
 }
 
-- (void)preprocessResultsForResponse:(CloudResponse*)cloudResponse
-{
-    
-    //
-    // Do some generic processing of the response data
-    //
-    
+// Do some generic processing of the response data
+- (void)preprocessResultsForResponse:(CloudResponse*)cloudResponse {
     // Parse the received data into an XmlDom
     XmlDom * dom = [[XmlDom alloc] initWithXmlData:cloudResponse.m_receivedData];
-    
     cloudResponse.m_responseXmlDom = dom;
-    
     NSString * result = [dom getTextFromChildWithName:@"StatusText"];
     
     // The request connection succeeded, but did it do what we asked
     if ( [result isEqualToString:@"Ok"] )
-    {
         cloudResponse.m_status = CloudResponseStatusSuccess;
-    }
-    else 
-    {
+    else
         cloudResponse.m_status = CloudResponseStatusFailure;
-    }
     
     // also see if we have been logged out as a result of this
     if ( [result isEqualToString:@"Unauthorized"] == YES )
-    {
         m_loggedIn = NO;
-    }
     
     NSString * detail = [dom getTextFromChildWithName:@"StatusDetail"];
     
     // Our net code is a little inconsistent on where failure reason is reported
     if ( detail != nil )
-    {
         cloudResponse.m_statusText = detail;
-    }
     else if ( result != nil )
-    {
         cloudResponse.m_statusText = result;
-    }
     else
-    {
         cloudResponse.m_statusText = @"Response parsing issue";
-    }
-    
-    
 }
     
 #pragma mark -
 #pragma mark NSURLConnection delegates
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-	
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     CloudResponse * cloudResponse = [self deregisterConnection:connection];
-    
     cloudResponse.m_cloudRequest.m_status = CloudRequestStatusConnectionError;
-    
+
     [self cloudReceiveResponse:cloudResponse];
-    
     [self performSelectorOnMainThread:@selector(handleError) withObject:nil waitUntilDone:YES];
     
 #if TARGET_IPHONE_SIMULATOR
@@ -2161,42 +2030,27 @@
 #endif
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response  
-{  
-
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response   {
     CloudResponse * cloudResponse = [self getReponseForConnection:connection];
-    
     NSHTTPURLResponse * httpResponse = (NSHTTPURLResponse *)response;
     
 //    cloudResponse.m_status = CloudResponseStatusReceivingData;
     
     cloudResponse.m_cloudRequest.m_status = CloudRequestStatusReceivingData;
-    
     cloudResponse.m_mimeType = [httpResponse MIMEType];
-    
     cloudResponse.m_statusCode = [httpResponse statusCode];
-    
     cloudResponse.m_receivedData = [[NSMutableData alloc] init];
     cloudResponse.m_receivedData.length = 0;
-
 }   
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data  
-{  
-    
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data   {
     CloudResponse * cloudResponse = [self getReponseForConnection:connection];
-    
     [cloudResponse.m_receivedData appendData:data];
-    
 }  
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection 
-{  
-	
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection  {
     CloudResponse * cloudResponse = [self deregisterConnection:connection];
-    
     cloudResponse.m_receivedDataString = [NSString stringWithCString:(char*)[cloudResponse.m_receivedData bytes] encoding:NSASCIIStringEncoding];
-    
     cloudResponse.m_cloudRequest.m_status = CloudRequestStatusCompleted;
 
 //    [self cloudReceiveResponse:cloudResponse];

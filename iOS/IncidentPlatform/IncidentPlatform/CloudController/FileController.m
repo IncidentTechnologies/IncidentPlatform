@@ -21,37 +21,23 @@
 
 @synthesize m_cloudController;
 
-- (id)initWithCloudController:(CloudController*)cloudController
-{
-    
+- (id)initWithCloudController:(CloudController*)cloudController {
     self = [super init];
     
-    if ( self )
-    {
-        
+    if ( self ) {
         m_cloudController = cloudController;
-        
         m_fileCacheMap = [[NSMutableDictionary alloc] init];
-        
         m_pendingFileRequests = [[NSMutableDictionary alloc] init];
-                
-        //
+        
         // Scan the hdd for files that have been caches
-        //
         if ( [self enumerateFileCache] == NO )
-        {
-            
             return nil;
-        }
     }
     
     return self;
-    
 }
 
-
-- (void)clearCache
-{
+- (void)clearCache {
     
     NSLog(@"Clearing the File cache!");
     
@@ -66,10 +52,8 @@
     // Delete the old cache folder
     result = [[NSFileManager defaultManager] removeItemAtPath:cachePath error:&error];
     
-    if ( result == NO || error != nil )
-    {
+    if ( result == NO || error != nil ) {
         NSLog(@"Failed to delete File cache");
-        
         return;
     }
     
@@ -79,18 +63,13 @@
     // Create a new cache folder
     result = [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:&error];
     
-    if ( result == NO || error != nil )
-    {
+    if ( result == NO || error != nil ) {
         NSLog(@"Error creating File cache path: %@", cachePath);
-        
         return;
     }
-    
 }
 
-- (BOOL)enumerateFileCache
-{
-    
+- (BOOL)enumerateFileCache {
     [m_fileCacheMap removeAllObjects];
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
@@ -99,83 +78,56 @@
     
     NSError * error = nil;
     
-    if ( [[NSFileManager defaultManager] fileExistsAtPath:cachePath] == NO )
-    {
+    if ( [[NSFileManager defaultManager] fileExistsAtPath:cachePath] == NO ) {
         
         // Cache is empty, create it
         [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:&error];
         
-        if ( error != nil )
-        {
+        if ( error != nil ) {
             NSLog(@"Error: '%@' creating File cache path: '%@'", [error localizedDescription], cachePath);
-            
             return NO;
         }
         
     }
-    else
-    {
-        
+    else {
         NSArray * cacheContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:cachePath error:&error];
         
-        if ( error != nil )
-        {
+        if ( error != nil ) {
             NSLog(@"Error: '%@' enumerating File cache path: '%@'", [error localizedDescription], cachePath);
-            
             return NO;
         }
         
-        for ( NSString * fileName in cacheContents )
-        {
-            
+        for ( NSString * fileName in cacheContents ) {
             NSArray * components = [fileName componentsSeparatedByString:@"."];
-            
             NSString * keyStr = [components objectAtIndex:0];
-            
             NSNumber * key = [NSNumber numberWithInteger:[keyStr integerValue]];
-            
             NSString * filePath = [cachePath stringByAppendingPathComponent:fileName];
             
             if ( filePath == nil || key == nil )
-            {
                 NSLog(@"Failed to map %@ to %@", key, filePath);
-            }
             else
-            {
                 [m_fileCacheMap setObject:filePath forKey:key];
-            }
-            
         }
     }
     
     return YES;
-    
 }
 
 #pragma mark General
 
-- (BOOL)fileExists:(NSInteger)fileId
-{
-    
+- (BOOL)fileExists:(NSInteger)fileId {
     NSNumber * key = [NSNumber numberWithInteger:fileId];
-    
     NSString * filePath = [m_fileCacheMap objectForKey:key];
     
     return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
-    
 }
 
-- (id)loadFile:(NSInteger)fileId
-{
-    
+- (id)loadFile:(NSInteger)fileId {
     NSNumber * key = [NSNumber numberWithInteger:fileId];
-    
     NSString * filePath = [m_fileCacheMap objectForKey:key];
     
     if ( filePath == nil )
-    {
         return nil;
-    }
     
     // Refresh access time
     NSError * error;
@@ -185,51 +137,29 @@
                                      ofItemAtPath:filePath
                                             error:&error];
     
-    
-    if ( [filePath hasSuffix:@".png"] == YES )
-    {
-        
+    if ( [filePath hasSuffix:@".png"] == YES ) {
         UIImage * img = [UIImage imageWithContentsOfFile:filePath];
-        
         return img;
-        
     }
-    else if ( [filePath hasSuffix:@".xmp"] == YES )
-    {
-        
+    else if ( [filePath hasSuffix:@".xmp"] == YES ) {
         NSString * str = [NSString stringWithContentsOfFile:filePath encoding:NSASCIIStringEncoding error:nil];
-        
         return str;
-        
     }
-    else if ( [filePath hasSuffix:@".bin"] == YES )
-    {
-        
+    else if ( [filePath hasSuffix:@".bin"] == YES ) {
         NSData * data = [NSData dataWithContentsOfFile:filePath];
-        
         return data;
-        
     }
-    else
-    {
-        
+    else {
         NSLog(@"Failed loading invalid file type");
-        
         return nil;
-        
     }
 
     return nil;
-    
 }
 
-- (BOOL)saveFilePath:(NSString*)filePath withFileId:(NSInteger)fileId
-{
-    
+- (BOOL)saveFilePath:(NSString*)filePath withFileId:(NSInteger)fileId {
     if ( filePath == nil )
-    {
         return NO;
-    }
     
     id file = nil;
     
@@ -237,42 +167,26 @@
          [filePath hasSuffix:@".jpg"] == YES ||
          [filePath hasSuffix:@".jpeg"] == YES )
     {
-        
         UIImage * img = [UIImage imageWithContentsOfFile:filePath];
-        
         file = img;
-        
     }
-    else if ( [filePath hasSuffix:@".xmp"] == YES )
-    {
-        
+    else if ( [filePath hasSuffix:@".xmp"] == YES ) {
         NSString * str = [NSString stringWithContentsOfFile:filePath encoding:NSASCIIStringEncoding error:nil];
-        
         file = str;
-        
     }
-    else if ( [filePath hasSuffix:@".bin"] == YES )
-    {
-        
+    else if ( [filePath hasSuffix:@".bin"] == YES ) {
         NSData * data = [NSData dataWithContentsOfFile:filePath];
-        
         file = data;
-        
     }
-    else
-    {
-        
+    else {
         NSLog(@"Failed loading invalid file type before saving");
-        
         return NO;
     }
         
     return [self saveFile:file withFileId:fileId];
-    
 }
 
-- (BOOL)saveFile:(id)file withFileId:(NSInteger)fileId
-{
+- (BOOL)saveFile:(id)file withFileId:(NSInteger)fileId {
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString * cacheDirectory = [paths objectAtIndex:0];
@@ -281,37 +195,26 @@
     NSString * fileName = nil;
     NSData * fileContents = nil;
     
-    if ( [file isKindOfClass:[UIImage class]] == YES )
-    {
-        
+    if ( [file isKindOfClass:[UIImage class]] == YES ) {
         UIImage * img = (UIImage*)file;
         
         fileName = [NSString stringWithFormat:@"%u.png", fileId];
         fileContents = UIImagePNGRepresentation(img);
-        
     }
-    else if ( [file isKindOfClass:[NSString class]] == YES )
-    {
-        
+    else if ( [file isKindOfClass:[NSString class]] == YES ) {
         NSString * str = (NSString*)file;
         
         fileName = [NSString stringWithFormat:@"%u.xmp", fileId];
         fileContents = [str dataUsingEncoding:NSASCIIStringEncoding];
-        
     }
-    else if ( [file isKindOfClass:[NSData class]] == YES )
-    {
-        
+    else if ( [file isKindOfClass:[NSData class]] == YES ) {
         NSData * data = (NSData*)file;
         
         fileName = [NSString stringWithFormat:@"%u.bin", fileId];
         fileContents = data;
-        
     }
-    else
-    {
+    else {
         NSLog(@"Failed to save invalid file type");
-        
         return NO;
     }
     
@@ -320,9 +223,7 @@
     BOOL success = [fileContents writeToFile:filePath atomically:YES];
     
     if ( success == NO )
-    {
         return NO;
-    }
     
     NSNumber * key = [NSNumber numberWithInteger:fileId];
     
@@ -330,13 +231,10 @@
     
     // Set the access time
     NSError * error;
-    
     NSDate * now = [[NSDate alloc] init];
-    
     [[NSFileManager defaultManager] setAttributes:[NSDictionary dictionaryWithObject:now forKey:NSFileModificationDate]
                                      ofItemAtPath:filePath
                                             error:&error];
-    
 
     // Don't backup this file
     [self addSkipBackupAttributeToFileId:fileId];
@@ -345,8 +243,7 @@
     
 }
 
-- (id)getFileOrReturnNil:(NSInteger)fileId
-{
+- (id)getFileOrReturnNil:(NSInteger)fileId {
     // nil is ok
     return [self loadFile:fileId];
 }

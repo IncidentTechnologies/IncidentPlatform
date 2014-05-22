@@ -36,6 +36,9 @@
 @synthesize m_deviceString;
 @synthesize m_appString;
 
+@synthesize m_serial_lower;
+@synthesize m_serial_upper;
+
 - (id)initWithType:(CloudRequestType)type
 {
     
