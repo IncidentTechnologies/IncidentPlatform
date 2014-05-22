@@ -107,6 +107,8 @@ typedef enum GTAR_RX_MSG_TYPE
 - (BOOL) InitiateSerialNumberRequest;
 - (BOOL) InterruptSerialNumberRequest;
 - (NSString *) GetSerialNumber;
+- (NSString *) GetSerialNumberUpper;
+- (NSString *) GetSerialNumberLower;
 
 - (BOOL) SetPendingRequest;
 - (BOOL) IsPendingRequest;

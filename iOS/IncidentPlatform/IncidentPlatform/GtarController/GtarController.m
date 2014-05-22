@@ -1139,6 +1139,20 @@ static bool AmIBeingDebugged(void) {
     return serialString;
 }
 
+- (NSString *) GetSerialNumberLower
+{
+    NSString * serialNumber = [self GetSerialNumber];
+    
+    return [serialNumber substringFromIndex:8];
+}
+
+- (NSString *) GetSerialNumberUpper
+{
+    NSString * serialNumber = [self GetSerialNumber];
+    
+    return [serialNumber substringToIndex:7];
+}
+
 #pragma mark - Observer management
 
 // Observers should ultimately replace the delegate paradigm we have going.
