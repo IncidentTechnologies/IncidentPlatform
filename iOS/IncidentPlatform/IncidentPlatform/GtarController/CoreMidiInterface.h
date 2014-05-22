@@ -147,6 +147,7 @@ void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void
 
 // Requests
 - (BOOL)sendRequestBatteryStatus;
+- (BOOL)sendRequestSerialNumber:(unsigned char)byte;
 - (BOOL)sendEnableDebug;
 - (BOOL)sendDisableDebug;
 
