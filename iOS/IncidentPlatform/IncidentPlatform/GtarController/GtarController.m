@@ -653,7 +653,7 @@ static bool AmIBeingDebugged(void) {
                     }
                     else {
                         m_pendingSerialByte = -1;
-                                                
+                        
                         // Delegate callback
                         if ( [m_delegate respondsToSelector:@selector(receivedSerialNumber:)] == YES ) {
                             [m_delegate receivedSerialNumber:m_serialNumber];
