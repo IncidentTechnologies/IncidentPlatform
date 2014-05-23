@@ -14,6 +14,8 @@
 // Debug Defines
 //#define GTAR_ALERT_LOG
 
+#define WAIT_INT 0.25f
+
 /*!
  @abstract The result status code used by the GtarController.
  @discussion These are the values that are returned by the GtarController. A status of 'GtarControllerStatusOk' means 

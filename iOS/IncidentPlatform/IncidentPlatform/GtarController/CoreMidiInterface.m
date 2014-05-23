@@ -619,16 +619,12 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     BOOL result = [self sendSysExBuffer:SysExBuffer withLength:SysExBuffer_n];
     
     if ( result == NO )
-    {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendRequestSerialNumber: Failed to send SysEx Buffer"] atLogLevel:GtarControllerLogLevelError];
-    }
     
     return result;
 }
 
-- (BOOL)sendEnableDebug
-{
-    
+- (BOOL)sendEnableDebug {
     int sendBufferLength = 3;
     unsigned char sendBuffer[sendBufferLength];
     

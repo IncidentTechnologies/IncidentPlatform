@@ -636,17 +636,33 @@ static bool AmIBeingDebugged(void) {
                 } break;
                     
                 case GTAR_SERIAL_NUMBER_ACK: {
-                    
                     unsigned char number = data[2];
+                
+                    if(m_pendingSerialByte >= 0 && m_pendingSerialByte < 16)
+                        m_serialNumber[m_pendingSerialByte] = number;
+                
+                    m_pendingSerialByte += 1;
                     
                     [self ReleasePendingRequest];
                     
-                    if(m_pendingSerialByte >= 0 && m_pendingSerialByte < 16){
-                        m_serialNumber[m_pendingSerialByte] = number;
+                    if(m_pendingSerialByte < 16) {
+                        BOOL request = [self sendRequestSerialNumber];
+                        
+                        if(request == FALSE)
+                            [self logMessage:[NSString stringWithFormat:@"Failed to request serial number byte %d", m_pendingSerialByte] atLogLevel:GtarControllerLogLevelError];
                     }
-                    
-                    m_pendingSerialByte = -1;
-                    
+                    else {
+                        m_pendingSerialByte = -1;
+                                                
+                        // Delegate callback
+                        if ( [m_delegate respondsToSelector:@selector(receivedSerialNumber:)] == YES ) {
+                            [m_delegate receivedSerialNumber:m_serialNumber];
+                        }
+                        else {
+                            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxSerialNumber %@", m_delegate]
+                                  atLogLevel:GtarControllerLogLevelWarn];
+                        }
+                    }
                 } break;
                     
                 case GTAR_COMMIT_USERSPACE_ACK: {
@@ -1054,66 +1070,33 @@ static bool AmIBeingDebugged(void) {
 }
 
 #pragma mark - Serial Number management
-#define WAIT_INT 0.25f
 
-- (BOOL) InitiateSerialNumberRequest
-{
-    if(m_pendingSerialByte == -1){
-        
+- (BOOL) InitiateSerialNumberRequest {
+    // Initiate sequence, delegate called when we've gotten through all the bytes
+    if(m_pendingSerialByte == -1) {
         // First initialize all to zero
         [self InterruptSerialNumberRequest];
         
-        for(int i = 0; i < 16; i++){
-            
-            m_pendingSerialByte = i;
-            
-            BOOL request = [self sendRequestSerialNumber];
-            
-            if(!request){
-                return FALSE;
-            }
-            
-            while(m_pendingSerialByte >= 0){
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                    [NSThread sleepForTimeInterval:WAIT_INT];
-                }];
-            }
-        }
-        
-        // Delegate callback
-        if ( [m_delegate respondsToSelector:@selector(receivedSerialNumber:)] == YES ) {
-            [m_delegate receivedSerialNumber:m_serialNumber];
-        }
-        else {
-            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxSerialNumber %@", m_delegate]
-                  atLogLevel:GtarControllerLogLevelWarn];
-        }
+        m_pendingSerialByte = 0;
+        [self sendRequestSerialNumber];
         
         return TRUE;
-        
-    }else{
-        
-        return FALSE;
     }
-    
+    else
+        return FALSE;
 }
 
-- (BOOL) InterruptSerialNumberRequest
-{
-    for(int i = 0; i < 16; i++){
+- (BOOL) InterruptSerialNumberRequest {
+    for(int i = 0; i < 16; i++)
         m_serialNumber[i] = 0;
-    }
     
     m_pendingSerialByte = -1;
-    
     return TRUE;
 }
 
-- (NSString *) GetSerialNumber
-{
+- (NSString *) GetSerialNumber {
     NSString * hexString = @"";
     BOOL isAllZero = YES;
-    
     
     // Build a hex string
     for(int i = 0; i < 16; i++){
@@ -1139,17 +1122,13 @@ static bool AmIBeingDebugged(void) {
     return serialString;
 }
 
-- (NSString *) GetSerialNumberLower
-{
+- (NSString *) GetSerialNumberLower {
     NSString * serialNumber = [self GetSerialNumber];
-    
     return [serialNumber substringFromIndex:8];
 }
 
-- (NSString *) GetSerialNumberUpper
-{
+- (NSString *) GetSerialNumberUpper {
     NSString * serialNumber = [self GetSerialNumber];
-    
     return [serialNumber substringToIndex:7];
 }
 
@@ -1903,8 +1882,7 @@ static bool AmIBeingDebugged(void) {
     return result;
 }
 
-- (BOOL)sendRequestSerialNumber
-{
+- (BOOL)sendRequestSerialNumber {
     if( m_spoofed == YES )
     {
         [self logMessage:@"SendRequestSerialNumber: Connection spoofed, no-op"
