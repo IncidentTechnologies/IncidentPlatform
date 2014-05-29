@@ -15,7 +15,7 @@
 #define DEFAULT_ATTACKLEVEL 1.0f
 #define DEFAULT_MSDECAY 100.0f
 #define DEFAULT_SUSTAINLEVEL 1.0f
-#define DEFAULT_MSRELEASE 1000.0f
+#define DEFAULT_MSRELEASE 500.0f
 
 #define MUTED_MSATTACK 10.0f
 #define MUTED_ATTACKLEVEL 0.3f
@@ -131,6 +131,7 @@ bool GtarSampleBuffer::IsNoteOn() {
 
 void GtarSampleBuffer::NoteOn() {
     m_CLK = 0;
+    m_releaseCLK = 0.0;
     m_msDecay = DEFAULT_MSDECAY;
     m_AttackLevel = DEFAULT_ATTACKLEVEL;
     m_msAttack = DEFAULT_MSATTACK;
@@ -140,6 +141,7 @@ void GtarSampleBuffer::NoteOn() {
 
 void GtarSampleBuffer::NoteMutedOn() {
     m_CLK = 0;
+    m_releaseCLK = 0.0;
     m_msDecay = MUTED_MSDECAY;
     m_AttackLevel = MUTED_ATTACKLEVEL;
     m_msAttack = MUTED_MSATTACK;
@@ -155,8 +157,11 @@ void GtarSampleBuffer::NoteSlideOn() {
 }
 
 void GtarSampleBuffer::NoteOff() {
+    
+    if(m_fNoteOn && m_releaseCLK <= 0.0){
+        m_releaseCLK = m_msRelease;
+    }
     m_fNoteOn = false;
-    m_releaseCLK = m_msRelease;
 }
 
 /*************************************/
