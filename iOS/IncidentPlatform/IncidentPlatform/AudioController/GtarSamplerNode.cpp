@@ -15,7 +15,7 @@
 #define DEFAULT_ATTACKLEVEL 1.0f
 #define DEFAULT_MSDECAY 100.0f
 #define DEFAULT_SUSTAINLEVEL 1.0f
-#define DEFAULT_MSRELEASE 500.0f
+#define DEFAULT_MSRELEASE 200.0f
 
 #define MUTED_MSATTACK 10.0f
 #define MUTED_ATTACKLEVEL 0.3f
@@ -320,49 +320,43 @@ unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleL
     }
     
     float currentSample;
+    float currentPrevSample;
     float currentNextSample;
     float nextSample;
-    float nextNextSample;
     
     unsigned long int currentIndex = m_buffers[bank][sampleLead]->m_pBuffer_c;
-    unsigned long int nextIndex;
+    unsigned long int nextIndex = 0.9 * currentIndex;
+    bool isDown = false;
     
-    // Figure out where the two samples cross
-    while (1)
-    {
-        // Out of bounds
-        if(currentIndex > m_buffers[bank][sampleTrail]->m_pBuffer_end){
-            return -3;
-        }
-        
-        currentIndex++;
-        currentSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex];
-        nextSample = m_buffers[bank][sampleTrail]->m_pBuffer[currentIndex];
-        if(currentSample < 0 && nextSample >= 0){
-            break;
-        }
+    // Out of bounds
+    if(nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_end){
+        return -3;
+    }else if(nextIndex <= 0){
+        nextIndex++;
     }
     
-    nextIndex = (unsigned long int) currentIndex * 0.9;
+    // Determine directionality
+    currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1];
+    currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1];
     
-    // Rewind nextIndex
-    while (1)
-    {
-        // Out of bounds
-        if(nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_end){
-            return -3;
+    if(currentPrevSample > currentNextSample){
+        isDown = true;
+    }
+    
+    // Figure out where the two samples match
+    for(; nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_start; nextIndex--){
+     
+        nextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex];
+        
+        if(isDown){ // down
+            if(nextSample < currentPrevSample && nextSample > currentNextSample){
+                break;
+            }
+        }else{ // up
+            if(nextSample > currentPrevSample && nextSample < currentNextSample){
+                break;
+            }
         }
-        
-        currentSample = m_buffers[bank][sampleTrail]->m_pBuffer[currentIndex];
-        currentNextSample = m_buffers[bank][sampleTrail]->m_pBuffer[currentIndex+1];
-        
-        nextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex+1];
-        nextNextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex+2];
-        
-        if(currentSample == nextSample && ((currentNextSample > currentSample && nextNextSample > nextSample) || (currentNextSample < currentSample && nextNextSample < nextSample))){
-            break;
-        }
-        nextIndex++;
     }
     
     // index to transition is currentIndex
