@@ -40,6 +40,7 @@ public:
     void NoteMutedOn();
     void NoteSlideOn();
     void NoteOff();
+    void StopNote();
     bool IsNoteOn();
     
 private:
@@ -86,6 +87,7 @@ public:
     
     RESULT StopSample(int bank, int sample);
     RESULT NoteOff(int bank, int sample);
+    RESULT StopNote(int bank, int sample);
     bool IsNoteOn(int bank, int sample);
     
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);

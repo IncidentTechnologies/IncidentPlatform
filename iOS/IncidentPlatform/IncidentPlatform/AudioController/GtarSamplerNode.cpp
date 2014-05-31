@@ -22,6 +22,8 @@
 #define MUTED_SUSTAINLEVEL 0.0f
 #define MUTED_MSDECAY 200.0f
 
+#define INSTANT_RELEASE 1.0f
+
 #define SLIDE_MSATTACK 0.0f
 #define SLIDE_ATTACKLEVEL 0.0f
 
@@ -160,6 +162,19 @@ void GtarSampleBuffer::NoteOff() {
     
     if(m_fNoteOn && m_releaseCLK <= 0.0){
         m_releaseCLK = m_msRelease;
+    }
+    m_fNoteOn = false;
+}
+
+void GtarSampleBuffer::StopNote() {
+    
+    if(m_fNoteOn){
+        m_msAttack = 0.0;
+        m_AttackLevel = 0.0;
+        m_SustainLevel = 0.0;
+        m_releaseCLK = INSTANT_RELEASE;
+        m_CLK = m_releaseCLK;
+        m_msDecay = 0.0;
     }
     m_fNoteOn = false;
 }
@@ -391,6 +406,19 @@ RESULT GtarSamplerNode::NoteOff(int bank, int sample) {
     
     if(m_buffers[bank][sample] != NULL){
         m_buffers[bank][sample]->NoteOff();
+    }
+    
+    return r;
+    
+Error:
+    return r;
+}
+
+RESULT GtarSamplerNode::StopNote(int bank, int sample) {
+    RESULT r = R_SUCCESS;
+    
+    if(m_buffers[bank][sample] != NULL){
+        m_buffers[bank][sample]->StopNote();
     }
     
     return r;
