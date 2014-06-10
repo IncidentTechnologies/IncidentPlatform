@@ -23,8 +23,12 @@ typedef enum XMPObjectTypes
     XMP_OBJECT_LOOP,
     XMP_OBJECT_GTARNOTE,
     XMP_OBJECT_INPUT,
-    XMP_OBJECT_LESSON,
+    XMP_OBJECT_COURSE,
     XMP_OBJECT_CHAPTER,
+    XMP_OBJECT_SECTION,
+    XMP_OBJECT_SECTION_LESSON,
+    XMP_OBJECT_LESSON,
+    XMP_OBJECT_LESSON_CHAPTER,
     XMP_OBJECT_SONG,
     XMP_OBJECT_OBJECT,
     XMP_OBJECT_TRACK,
@@ -49,6 +53,7 @@ typedef enum XMPObjectTypes
     XMP_OBJECT_TYPE m_type;
     XMPNode *m_xmpNode;
     NSString *m_Name;
+    
 }
 
 -(NSString*)GetName;
@@ -81,6 +86,7 @@ typedef enum XMPObjectTypes
 //-(XMPNode*)CreateXMPNodeFromObject;
 -(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
 -(XMPTree*)GetXMPTree;
+//-(XMPNode*)GetXMPNode;
 
 -(NSString*)Text;
 

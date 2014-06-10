@@ -1,0 +1,110 @@
+<course>
+		<header>
+			<id value="123"/>
+			<title>Course K</title>
+			<author>Kate</author>
+			<description>This is a description of Course K</description>
+			<unlock>5</unlock>
+		</header>
+		<content>
+			<chapter name="Chapter I" description="Chapter Description" unlock="0">
+				<section>
+					<lesson index="1" name="Lesson A" description=""/>
+				</section>
+				<section>
+					<lesson index="2" name="Lesson B" description="">
+						<depends index="1"/>
+					</lesson>
+					<lesson index="3" name="Lesson C" description="">
+						<depends index="1"/>
+					</lesson>
+				</section>
+				<section>
+					<lesson index="4" name="Lesson D" description="">
+						<depends index="2"/>
+					</lesson>
+					<lesson index="5" name="Lesson E" description="">
+						<depends index="3"/>
+					</lesson>
+					<lesson index="6" name="Lesson F" description="">
+						<depends index="3"/>
+					</lesson>
+				</section>
+				<section>
+					<lesson index="7" name="Lesson G" description="">
+						<depends index="4"/>
+						<depends count="2">
+							<depends index="5"/>
+							<depends index="6"/>
+						</depends>
+					</lesson>
+				</section>
+			</chapter>
+			<chapter name="Chapter II" description="Chapter Description" unlock="0">
+				<section>
+					<lesson index="8" name="Lesson A" description=""/>
+				</section>
+				<section>
+					<lesson index="9" name="Lesson B" description="">
+						<depends index="8"/>
+					</lesson>
+					<lesson index="10" name="Lesson C" description="">
+						<depends index="8"/>
+					</lesson>
+				</section>
+				<section>
+					<lesson index="11" name="Lesson D" description="">
+						<depends index="9"/>
+					</lesson>
+					<lesson index="12" name="Lesson E" description="">
+						<depends index="9"/>
+					</lesson>
+					<lesson index="13" name="Lesson F" description="">
+						<depends index="10"/>
+					</lesson>
+				</section>
+				<section>
+					<lesson index="14" name="Lesson G" description="">
+						<depends index="13"/>
+						<depends count="2">
+							<depends index="11"/>
+							<depends index="12"/>
+						</depends>
+					</lesson>
+				</section>
+			</chapter>
+			<chapter name="Chapter III" description="Chapter Description" unlock="0">
+				<section>
+					<lesson index="15" name="Lesson A" description=""/>
+				</section>
+				<section>
+					<lesson index="16" name="Lesson B" description="">
+						<depends index="15"/>
+					</lesson>
+					<lesson index="17" name="Lesson C" description="">
+						<depends index="15"/>
+					</lesson>
+				</section>
+				<section>
+					<lesson index="18" name="Lesson D" description="">
+						<depends index="16"/>
+					</lesson>
+					<lesson index="19" name="Lesson E" description="">
+						<depends index="16"/>
+					</lesson>
+					<lesson index="20" name="Lesson F" description="">
+						<depends index="17"/>
+					</lesson>
+				</section>
+				<section>
+					<lesson index="21" name="Lesson G" description="">
+						<depends index="20"/>
+						<depends count="2">
+							<depends index="18"/>
+							<depends index="19"/>
+						</depends>
+					</lesson>
+				</section>
+			</chapter>
+		</content>
+</course>

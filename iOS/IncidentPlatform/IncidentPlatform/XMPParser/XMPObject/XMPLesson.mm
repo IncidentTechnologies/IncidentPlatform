@@ -27,6 +27,24 @@ Error:
     return NULL;
 }
 
+-(id)initWithLessonName:(NSString *)LessonName
+{
+    RESULT r = R_SUCCESS;
+    
+    m_Title = [[NSString alloc] initWithString:LessonName];
+    
+    m_xmpNode = NULL;
+    
+    CPRM((self = [super init]), "initWithXMPNode: Failed to init super");
+    m_type = XMP_OBJECT_LESSON;
+    m_Name = @"lesson";
+    
+    return self;
+Error:
+    return NULL;
+    
+}
+
 -(RESULT)ConstructLesson {
     RESULT r = R_SUCCESS;
     

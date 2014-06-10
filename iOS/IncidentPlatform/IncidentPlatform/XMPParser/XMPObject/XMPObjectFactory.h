@@ -15,6 +15,11 @@
 #import "XMPLEDEvent.h"
 #import "XMPLoop.h"
 #import "XMPInput.h"
+
+#import "XMPCourse.h"
+#import "XMPChapter.h"
+#import "XMPSection.h"
+#import "XMPSectionLesson.h"
 #import "XMPLesson.h"
 #import "XMPLessonChapter.h"
 
