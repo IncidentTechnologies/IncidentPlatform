@@ -186,6 +186,11 @@ Error:
             [retObject SetName:@"lessonchapter"];
         } break;
             
+        case XMP_OBJECT_NARRATIVE: {
+            retObject = [[XMPNarrative alloc] init];
+            [retObject SetName:@"narrative"];
+        }break;
+            
         case XMP_OBJECT_SONG: {
             retObject = [[XMPSong alloc] init];
             [retObject SetName:@"song"];

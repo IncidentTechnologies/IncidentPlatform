@@ -26,6 +26,13 @@
     // clip time
     double m_clipstart;
     double m_cliplength;
+    
+    // learn info
+    bool m_sound;
+    bool m_display;
+    bool m_autocomplete;
+    bool m_wrongnotes;
+    double m_tempo;
 
 }
 

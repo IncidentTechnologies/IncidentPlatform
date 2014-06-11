@@ -9,10 +9,20 @@
 #import "XMPObject.h"
 
 @interface XMPLoop : XMPObject {
-
+    
+    NSString * m_LoopName;
+    NSString * m_Success;
+    NSString * m_Fail;
+    
+    long m_repeat;
+    double m_complete;
+    
 }
 
--(id) initWithXMPNode:(XMPNode*)xmpNode;
+- (id) initWithLoopName:(NSString *)LoopName andSuccess:(NSString *)Success andFail:(NSString *)Fail;
+
+- (id) initWithXMPNode:(XMPNode*)xmpNode;
+- (RESULT)ConstructLoop;
 
 -(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
 

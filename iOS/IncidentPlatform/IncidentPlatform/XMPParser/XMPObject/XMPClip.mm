@@ -46,6 +46,12 @@ Error:
     m_loopstart = 0.0f;
     m_looplength = m_cliplength;
     
+    m_sound = true;
+    m_display = true;
+    m_autocomplete = false;
+    m_wrongnotes = false;
+    m_tempo = 0.0f;
+    
     return self;
 Error:
     return NULL;
@@ -95,6 +101,31 @@ Error:
     else
         m_cliplength = (m_endbeat - m_clipstart);
     
+    if([self HasAttributeWithName:@"sound"])
+        [self GetAttributeValueWithName:@"sound"].GetValueBool((bool*)(&m_sound));
+    else
+        m_sound = true;
+    
+    if([self HasAttributeWithName:@"display"])
+        [self GetAttributeValueWithName:@"display"].GetValueBool((bool*)(&m_display));
+    else
+        m_display = true;
+    
+    if([self HasAttributeWithName:@"autocomplete"])
+        [self GetAttributeValueWithName:@"autocomplete"].GetValueBool((bool*)(&m_autocomplete));
+    else
+        m_autocomplete = false;
+    
+    if([self HasAttributeWithName:@"wrongnotes"])
+        [self GetAttributeValueWithName:@"wrongnotes"].GetValueBool((bool*)(&m_wrongnotes));
+    else
+        m_fLoop = false;
+    
+    if([self HasAttributeWithName:@"tempo"])
+        [self GetAttributeValueWithName:@"tempo"].GetValueDouble((double*)(&m_tempo));
+    else
+        m_tempo = false;
+    
 Error:
     return r;
 }
@@ -116,17 +147,23 @@ Error:
     
     node = new XMPNode((char*)[m_Name UTF8String], parent);
     
-    node->AddAttribute(new XMPAttribute("name", (char*)[m_strName UTF8String]));
+    node->AddAttribute(new XMPAttribute((char *)"name", (char*)[m_strName UTF8String]));
     
-    node->AddAttribute(new XMPAttribute("startbeat", m_startbeat));
-    node->AddAttribute(new XMPAttribute("endbeat", m_endbeat));
+    node->AddAttribute(new XMPAttribute((char *)"startbeat", m_startbeat));
+    node->AddAttribute(new XMPAttribute((char *)"endbeat", m_endbeat));
     
-    node->AddAttribute(new XMPAttribute("looping", (char*)((m_fLoop) ? "true" : "false")));
-    node->AddAttribute(new XMPAttribute("loopstart", m_loopstart));
-    node->AddAttribute(new XMPAttribute("looplength", m_looplength));
+    node->AddAttribute(new XMPAttribute((char *)"looping", (char*)((m_fLoop) ? "true" : "false")));
+    node->AddAttribute(new XMPAttribute((char *)"loopstart", m_loopstart));
+    node->AddAttribute(new XMPAttribute((char *)"looplength", m_looplength));
     
-    node->AddAttribute(new XMPAttribute("clipstart", m_clipstart));
-    node->AddAttribute(new XMPAttribute("cliplength", m_cliplength));
+    node->AddAttribute(new XMPAttribute((char *)"clipstart", m_clipstart));
+    node->AddAttribute(new XMPAttribute((char *)"cliplength", m_cliplength));
+    
+    node->AddAttribute(new XMPAttribute((char *)"sound", m_sound));
+    node->AddAttribute(new XMPAttribute((char *)"display", m_display));
+    node->AddAttribute(new XMPAttribute((char *)"autocomplete", m_autocomplete));
+    node->AddAttribute(new XMPAttribute((char *)"wrongnotes", m_wrongnotes));
+    node->AddAttribute(new XMPAttribute((char *)"tempo", m_tempo));
     
     // Shouldn't have any children, but if it does
     for(XMPObject *child in m_contents) {

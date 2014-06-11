@@ -13,8 +13,6 @@
 #import "XMPText.h"
 #import "XMPGtarNote.h"
 #import "XMPLEDEvent.h"
-#import "XMPLoop.h"
-#import "XMPInput.h"
 
 #import "XMPCourse.h"
 #import "XMPChapter.h"
@@ -22,6 +20,10 @@
 #import "XMPSectionLesson.h"
 #import "XMPLesson.h"
 #import "XMPLessonChapter.h"
+#import "XMPClip.h"
+#import "XMPLoop.h"
+#import "XMPNarrative.h"
+#import "XMPInput.h"
 
 #import "XMPTrack.h"
 #import "XMPSong.h"
@@ -31,7 +33,6 @@
 #import "XMPSample.h"
 #import "XMPData.h"
 
-#import "XMPClip.h"
 #import "XMPContent.h"
 #import "XMPSampler.h"
 #import "XMPBank.h"

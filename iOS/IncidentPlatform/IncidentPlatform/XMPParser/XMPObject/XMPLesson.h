@@ -17,7 +17,6 @@
 
 - (id) initWithLessonName:(NSString *)LessonName;
 
-
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 -(RESULT)ConstructLesson;
 
