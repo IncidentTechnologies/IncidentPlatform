@@ -718,7 +718,6 @@
 		6DBAE8FB19463F42007E8D8A /* XMPSection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPSection.mm; sourceTree = "<group>"; };
 		6DBE751A1946367D001021E5 /* XMPCourse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPCourse.h; sourceTree = "<group>"; };
 		6DBE751B1946367D001021E5 /* XMPCourse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPCourse.mm; sourceTree = "<group>"; };
-		6DBE751D19463688001021E5 /* test_course.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test_course.xml; sourceTree = "<group>"; };
 		6DBE751E19463C67001021E5 /* XMPChapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPChapter.h; sourceTree = "<group>"; };
 		6DBE751F19463C67001021E5 /* XMPChapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPChapter.mm; sourceTree = "<group>"; };
 		6DE60DA41948F75C00AE6B2E /* XMPNarrative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPNarrative.h; sourceTree = "<group>"; };
@@ -982,7 +981,6 @@
 		2605803618691DE800F6668F /* test_data */ = {
 			isa = PBXGroup;
 			children = (
-				6DBE751D19463688001021E5 /* test_course.xml */,
 				2605803718691DE800F6668F /* sampleinput.xml */,
 				2605803818691DE800F6668F /* spaceoddity.xmp */,
 				2605803918691DE800F6668F /* test_lesson.xml */,

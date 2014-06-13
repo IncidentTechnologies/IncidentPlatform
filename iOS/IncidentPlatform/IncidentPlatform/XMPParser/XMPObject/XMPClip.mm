@@ -50,6 +50,7 @@ Error:
     m_display = true;
     m_autocomplete = false;
     m_wrongnotes = false;
+    m_requirefret = false;
     m_tempo = 0.0f;
     
     return self;
@@ -119,7 +120,12 @@ Error:
     if([self HasAttributeWithName:@"wrongnotes"])
         [self GetAttributeValueWithName:@"wrongnotes"].GetValueBool((bool*)(&m_wrongnotes));
     else
-        m_fLoop = false;
+        m_wrongnotes = false;
+    
+    if([self HasAttributeWithName:@"requirefret"])
+        [self GetAttributeValueWithName:@"requirefret"].GetValueBool((bool*)(&m_requirefret));
+    else
+        m_requirefret = false;
     
     if([self HasAttributeWithName:@"tempo"])
         [self GetAttributeValueWithName:@"tempo"].GetValueDouble((double*)(&m_tempo));
@@ -163,6 +169,7 @@ Error:
     node->AddAttribute(new XMPAttribute((char *)"display", m_display));
     node->AddAttribute(new XMPAttribute((char *)"autocomplete", m_autocomplete));
     node->AddAttribute(new XMPAttribute((char *)"wrongnotes", m_wrongnotes));
+    node->AddAttribute(new XMPAttribute((char *)"requirefret",m_requirefret));
     node->AddAttribute(new XMPAttribute((char *)"tempo", m_tempo));
     
     // Shouldn't have any children, but if it does
