@@ -23,7 +23,7 @@
     m_type = XMP_OBJECT_LESSON_CHAPTER;
     
     // Construct Lesson particulars
-    CRM([self ConsructLessonChapterFromChapterNode], "initWithParentLesson: Failed to construct chapter");
+    //CRM([self ConsructLessonChapterFromChapterNode], "initWithParentLesson: Failed to construct chapter");
     
     return self;
 Error:

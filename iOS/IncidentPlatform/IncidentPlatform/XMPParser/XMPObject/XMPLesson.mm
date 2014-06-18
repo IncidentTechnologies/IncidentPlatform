@@ -20,7 +20,7 @@ using namespace dss;
     CPRM((self = [super init]), "initWithLessonName: Failed to init super");
     m_type = XMP_OBJECT_LESSON;
     
-    CRM([self ConstructLesson], "initWithLessonName: Failed to construct from XMP");
+    //CRM([self ConstructLesson], "initWithLessonName: Failed to construct from XMP");
     
     return self;
 Error:

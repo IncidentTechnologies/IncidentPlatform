@@ -22,20 +22,21 @@ using namespace dss;
     CPRM((self = [super init]), "initWithXMPNode: Failed to init super");
     m_type = XMP_OBJECT_COURSE;
     
-    CRM([self ConstructCourse], "initWithXMPNode: Failed to construct from XMP");
+    //CRM([self ConstructCourse], "initWithXMPNode: Failed to construct from XMP");
     
     return self;
 Error:
     return NULL;
 }
 
--(id)initWithCourseTitle:(NSString *)title author:(NSString *)author description:(NSString *)description
+-(id)initWithCourseTitle:(NSString *)title author:(NSString *)author description:(NSString *)description shortdescription:(NSString *)shortdescription
 {
     RESULT r = R_SUCCESS;
     
     m_Title = [[NSString alloc] initWithString:title];
     m_Author = [[NSString alloc] initWithString:author];
     m_Description = [[NSString alloc] initWithString:description];
+    m_ShortDescription = [[NSString alloc] initWithString:shortdescription];
     
     m_xmpNode = NULL;
     
@@ -62,6 +63,7 @@ Error:
     
     XMPObject *headerObj = NULL;
     if((headerObj = [self GetChildWithName:@"header"]) != NULL ) {
+        m_ShortDescription = [headerObj GetChildTextWithName:@"shortdescription"];
         m_Description = [headerObj GetChildTextWithName:@"description"];
         m_Title = [headerObj GetChildTextWithName:@"title"];
         m_Author = [headerObj GetChildTextWithName:@"author"];
@@ -106,6 +108,10 @@ Error:
     
     XMPNode *tempNode = new XMPNode((char *)"description", headerNode);
     tempNode->AppendContent((char*)[m_Description UTF8String]);
+    headerNode->AddChild(tempNode);
+    
+    tempNode = new XMPNode((char *)"shortdescription", headerNode);
+    tempNode->AppendContent((char*)[m_ShortDescription UTF8String]);
     headerNode->AddChild(tempNode);
     
     tempNode = new XMPNode((char *)"title", headerNode);

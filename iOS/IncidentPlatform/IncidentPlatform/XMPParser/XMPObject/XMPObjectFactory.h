@@ -25,6 +25,11 @@
 #import "XMPNarrative.h"
 #import "XMPInput.h"
 #import "XMPPrompt.h"
+#import "XMPPicture.h"
+#import "XMPClear.h"
+#import "XMPDelay.h"
+#import "XMPDock.h"
+#import "XMPUndock.h"
 
 #import "XMPTrack.h"
 #import "XMPSong.h"

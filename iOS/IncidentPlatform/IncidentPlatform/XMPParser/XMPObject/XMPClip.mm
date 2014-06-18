@@ -18,7 +18,7 @@
     CPRM((self = [super init]), "initWithXMPNode: Failed to init super");
     m_type = XMP_OBJECT_CLIP;
     
-    CRM([self ConstructClip], "initWithXMPNode: Failed to construct from XMP");
+    //CRM([self ConstructClip], "initWithXMPNode: Failed to construct from XMP");
     
     return self;
 Error:

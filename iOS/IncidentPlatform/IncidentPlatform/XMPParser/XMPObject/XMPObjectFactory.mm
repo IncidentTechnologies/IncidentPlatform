@@ -221,6 +221,31 @@ Error:
             [retObject SetName:@"clip"];
         } break;
             
+        case XMP_OBJECT_PICTURE: {
+            retObject = [[XMPPicture alloc] init];
+            [retObject SetName:@"picture"];
+        } break;
+            
+        case XMP_OBJECT_CLEAR: {
+            retObject = [[XMPClear alloc] init];
+            [retObject SetName:@"clear"];
+        } break;
+            
+        case XMP_OBJECT_DELAY: {
+            retObject = [[XMPDelay alloc] init];
+            [retObject SetName:@"delay"];
+        } break;
+            
+        case XMP_OBJECT_DOCK: {
+            retObject = [[XMPDock alloc] init];
+            [retObject SetName:@"dock"];
+        } break;
+            
+        case XMP_OBJECT_UNDOCK: {
+            retObject = [[XMPUndock alloc] init];
+            [retObject SetName:@"undock"];
+        } break;
+            
         case XMP_OBJECT_GROUP: {
             //TODO: retObject = [[XMPGroup alloc] init];
             //[retObject SetName:@"group"];

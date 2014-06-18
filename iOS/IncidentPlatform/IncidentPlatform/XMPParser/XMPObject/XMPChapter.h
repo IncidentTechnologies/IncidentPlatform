@@ -18,6 +18,9 @@
     double m_unlock;
 }
 
+//@property (nonatomic, readonly) NSString * m_ChapterName;
+//@property (nonatomic, readonly) NSString * m_ChapterDescription;
+
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 -(id) initWithName:(NSString *)name description:(NSString *)description;
 

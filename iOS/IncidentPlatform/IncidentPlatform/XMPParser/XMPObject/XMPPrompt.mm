@@ -17,7 +17,7 @@
     CPRM((self = [self init]), "initWithParentLesson: Failed to init");
     m_type = XMP_OBJECT_PROMPT;
     
-    CRM([self ConstructPrompt], "initWithXMPNode: Failed to construct from XMP");
+    //CRM([self ConstructPrompt], "initWithXMPNode: Failed to construct from XMP");
     
     return self;
 Error:

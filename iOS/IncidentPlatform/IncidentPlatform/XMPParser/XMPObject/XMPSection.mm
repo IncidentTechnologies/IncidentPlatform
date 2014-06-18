@@ -21,7 +21,7 @@ using namespace dss;
     CPRM((self = [super init]), "initWithXMPNode: Failed to init super");
     m_type = XMP_OBJECT_SECTION;
     
-    CRM([self ConstructSection], "initWithXMPNode: Failed to construct from XMP");
+    //CRM([self ConstructSection], "initWithXMPNode: Failed to construct from XMP");
     
     return self;
 Error:

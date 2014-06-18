@@ -9,7 +9,7 @@
     CPRM((self = [super init]), "initWithXMPNode: Failed to init super");
     m_type = XMP_OBJECT_MEASURE;
     
-    CRM([self ConstructMeasure], "initWithXMPNode: Failed to construct from XMP");
+    //CRM([self ConstructMeasure], "initWithXMPNode: Failed to construct from XMP");
     
     return self;
 Error:

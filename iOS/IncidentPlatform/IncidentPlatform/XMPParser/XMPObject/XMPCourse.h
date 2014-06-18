@@ -13,6 +13,7 @@
 @class XMPChapter;
 
 @interface XMPCourse : XMPObject {
+    NSString *m_ShortDescription;
     NSString *m_Description;
     NSString *m_Title;
     NSString *m_Author;
@@ -22,7 +23,7 @@
 }
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
--(id) initWithCourseTitle:(NSString *)title author:(NSString *)author description:(NSString *)description;
+-(id) initWithCourseTitle:(NSString *)title author:(NSString *)author description:(NSString *)description shortdescription:(NSString *)shortdescription;
 
 -(RESULT)ConstructCourse;
 -(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;

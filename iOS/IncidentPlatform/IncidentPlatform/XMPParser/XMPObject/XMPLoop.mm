@@ -18,7 +18,7 @@
     m_type = XMP_OBJECT_LOOP;
     
     // Set up the XMP Loop
-    CRM([self ConstructLoop], "initWithLoopName: Failed to construct from XMP");
+    //CRM([self ConstructLoop], "initWithLoopName: Failed to construct from XMP");
     
     return self;
 Error:
