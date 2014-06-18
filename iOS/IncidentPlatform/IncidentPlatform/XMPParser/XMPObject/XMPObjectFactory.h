@@ -24,6 +24,7 @@
 #import "XMPLoop.h"
 #import "XMPNarrative.h"
 #import "XMPInput.h"
+#import "XMPPrompt.h"
 
 #import "XMPTrack.h"
 #import "XMPSong.h"

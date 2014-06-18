@@ -191,6 +191,11 @@ Error:
             [retObject SetName:@"narrative"];
         }break;
             
+        case XMP_OBJECT_PROMPT: {
+            retObject = [[XMPPrompt alloc] init];
+            [retObject SetName:@"prompt"];
+        } break;
+            
         case XMP_OBJECT_SONG: {
             retObject = [[XMPSong alloc] init];
             [retObject SetName:@"song"];

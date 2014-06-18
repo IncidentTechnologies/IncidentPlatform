@@ -187,6 +187,8 @@
 		26EBC39918ADB7230068BEC6 /* GeneratorNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11418AD6A31003F5CEB /* GeneratorNode.h */; };
 		26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26F72A9C18C9B16800D2D560 /* XMPData.mm */; };
 		6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */; };
+		6D485DF2195120A800F21938 /* XMPPrompt.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D485DF1195120A800F21938 /* XMPPrompt.mm */; };
+		6D485DF3195122DD00F21938 /* XMPPrompt.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D485DF0195120A800F21938 /* XMPPrompt.h */; };
 		6D495E9A190F3510002530EB /* CoreMidiInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D495E8A190F3510002530EB /* CoreMidiInterface.m */; };
 		6D495E9B190F3510002530EB /* GtarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D495E8D190F3510002530EB /* GtarController.m */; };
 		6D495E9D190F3612002530EB /* GtarController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E8C190F3510002530EB /* GtarController.h */; };
@@ -273,6 +275,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6D485DF3195122DD00F21938 /* XMPPrompt.h in CopyFiles */,
 				6DE60DA71948F78600AE6B2E /* XMPNarrative.h in CopyFiles */,
 				6DA915A419469F7D00637AAF /* XMPSectionLesson.h in CopyFiles */,
 				6DA91590194675E900637AAF /* XMPCourse.h in CopyFiles */,
@@ -676,6 +679,8 @@
 		26F72A9C18C9B16800D2D560 /* XMPData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPData.mm; sourceTree = "<group>"; };
 		6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GtarSamplerNode.cpp; sourceTree = "<group>"; };
 		6D346EF91922F3B200837F88 /* GtarSamplerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarSamplerNode.h; sourceTree = "<group>"; };
+		6D485DF0195120A800F21938 /* XMPPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPrompt.h; sourceTree = "<group>"; };
+		6D485DF1195120A800F21938 /* XMPPrompt.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPPrompt.mm; sourceTree = "<group>"; };
 		6D495E89190F3510002530EB /* CoreMidiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreMidiInterface.h; sourceTree = "<group>"; };
 		6D495E8A190F3510002530EB /* CoreMidiInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreMidiInterface.m; sourceTree = "<group>"; };
 		6D495E8C190F3510002530EB /* GtarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarController.h; sourceTree = "<group>"; };
@@ -962,6 +967,8 @@
 				2605802718691DE800F6668F /* XMPSong.mm */,
 				2605802818691DE800F6668F /* XMPText.h */,
 				2605802918691DE800F6668F /* XMPText.mm */,
+				6D485DF0195120A800F21938 /* XMPPrompt.h */,
+				6D485DF1195120A800F21938 /* XMPPrompt.mm */,
 				2605802A18691DE800F6668F /* XMPTrack.h */,
 				2605802B18691DE800F6668F /* XMPTrack.mm */,
 				2616854518E9278800094BB0 /* XMPClip.h */,
@@ -1699,6 +1706,7 @@
 				26057F4818691C7800F6668F /* IncidentPlatform.m in Sources */,
 				6DE6B92418F8A3BB00F9E49B /* HardCutoffDistortionNode.cpp in Sources */,
 				266A221B18BEE7A9007027C1 /* XMPSample.mm in Sources */,
+				6D485DF2195120A800F21938 /* XMPPrompt.mm in Sources */,
 				264790A11869304C0077987F /* NPAPIWin32Interface.cpp in Sources */,
 				264790A01869304C0077987F /* IncidentMainWindow.cpp in Sources */,
 				2605805518691DE800F6668F /* XMPValue.cpp in Sources */,
