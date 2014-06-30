@@ -30,6 +30,7 @@
     // learn info
     bool m_sound;
     bool m_display;
+    bool m_persist;
     bool m_autocomplete;
     bool m_wrongnotes;
     bool m_requirefret;

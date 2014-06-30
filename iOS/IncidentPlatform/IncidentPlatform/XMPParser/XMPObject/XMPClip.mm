@@ -48,6 +48,7 @@ Error:
     
     m_sound = true;
     m_display = true;
+    m_persist = false;
     m_autocomplete = false;
     m_wrongnotes = false;
     m_requirefret = false;
@@ -112,6 +113,11 @@ Error:
     else
         m_display = true;
     
+    if([self HasAttributeWithName:@"persist"])
+        [self GetAttributeValueWithName:@"persist"].GetValueBool((bool*)(&m_persist));
+    else
+        m_persist = true;
+    
     if([self HasAttributeWithName:@"autocomplete"])
         [self GetAttributeValueWithName:@"autocomplete"].GetValueBool((bool*)(&m_autocomplete));
     else
@@ -167,6 +173,7 @@ Error:
     
     node->AddAttribute(new XMPAttribute((char *)"sound", m_sound));
     node->AddAttribute(new XMPAttribute((char *)"display", m_display));
+    node->AddAttribute(new XMPAttribute((char *)"persist", m_persist));
     node->AddAttribute(new XMPAttribute((char *)"autocomplete", m_autocomplete));
     node->AddAttribute(new XMPAttribute((char *)"wrongnotes", m_wrongnotes));
     node->AddAttribute(new XMPAttribute((char *)"requirefret",m_requirefret));
