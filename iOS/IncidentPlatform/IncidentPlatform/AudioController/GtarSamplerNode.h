@@ -36,6 +36,8 @@ public:
     inline RESULT GtarStartPlaying();
     inline RESULT GtarSampleInterrupt();
     
+    inline RESULT NormalizeSample();
+    
     void NoteOn();
     void NoteMutedOn();
     void NoteSlideOn();
@@ -65,6 +67,8 @@ public:
     float m_ReleaseLevel;
     
     float m_releaseScaleFactor;
+    
+    float m_normalScale;
 };
 
 // A sampler is a collection of Sample nodes mixed into

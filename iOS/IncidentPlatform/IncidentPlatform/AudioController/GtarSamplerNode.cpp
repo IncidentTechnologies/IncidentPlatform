@@ -16,6 +16,10 @@
 #define DEFAULT_MSDECAY 100.0f
 #define DEFAULT_SUSTAINLEVEL 1.0f
 #define DEFAULT_MSRELEASE 200.0f
+#define DEFAULT_NORMALSCALE 1.0f
+
+#define DEFAULT_NORMAL_MAX 0.3f
+#define DEFAULT_NORMAL_MIN -0.3f
 
 #define MUTED_MSATTACK 10.0f
 #define MUTED_ATTACKLEVEL 0.3f
@@ -44,6 +48,9 @@ m_releaseCLK(0.0f)
 {
     m_fNoteOn = false;
     m_msCLKIncrement = 1000.0f / DEFAULT_SAMPLE_RATE;
+    m_normalScale = DEFAULT_NORMALSCALE;
+    
+    NormalizeSample();
 }
 
 GtarSampleBuffer::~GtarSampleBuffer() {
@@ -124,7 +131,46 @@ inline float GtarSampleBuffer::EnvelopeSample(float retVal){
     
     retVal *= scaleFactor;
     
+    retVal *= m_normalScale;
+    
     return retVal;
+}
+
+inline RESULT GtarSampleBuffer::NormalizeSample() {
+    RESULT r = R_SUCCESS;
+    
+    if(m_pBuffer != NULL && m_pBuffer_n > 0){
+
+        double buffer_max = m_pBuffer[m_pBuffer_start];
+        double buffer_min = m_pBuffer[m_pBuffer_start];
+        
+        for(unsigned long int c = m_pBuffer_start; c < m_pBuffer_end; c++){
+            buffer_max = (m_pBuffer[c] > buffer_max) ? m_pBuffer[c] : buffer_max;
+            buffer_min = (m_pBuffer[c] < buffer_min) ? m_pBuffer[c] : buffer_min;
+        }
+        
+        if(buffer_max > DEFAULT_NORMAL_MAX){
+            
+            m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
+            
+        }else if(buffer_min < DEFAULT_NORMAL_MIN){
+            
+            m_normalScale = abs(DEFAULT_NORMAL_MIN / buffer_min);
+            
+        }else if(buffer_max > abs(buffer_min)){
+            
+            m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
+            
+        }else if(abs(buffer_min) > buffer_max){
+            
+            m_normalScale = abs(DEFAULT_NORMAL_MIN / buffer_min);
+            
+        }
+    }
+    
+    return r;
+Error:
+    return r;
 }
 
 bool GtarSampleBuffer::IsNoteOn() {
