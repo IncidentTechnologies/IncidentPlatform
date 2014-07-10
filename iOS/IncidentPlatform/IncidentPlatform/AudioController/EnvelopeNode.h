@@ -19,7 +19,10 @@ public:
     void NoteOff();
     bool IsNoteOn();
     
+    inline double InputSample(double sample);
     float GetNextSample(unsigned long int timestamp);
+    
+    ~EnvelopeNode();
     
 private:
     int m_channel_n;

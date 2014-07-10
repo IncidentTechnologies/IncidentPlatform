@@ -116,8 +116,7 @@ inline float GtarSampleBuffer::EnvelopeSample(float retVal){
         else {
             scaleFactor = m_SustainLevel;
         }
-        
-        
+                
         m_CLK += m_msCLKIncrement;
         m_releaseScaleFactor = scaleFactor;
     }
