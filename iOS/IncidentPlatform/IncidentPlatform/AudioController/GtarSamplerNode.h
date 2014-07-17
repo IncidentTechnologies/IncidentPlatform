@@ -95,6 +95,7 @@ public:
     bool IsNoteOn(int bank, int sample);
     
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
+    RESULT LoadSampleIntoBankAtIndex(int bank, int index, char *pszFilepath);
     
 public:
     GtarSampleBuffer *m_buffers[MAX_BANKS][MAX_SAMPLES] = {{NULL}};

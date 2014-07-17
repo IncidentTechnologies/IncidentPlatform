@@ -145,7 +145,7 @@ inline RESULT GtarSampleBuffer::NormalizeSample() {
         
         for(unsigned long int c = m_pBuffer_start; c < m_pBuffer_end; c++){
             buffer_max = (m_pBuffer[c] > buffer_max) ? m_pBuffer[c] : buffer_max;
-            buffer_min = (m_pBuffer[c] < buffer_min) ? m_pBuffer[c] : buffer_min;
+            buffer_min = (m_pBuffer[c] < buffer_min || buffer_min == 0) ? m_pBuffer[c] : buffer_min;
         }
         
         if(buffer_max > DEFAULT_NORMAL_MAX){
@@ -154,15 +154,15 @@ inline RESULT GtarSampleBuffer::NormalizeSample() {
             
         }else if(buffer_min < DEFAULT_NORMAL_MIN){
             
-            m_normalScale = abs(DEFAULT_NORMAL_MIN / buffer_min);
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
             
-        }else if(buffer_max > abs(buffer_min)){
+        }else if(buffer_max > fabsf(buffer_min)){
             
             m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
             
-        }else if(abs(buffer_min) > buffer_max){
+        }else if(fabsf(buffer_min) > buffer_max){
             
-            m_normalScale = abs(DEFAULT_NORMAL_MIN / buffer_min);
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
             
         }
     }
@@ -265,7 +265,7 @@ inline float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
                         s = m_sampleTransitionIndex[b][i];
                         m_buffers[b][s]->m_CLK = m_buffers[b][i]->m_CLK;
                         
-                        m_buffers[b][s]->m_pBuffer_c = m_sampleBufferTransitionIndex[b][s]-1;
+                        m_buffers[b][s]->m_pBuffer_c = m_sampleBufferTransitionIndex[b][s];
                         m_buffers[b][s]->NoteSlideOn();
                         
                         // turn off
@@ -343,6 +343,17 @@ Error:
     return r;
 }
 
+RESULT GtarSamplerNode::LoadSampleIntoBankAtIndex(int bank, int index, char *pszFilepath) {
+    RESULT r = R_SUCCESS;
+    
+    m_buffers[bank][index] = new GtarSampleBuffer(pszFilepath);
+        
+    return r;
+    
+Error:
+    return r;
+}
+
 RESULT GtarSamplerNode::TriggerSample(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
@@ -374,48 +385,65 @@ Error:
 
 unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleLead, int sampleTrail) {
     
-    if(sampleLead == sampleTrail || sampleTrail < 0 || m_buffers[bank][sampleLead]->m_pBuffer_c == 0){
+    //|| m_buffers[bank][sampleLead]->m_pBuffer_c == 0
+    if(sampleLead == sampleTrail || sampleTrail < 0){
         // TriggerSample(bank, sampleLead);
         return -1;
     }
     
-    float currentSample;
     float currentPrevSample;
     float currentNextSample;
-    float nextSample;
+    float nextPrevSample;
+    float nextNextSample;
     
-    unsigned long int currentIndex = m_buffers[bank][sampleLead]->m_pBuffer_c;
-    unsigned long int nextIndex = 0.9 * currentIndex;
-    bool isDown = false;
+    float nextPercent = 0.95;
+    int transitionOffset = 5;
     
-    // Out of bounds
-    if(nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_end){
-        return -3;
-    }else if(nextIndex <= 0){
-        nextIndex++;
-    }
+    unsigned long int currentIndex = m_buffers[bank][sampleLead]->m_pBuffer_c+1;
     
-    // Determine directionality
-    currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1];
-    currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1];
+    float currentPercent = (float)currentIndex / (float)(m_buffers[bank][sampleLead]->m_pBuffer_start+m_buffers[bank][sampleLead]->m_pBuffer_n);
     
-    if(currentPrevSample > currentNextSample){
-        isDown = true;
-    }
+    unsigned long int initialNextIndex = m_buffers[bank][sampleTrail]->m_pBuffer_start + currentPercent * nextPercent * m_buffers[bank][sampleTrail]->m_pBuffer_n;
     
-    // Figure out where the two samples match
-    for(; nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_start; nextIndex--){
-     
-        nextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex];
+    unsigned long int nextIndex = initialNextIndex;
+    
+    for(; nextIndex >= m_buffers[bank][sampleTrail]->m_pBuffer_start+transitionOffset; nextIndex--){
         
-        if(isDown){ // down
-            if(nextSample < currentPrevSample && nextSample > currentNextSample){
-                break;
+        bool breakLoop = false;
+        
+        for(int j = 0; j < 50 && currentIndex < m_buffers[bank][sampleLead]->m_pBuffer_end-transitionOffset; currentIndex++, j++){
+            
+            bool isDown = false;
+            
+            // Get current sample directionality
+            currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1] * m_buffers[bank][sampleLead]->m_normalScale;
+            currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1] * m_buffers[bank][sampleLead]->m_normalScale;
+            
+            if(currentPrevSample > currentNextSample){
+                isDown = true;
             }
-        }else{ // up
-            if(nextSample > currentPrevSample && nextSample < currentNextSample){
-                break;
+            
+            // Get next sample directionality
+            nextPrevSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex] * m_buffers[bank][sampleTrail]->m_normalScale;
+            nextNextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex+1] * m_buffers[bank][sampleTrail]->m_normalScale;
+            
+            // Find crossover
+            if(isDown){ // down
+                if(nextNextSample <= currentPrevSample && nextPrevSample >= currentNextSample && nextPrevSample > nextNextSample){
+                    breakLoop = true;
+                    break;
+                }
+            }else{ // up
+                if(nextNextSample >= currentPrevSample && nextPrevSample <= currentNextSample && nextPrevSample < nextNextSample){
+                    breakLoop = true;
+                    break;
+                }
             }
+            
+        }
+        
+        if(breakLoop){
+            break;
         }
     }
     

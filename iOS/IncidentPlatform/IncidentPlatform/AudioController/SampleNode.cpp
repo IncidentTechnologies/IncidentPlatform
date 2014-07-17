@@ -76,15 +76,15 @@ inline RESULT SampleBuffer::NormalizeSample() {
             
         }else if(buffer_min < DEFAULT_NORMAL_MIN){
             
-            m_normalScale = abs(DEFAULT_NORMAL_MIN / buffer_min);
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
             
-        }else if(buffer_max > abs(buffer_min)){
+        }else if(buffer_max > fabsf(buffer_min)){
             
             m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
             
-        }else if(abs(buffer_min) > buffer_max){
+        }else if(fabsf(buffer_min) > buffer_max){
             
-            m_normalScale = abs(DEFAULT_NORMAL_MIN / buffer_min);
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
             
         }
     }
