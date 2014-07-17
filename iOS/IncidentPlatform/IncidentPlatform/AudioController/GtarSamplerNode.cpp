@@ -385,9 +385,7 @@ Error:
 
 unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleLead, int sampleTrail) {
     
-    //|| m_buffers[bank][sampleLead]->m_pBuffer_c == 0
     if(sampleLead == sampleTrail || sampleTrail < 0){
-        // TriggerSample(bank, sampleLead);
         return -1;
     }
     
@@ -407,45 +405,29 @@ unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleL
     
     unsigned long int nextIndex = initialNextIndex;
     
-    for(; nextIndex >= m_buffers[bank][sampleTrail]->m_pBuffer_start+transitionOffset; nextIndex--){
+    // Fast forward Current to Zero
+    for(; currentIndex < m_buffers[bank][sampleLead]->m_pBuffer_end-transitionOffset; currentIndex++){
         
-        bool breakLoop = false;
+        currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1] * m_buffers[bank][sampleLead]->m_normalScale;
+        currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1] * m_buffers[bank][sampleLead]->m_normalScale;
         
-        for(int j = 0; j < 50 && currentIndex < m_buffers[bank][sampleLead]->m_pBuffer_end-transitionOffset; currentIndex++, j++){
-            
-            bool isDown = false;
-            
-            // Get current sample directionality
-            currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1] * m_buffers[bank][sampleLead]->m_normalScale;
-            currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1] * m_buffers[bank][sampleLead]->m_normalScale;
-            
-            if(currentPrevSample > currentNextSample){
-                isDown = true;
-            }
-            
-            // Get next sample directionality
-            nextPrevSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex] * m_buffers[bank][sampleTrail]->m_normalScale;
-            nextNextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex+1] * m_buffers[bank][sampleTrail]->m_normalScale;
-            
-            // Find crossover
-            if(isDown){ // down
-                if(nextNextSample <= currentPrevSample && nextPrevSample >= currentNextSample && nextPrevSample > nextNextSample){
-                    breakLoop = true;
-                    break;
-                }
-            }else{ // up
-                if(nextNextSample >= currentPrevSample && nextPrevSample <= currentNextSample && nextPrevSample < nextNextSample){
-                    breakLoop = true;
-                    break;
-                }
-            }
-            
-        }
-        
-        if(breakLoop){
+        if(currentPrevSample < 0 && currentNextSample >= 0){
             break;
         }
+        
     }
+    
+    // Rewind Next to Zero
+    for(; nextIndex >= m_buffers[bank][sampleTrail]->m_pBuffer_start+transitionOffset; nextIndex--){
+        
+        nextPrevSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex] * m_buffers[bank][sampleTrail]->m_normalScale;
+        nextNextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex+1] * m_buffers[bank][sampleTrail]->m_normalScale;
+        
+        if(nextPrevSample < 0 && nextNextSample >= 0){
+            break;
+        }
+        
+    }    
     
     // index to transition is currentIndex
     m_sampleBufferTransitionIndex[bank][sampleLead] = currentIndex;
