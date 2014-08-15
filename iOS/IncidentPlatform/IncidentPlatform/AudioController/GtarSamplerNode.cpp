@@ -238,6 +238,10 @@ GtarSamplerNode::GtarSamplerNode()
         m_numSamples[i] = 0;
         m_nextSampleCounter[i] = 0;
     }
+    
+    m_pRewind = new Parameter(0.95, 0.6, 1.0, "Rewind");
+    m_pTransition = new Parameter(5, 3, 10, "Transition");
+    
 }
 
 GtarSamplerNode::~GtarSamplerNode() {
@@ -394,8 +398,9 @@ unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleL
     float nextPrevSample;
     float nextNextSample;
     
-    float nextPercent = 0.95;
-    int transitionOffset = 5;
+    float nextPercent = m_pRewind->getValue();
+    //float nextPercent = 0.95;
+    int transitionOffset = 5; // m_pTransition->getValue();
     
     unsigned long int currentIndex = m_buffers[bank][sampleLead]->m_pBuffer_c+1;
     
@@ -486,5 +491,27 @@ bool GtarSamplerNode::IsNoteOn(int bank, int sample) {
     
     return m_buffers[bank][sample]->IsNoteOn();
     
+}
+
+Parameter *GtarSamplerNode::getPrimaryParam()
+{
+    return m_pRewind;
+}
+
+
+bool GtarSamplerNode::setPrimaryParam(float value)
+{
+    return m_pRewind->setValue(value);
+}
+
+Parameter *GtarSamplerNode::getSecondaryParam()
+{
+    return m_pTransition;
+}
+
+
+bool GtarSamplerNode::setSecondaryParam(float value)
+{
+    return m_pTransition->setValue(value);
 }
 

@@ -266,6 +266,8 @@
 		6DE6B92E18F8A6AC00F9E49B /* OverdriveNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE6B92018F8A33C00F9E49B /* OverdriveNode.h */; };
 		6DE6B92F18F8A6B400F9E49B /* HardCutoffDistortionNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE6B92318F8A3BB00F9E49B /* HardCutoffDistortionNode.h */; };
 		6DE6B93018F8A73C00F9E49B /* LocalMax.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11918AD6A31003F5CEB /* LocalMax.h */; };
+		6DE73731198701FB007EA00D /* XMPChord.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DE73730198701FB007EA00D /* XMPChord.mm */; };
+		6DE7373219870398007EA00D /* XMPChord.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE7372F198701FB007EA00D /* XMPChord.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -285,6 +287,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6DE7373219870398007EA00D /* XMPChord.h in CopyFiles */,
 				6D218C8D195206B6006E459E /* XMPClear.h in CopyFiles */,
 				6D218C8E195206B6006E459E /* XMPDelay.h in CopyFiles */,
 				6D218C8F195206B6006E459E /* XMPDock.h in CopyFiles */,
@@ -774,6 +777,8 @@
 		6DE6B92618F8A3EA00F9E49B /* CompressorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressorNode.h; sourceTree = "<group>"; };
 		6DE6B92818F8A41500F9E49B /* EnvelopeFollowerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnvelopeFollowerNode.cpp; sourceTree = "<group>"; };
 		6DE6B92918F8A41500F9E49B /* EnvelopeFollowerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnvelopeFollowerNode.h; sourceTree = "<group>"; };
+		6DE7372F198701FB007EA00D /* XMPChord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPChord.h; sourceTree = "<group>"; };
+		6DE73730198701FB007EA00D /* XMPChord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPChord.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1006,6 +1011,8 @@
 				6D485DF1195120A800F21938 /* XMPPrompt.mm */,
 				2605802A18691DE800F6668F /* XMPTrack.h */,
 				2605802B18691DE800F6668F /* XMPTrack.mm */,
+				6DE7372F198701FB007EA00D /* XMPChord.h */,
+				6DE73730198701FB007EA00D /* XMPChord.mm */,
 				2616854518E9278800094BB0 /* XMPClip.h */,
 				2616854618E9278800094BB0 /* XMPClip.mm */,
 				2616854D18E93FA500094BB0 /* XMPContent.h */,
@@ -1812,6 +1819,7 @@
 				2610F13518AD6A31003F5CEB /* DiffusionTankNode.cpp in Sources */,
 				2610F12C18AD6A31003F5CEB /* AudioNode.cpp in Sources */,
 				2605803D18691DE800F6668F /* hash.cpp in Sources */,
+				6DE73731198701FB007EA00D /* XMPChord.mm in Sources */,
 				2610F12A18AD6A31003F5CEB /* AUAudioNodeFactory.mm in Sources */,
 				6D7D46DB1919B5EF00EF8C75 /* FileRequest.m in Sources */,
 				6D7D46BB1919B46F00EF8C75 /* UserProfile.m in Sources */,

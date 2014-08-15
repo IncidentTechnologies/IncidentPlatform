@@ -21,6 +21,7 @@
 #import "XMPLesson.h"
 #import "XMPLessonChapter.h"
 #import "XMPClip.h"
+#import "XMPChord.h"
 #import "XMPLoop.h"
 #import "XMPNarrative.h"
 #import "XMPInput.h"

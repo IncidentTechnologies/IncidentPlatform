@@ -13,6 +13,7 @@
 #include "dss_list.h"
 #include "SampleNode.h"
 #include "SamplerNode.h"
+#include "Parameter.h"
 
 #define MAX_BANKS 2
 #define MAX_SAMPLES 102
@@ -97,6 +98,12 @@ public:
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
     RESULT LoadSampleIntoBankAtIndex(int bank, int index, char *pszFilepath);
     
+    virtual bool setPrimaryParam(float value);
+    virtual bool setSecondaryParam(float value);
+    
+    Parameter* getPrimaryParam();
+    Parameter* getSecondaryParam();
+    
 public:
     GtarSampleBuffer *m_buffers[MAX_BANKS][MAX_SAMPLES] = {{NULL}};
     
@@ -108,6 +115,9 @@ public:
     
     int m_sampleTransitionIndex[MAX_BANKS][MAX_SAMPLES];
     unsigned long int m_sampleBufferTransitionIndex[MAX_BANKS][MAX_SAMPLES];
+    
+    Parameter *m_pRewind;
+    Parameter *m_pTransition;
     
 };
 

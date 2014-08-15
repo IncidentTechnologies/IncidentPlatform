@@ -221,6 +221,11 @@ Error:
             [retObject SetName:@"clip"];
         } break;
             
+        case XMP_OBJECT_CHORD: {
+            retObject = [[XMPChord alloc] init];
+            [retObject SetName:@"chord"];
+        } break;
+            
         case XMP_OBJECT_PICTURE: {
             retObject = [[XMPPicture alloc] init];
             [retObject SetName:@"picture"];
