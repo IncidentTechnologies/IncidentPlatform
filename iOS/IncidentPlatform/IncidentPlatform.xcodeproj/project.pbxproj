@@ -241,6 +241,21 @@
 		6DBAE8FC19463F42007E8D8A /* XMPSection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAE8FB19463F42007E8D8A /* XMPSection.mm */; };
 		6DBE751C1946367D001021E5 /* XMPCourse.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBE751B1946367D001021E5 /* XMPCourse.mm */; };
 		6DBE752019463C67001021E5 /* XMPChapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBE751F19463C67001021E5 /* XMPChapter.mm */; };
+		6DC9A2DC19B91CCC0099372E /* Facebook.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2C319B91CCC0099372E /* Facebook.m */; };
+		6DC9A2DD19B91CCC0099372E /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2C719B91CCC0099372E /* FBDialog.m */; };
+		6DC9A2DE19B91CCC0099372E /* FBFrictionlessRequestSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2C919B91CCC0099372E /* FBFrictionlessRequestSettings.m */; };
+		6DC9A2DF19B91CCC0099372E /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2CB19B91CCC0099372E /* FBLoginDialog.m */; };
+		6DC9A2E019B91CCC0099372E /* FBRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2CD19B91CCC0099372E /* FBRequest.m */; };
+		6DC9A2E119B91CCC0099372E /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2D119B91CCC0099372E /* NSObject+SBJSON.m */; };
+		6DC9A2E219B91CCC0099372E /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2D319B91CCC0099372E /* NSString+SBJSON.m */; };
+		6DC9A2E319B91CCC0099372E /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2D519B91CCC0099372E /* SBJSON.m */; };
+		6DC9A2E419B91CCC0099372E /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2D719B91CCC0099372E /* SBJsonBase.m */; };
+		6DC9A2E519B91CCC0099372E /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2D919B91CCC0099372E /* SBJsonParser.m */; };
+		6DC9A2E619B91CCC0099372E /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9A2DB19B91CCC0099372E /* SBJsonWriter.m */; };
+		6DC9A2E819B91D0C0099372E /* Facebook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DC9A2C219B91CCC0099372E /* Facebook.h */; };
+		6DC9A2E919B91D110099372E /* FBLoginDialog.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DC9A2CA19B91CCC0099372E /* FBLoginDialog.h */; };
+		6DC9A2EA19B91D160099372E /* FBRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DC9A2CC19B91CCC0099372E /* FBRequest.h */; };
+		6DC9A2EB19B91D850099372E /* FBDialog.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DC9A2C619B91CCC0099372E /* FBDialog.h */; };
 		6DE60DA61948F75C00AE6B2E /* XMPNarrative.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DE60DA51948F75C00AE6B2E /* XMPNarrative.mm */; };
 		6DE60DA71948F78600AE6B2E /* XMPNarrative.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE60DA41948F75C00AE6B2E /* XMPNarrative.h */; };
 		6DE6B8F618F86F5600F9E49B /* ChorusEffectNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */; };
@@ -287,12 +302,16 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6DC9A2E919B91D110099372E /* FBLoginDialog.h in CopyFiles */,
+				6DC9A2EA19B91D160099372E /* FBRequest.h in CopyFiles */,
+				6DC9A2E819B91D0C0099372E /* Facebook.h in CopyFiles */,
 				6DE7373219870398007EA00D /* XMPChord.h in CopyFiles */,
 				6D218C8D195206B6006E459E /* XMPClear.h in CopyFiles */,
 				6D218C8E195206B6006E459E /* XMPDelay.h in CopyFiles */,
 				6D218C8F195206B6006E459E /* XMPDock.h in CopyFiles */,
 				6D218C90195206B6006E459E /* XMPUndock.h in CopyFiles */,
 				6D218C80195205C7006E459E /* XMPPicture.h in CopyFiles */,
+				6DC9A2EB19B91D850099372E /* FBDialog.h in CopyFiles */,
 				6D485DF3195122DD00F21938 /* XMPPrompt.h in CopyFiles */,
 				6DE60DA71948F78600AE6B2E /* XMPNarrative.h in CopyFiles */,
 				6DA915A419469F7D00637AAF /* XMPSectionLesson.h in CopyFiles */,
@@ -753,6 +772,32 @@
 		6DBE751B1946367D001021E5 /* XMPCourse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPCourse.mm; sourceTree = "<group>"; };
 		6DBE751E19463C67001021E5 /* XMPChapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPChapter.h; sourceTree = "<group>"; };
 		6DBE751F19463C67001021E5 /* XMPChapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPChapter.mm; sourceTree = "<group>"; };
+		6DC9A2C119B91CCC0099372E /* facebook_ios_sdk_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = facebook_ios_sdk_Prefix.pch; path = IncidentPlatform/Facebook/facebook_ios_sdk_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		6DC9A2C219B91CCC0099372E /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook.h; path = IncidentPlatform/Facebook/Facebook.h; sourceTree = SOURCE_ROOT; };
+		6DC9A2C319B91CCC0099372E /* Facebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Facebook.m; path = IncidentPlatform/Facebook/Facebook.m; sourceTree = SOURCE_ROOT; };
+		6DC9A2C419B91CCC0099372E /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBConnect.h; path = IncidentPlatform/Facebook/FBConnect.h; sourceTree = SOURCE_ROOT; };
+		6DC9A2C519B91CCC0099372E /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FBDialog.bundle; path = IncidentPlatform/Facebook/FBDialog.bundle; sourceTree = SOURCE_ROOT; };
+		6DC9A2C619B91CCC0099372E /* FBDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBDialog.h; path = IncidentPlatform/Facebook/FBDialog.h; sourceTree = SOURCE_ROOT; };
+		6DC9A2C719B91CCC0099372E /* FBDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBDialog.m; path = IncidentPlatform/Facebook/FBDialog.m; sourceTree = SOURCE_ROOT; };
+		6DC9A2C819B91CCC0099372E /* FBFrictionlessRequestSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBFrictionlessRequestSettings.h; path = IncidentPlatform/Facebook/FBFrictionlessRequestSettings.h; sourceTree = SOURCE_ROOT; };
+		6DC9A2C919B91CCC0099372E /* FBFrictionlessRequestSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBFrictionlessRequestSettings.m; path = IncidentPlatform/Facebook/FBFrictionlessRequestSettings.m; sourceTree = SOURCE_ROOT; };
+		6DC9A2CA19B91CCC0099372E /* FBLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBLoginDialog.h; path = IncidentPlatform/Facebook/FBLoginDialog.h; sourceTree = SOURCE_ROOT; };
+		6DC9A2CB19B91CCC0099372E /* FBLoginDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBLoginDialog.m; path = IncidentPlatform/Facebook/FBLoginDialog.m; sourceTree = SOURCE_ROOT; };
+		6DC9A2CC19B91CCC0099372E /* FBRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBRequest.h; path = IncidentPlatform/Facebook/FBRequest.h; sourceTree = SOURCE_ROOT; };
+		6DC9A2CD19B91CCC0099372E /* FBRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBRequest.m; path = IncidentPlatform/Facebook/FBRequest.m; sourceTree = SOURCE_ROOT; };
+		6DC9A2CF19B91CCC0099372E /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		6DC9A2D019B91CCC0099372E /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		6DC9A2D119B91CCC0099372E /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		6DC9A2D219B91CCC0099372E /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		6DC9A2D319B91CCC0099372E /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		6DC9A2D419B91CCC0099372E /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		6DC9A2D519B91CCC0099372E /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
+		6DC9A2D619B91CCC0099372E /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		6DC9A2D719B91CCC0099372E /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		6DC9A2D819B91CCC0099372E /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		6DC9A2D919B91CCC0099372E /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		6DC9A2DA19B91CCC0099372E /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		6DC9A2DB19B91CCC0099372E /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		6DE60DA41948F75C00AE6B2E /* XMPNarrative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPNarrative.h; sourceTree = "<group>"; };
 		6DE60DA51948F75C00AE6B2E /* XMPNarrative.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPNarrative.mm; sourceTree = "<group>"; };
 		6DE6B8F718F881B300F9E49B /* DistortionNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistortionNode.cpp; sourceTree = "<group>"; };
@@ -866,6 +911,7 @@
 				2678705718D640C400779B81 /* Widgets */,
 				6D495E88190F3510002530EB /* GtarController */,
 				6D7D46A21919B41B00EF8C75 /* CloudController */,
+				6DC9A2C019B91CBD0099372E /* Facebook */,
 				2610F0E818AD6A31003F5CEB /* AudioController */,
 				2647908B1869304C0077987F /* Window */,
 				26478FFC18692BA50077987F /* Dimension */,
@@ -1490,6 +1536,49 @@
 			name = FileController;
 			sourceTree = "<group>";
 		};
+		6DC9A2C019B91CBD0099372E /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				6DC9A2C119B91CCC0099372E /* facebook_ios_sdk_Prefix.pch */,
+				6DC9A2C219B91CCC0099372E /* Facebook.h */,
+				6DC9A2C319B91CCC0099372E /* Facebook.m */,
+				6DC9A2C419B91CCC0099372E /* FBConnect.h */,
+				6DC9A2C519B91CCC0099372E /* FBDialog.bundle */,
+				6DC9A2C619B91CCC0099372E /* FBDialog.h */,
+				6DC9A2C719B91CCC0099372E /* FBDialog.m */,
+				6DC9A2C819B91CCC0099372E /* FBFrictionlessRequestSettings.h */,
+				6DC9A2C919B91CCC0099372E /* FBFrictionlessRequestSettings.m */,
+				6DC9A2CA19B91CCC0099372E /* FBLoginDialog.h */,
+				6DC9A2CB19B91CCC0099372E /* FBLoginDialog.m */,
+				6DC9A2CC19B91CCC0099372E /* FBRequest.h */,
+				6DC9A2CD19B91CCC0099372E /* FBRequest.m */,
+				6DC9A2CE19B91CCC0099372E /* JSON */,
+			);
+			name = Facebook;
+			path = AudioController;
+			sourceTree = "<group>";
+		};
+		6DC9A2CE19B91CCC0099372E /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				6DC9A2CF19B91CCC0099372E /* JSON.h */,
+				6DC9A2D019B91CCC0099372E /* NSObject+SBJSON.h */,
+				6DC9A2D119B91CCC0099372E /* NSObject+SBJSON.m */,
+				6DC9A2D219B91CCC0099372E /* NSString+SBJSON.h */,
+				6DC9A2D319B91CCC0099372E /* NSString+SBJSON.m */,
+				6DC9A2D419B91CCC0099372E /* SBJSON.h */,
+				6DC9A2D519B91CCC0099372E /* SBJSON.m */,
+				6DC9A2D619B91CCC0099372E /* SBJsonBase.h */,
+				6DC9A2D719B91CCC0099372E /* SBJsonBase.m */,
+				6DC9A2D819B91CCC0099372E /* SBJsonParser.h */,
+				6DC9A2D919B91CCC0099372E /* SBJsonParser.m */,
+				6DC9A2DA19B91CCC0099372E /* SBJsonWriter.h */,
+				6DC9A2DB19B91CCC0099372E /* SBJsonWriter.m */,
+			);
+			name = JSON;
+			path = IncidentPlatform/Facebook/JSON;
+			sourceTree = SOURCE_ROOT;
+		};
 		6DE6B90718F8918D00F9E49B /* Distortion */ = {
 			isa = PBXGroup;
 			children = (
@@ -1702,6 +1791,7 @@
 				6D7D46C01919B46F00EF8C75 /* UserSongSessions.m in Sources */,
 				6DE6B92718F8A3EA00F9E49B /* CompressorNode.cpp in Sources */,
 				2647907718692BA50077987F /* DX9ShaderManager.cpp in Sources */,
+				6DC9A2E219B91CCC0099372E /* NSString+SBJSON.m in Sources */,
 				2647907118692BA50077987F /* colord.cpp in Sources */,
 				2610F14318AD6A31003F5CEB /* Sampler.mm in Sources */,
 				2647908418692BA50077987F /* vertex.vsh in Sources */,
@@ -1720,6 +1810,7 @@
 				2616854718E9278800094BB0 /* XMPClip.mm in Sources */,
 				6DA915A319469C8B00637AAF /* XMPSectionLesson.mm in Sources */,
 				2610F12E18AD6A31003F5CEB /* AUOutputNode.mm in Sources */,
+				6DC9A2E319B91CCC0099372E /* SBJSON.m in Sources */,
 				6D218C8C1952067A006E459E /* XMPUndock.mm in Sources */,
 				2647908018692BA50077987F /* MeshMd3.cpp in Sources */,
 				264EC76C18B30741001F7224 /* AudioNodeFactory.mm in Sources */,
@@ -1728,17 +1819,22 @@
 				26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */,
 				6DE6B91518F892B000F9E49B /* ButterWorthFilterElementNode.cpp in Sources */,
 				2616855818E9443D00094BB0 /* XMPInstrument.mm in Sources */,
+				6DC9A2DE19B91CCC0099372E /* FBFrictionlessRequestSettings.m in Sources */,
 				6D495E9A190F3510002530EB /* CoreMidiInterface.m in Sources */,
+				6DC9A2DC19B91CCC0099372E /* Facebook.m in Sources */,
 				6D7D46BC1919B46F00EF8C75 /* UserProfiles.m in Sources */,
 				2616854318E8C18E00094BB0 /* FileoutNode.cpp in Sources */,
 				2610F12D18AD6A31003F5CEB /* AUMixerNode.mm in Sources */,
 				264EC77918B456E6001F7224 /* AudioNodeNetwork.cpp in Sources */,
+				6DC9A2E119B91CCC0099372E /* NSObject+SBJSON.m in Sources */,
 				2605804218691DE800F6668F /* XMPMain.cpp in Sources */,
 				2610F13918AD6A31003F5CEB /* EnvelopeNode.cpp in Sources */,
 				2647908818692BA50077987F /* vertex.vsh in Sources */,
 				2605804D18691DE800F6668F /* XMPObjectFactory.mm in Sources */,
+				6DC9A2E519B91CCC0099372E /* SBJsonParser.m in Sources */,
 				2616855218E940DE00094BB0 /* XMPSampler.mm in Sources */,
 				2605804118691DE800F6668F /* XMPElement.cpp in Sources */,
+				6DC9A2E019B91CCC0099372E /* FBRequest.m in Sources */,
 				2605804618691DE800F6668F /* XMPLEDEvent.mm in Sources */,
 				6D218C8A1952067A006E459E /* XMPDelay.mm in Sources */,
 				6DE6B92118F8A33C00F9E49B /* OverdriveNode.cpp in Sources */,
@@ -1757,6 +1853,7 @@
 				2605805518691DE800F6668F /* XMPValue.cpp in Sources */,
 				2605804A18691DE800F6668F /* XMPMeasure.mm in Sources */,
 				2605804018691DE800F6668F /* XMPAttribute.cpp in Sources */,
+				6DC9A2E619B91CCC0099372E /* SBJsonWriter.m in Sources */,
 				6DE6B91218F8929C00F9E49B /* ButterWorthFilterNode.cpp in Sources */,
 				2647907218692BA50077987F /* DimensionImpDX9.cpp in Sources */,
 				2605803E18691DE800F6668F /* SmartBuffer.cpp in Sources */,
@@ -1833,10 +1930,13 @@
 				2605804E18691DE800F6668F /* XMPSong.mm in Sources */,
 				2647908218692BA50077987F /* nuke.cpp in Sources */,
 				2678705A18D6416300779B81 /* UIKnob.m in Sources */,
+				6DC9A2E419B91CCC0099372E /* SBJsonBase.m in Sources */,
 				2605804318691DE800F6668F /* XMPNode.cpp in Sources */,
+				6DC9A2DF19B91CCC0099372E /* FBLoginDialog.m in Sources */,
 				2647907518692BA50077987F /* DX9Line.cpp in Sources */,
 				2647907A18692BA50077987F /* DX9Translator.cpp in Sources */,
 				264790A31869304C0077987F /* WindowWin32.cpp in Sources */,
+				6DC9A2DD19B91CCC0099372E /* FBDialog.m in Sources */,
 				2610F13A18AD6A31003F5CEB /* FirstOrderFilterNode.cpp in Sources */,
 				264EC76718B30343001F7224 /* SampleNode.cpp in Sources */,
 			);
