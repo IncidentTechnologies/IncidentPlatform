@@ -9,12 +9,18 @@
 #import "XMPObject.h"
 
 @interface XMPInput : XMPObject {
-    //NSString *m_text;
+    
+    NSString * m_formula;
+    
+    bool m_scrolling;
     bool m_fBlock;
 }
 
--(id) initWithXMPNode:(XMPNode*)xmpNode;
+- (id) initWithScrolling:(bool)scrolling andFormula:(NSString *)formula andBlock:(bool)block;
 
--(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
+- (id) initWithXMPNode:(XMPNode*)xmpNode;
+- (RESULT)ConstructInput;
+
+- (XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
 
 @end

@@ -62,10 +62,22 @@ Error:
     else if(strcmp(pszName, (char*)"input") == 0) {
         retObj = [[XMPInput alloc] initWithXMPNode:xmpNode];
     }
+    else if(strcmp(pszName, (char*)"course") == 0) {
+        retObj = [[XMPCourse alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"chapter") == 0) {
+        retObj = [[XMPChapter alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"section") == 0) {
+        retObj = [[XMPSection alloc] initWithXMPNode:xmpNode];
+    }
+    else if(strcmp(pszName, (char*)"sectionlesson") == 0) {
+        retObj = [[XMPSectionLesson alloc] initWithXMPNode:xmpNode];
+    }
     else if(strcmp(pszName, (char*)"lesson") == 0) {
         retObj = [[XMPLesson alloc] initWithXMPNode:xmpNode];
     }
-    else if(strcmp(pszName, (char*)"chapter") == 0) {
+    else if(strcmp(pszName, (char*)"lessonchapter") == 0) {
         retObj = [[XMPLessonChapter alloc] initWithXMPNode:xmpNode];
     }
     else if(strcmp(pszName, (char*)"xmp") == 0) {
@@ -144,14 +156,44 @@ Error:
             [retObject SetName:@"input"];
         } break;
             
+        case XMP_OBJECT_COURSE: {
+            retObject = [[XMPCourse alloc] init];
+            [retObject SetName:@"course"];
+        } break;
+            
+        case XMP_OBJECT_CHAPTER: {
+            retObject = [[XMPChapter alloc] init];
+            [retObject SetName:@"chapter"];
+        } break;
+            
+        case XMP_OBJECT_SECTION: {
+            retObject = [[XMPSection alloc] init];
+            [retObject SetName:@"section"];
+        } break;
+            
+        case XMP_OBJECT_SECTION_LESSON: {
+            retObject = [[XMPSectionLesson alloc] init];
+            [retObject SetName:@"sectionlesson"];
+        } break;
+            
         case XMP_OBJECT_LESSON: {
             retObject = [[XMPLesson alloc] init];
             [retObject SetName:@"lesson"];
         } break;
             
-        case XMP_OBJECT_CHAPTER: {
+        case XMP_OBJECT_LESSON_CHAPTER: {
             retObject = [[XMPLessonChapter alloc] init];
-            [retObject SetName:@"chapter"];
+            [retObject SetName:@"lessonchapter"];
+        } break;
+            
+        case XMP_OBJECT_NARRATIVE: {
+            retObject = [[XMPNarrative alloc] init];
+            [retObject SetName:@"narrative"];
+        }break;
+            
+        case XMP_OBJECT_PROMPT: {
+            retObject = [[XMPPrompt alloc] init];
+            [retObject SetName:@"prompt"];
         } break;
             
         case XMP_OBJECT_SONG: {
@@ -177,6 +219,36 @@ Error:
         case XMP_OBJECT_CLIP: {
             retObject = [[XMPClip alloc] init];
             [retObject SetName:@"clip"];
+        } break;
+            
+        case XMP_OBJECT_CHORD: {
+            retObject = [[XMPChord alloc] init];
+            [retObject SetName:@"chord"];
+        } break;
+            
+        case XMP_OBJECT_PICTURE: {
+            retObject = [[XMPPicture alloc] init];
+            [retObject SetName:@"picture"];
+        } break;
+            
+        case XMP_OBJECT_CLEAR: {
+            retObject = [[XMPClear alloc] init];
+            [retObject SetName:@"clear"];
+        } break;
+            
+        case XMP_OBJECT_DELAY: {
+            retObject = [[XMPDelay alloc] init];
+            [retObject SetName:@"delay"];
+        } break;
+            
+        case XMP_OBJECT_DOCK: {
+            retObject = [[XMPDock alloc] init];
+            [retObject SetName:@"dock"];
+        } break;
+            
+        case XMP_OBJECT_UNDOCK: {
+            retObject = [[XMPUndock alloc] init];
+            [retObject SetName:@"undock"];
         } break;
             
         case XMP_OBJECT_GROUP: {

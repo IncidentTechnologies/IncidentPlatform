@@ -10,6 +10,10 @@
 #include "CAXException.h"
 #include <AudioToolbox/AudioFormat.h>
 
+#define DEFAULT_NORMALSCALE 1.0f
+#define DEFAULT_NORMAL_MAX 0.3f
+#define DEFAULT_NORMAL_MIN -0.3f
+
 SampleBuffer::SampleBuffer(char *pszFilenamePath) :
 m_pBuffer_c(0),
 m_pBuffer(NULL),
@@ -19,6 +23,8 @@ m_pBuffer_start(0),
 m_pBuffer_end(0)
 {
     LoadSampleBufferFromPath(pszFilenamePath);
+    
+    NormalizeSample();
 }
 
 SampleBuffer::~SampleBuffer() {
@@ -45,8 +51,49 @@ inline float SampleBuffer::GetNextSample(unsigned long int timestamp) {
         m_pBuffer_c++;
     }
     
+    retVal *= m_normalScale;
+    
     return retVal;
 }
+
+
+inline RESULT SampleBuffer::NormalizeSample() {
+    RESULT r = R_SUCCESS;
+    
+    if(m_pBuffer != NULL && m_pBuffer_n > 0){
+        
+        double buffer_max = m_pBuffer[m_pBuffer_start];
+        double buffer_min = m_pBuffer[m_pBuffer_start];
+        
+        for(unsigned long int c = m_pBuffer_start; c < m_pBuffer_end; c++){
+            buffer_max = (m_pBuffer[c] > buffer_max) ? m_pBuffer[c] : buffer_max;
+            buffer_min = (m_pBuffer[c] < buffer_min) ? m_pBuffer[c] : buffer_min;
+        }
+        
+        if(buffer_max > DEFAULT_NORMAL_MAX){
+            
+            m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
+            
+        }else if(buffer_min < DEFAULT_NORMAL_MIN){
+            
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
+            
+        }else if(buffer_max > fabsf(buffer_min)){
+            
+            m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
+            
+        }else if(fabsf(buffer_min) > buffer_max){
+            
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
+            
+        }
+    }
+    
+    return r;
+Error:
+    return r;
+}
+
 
 float SampleBuffer::GetSampleBufferLengthMS() {
     return ((float)m_pBuffer_n / (float)m_SampleRate) * 1000.0f;

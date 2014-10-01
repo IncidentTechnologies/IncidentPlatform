@@ -186,7 +186,19 @@
 		26EBC39818ADB7230068BEC6 /* EnvelopeNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10E18AD6A31003F5CEB /* EnvelopeNode.h */; };
 		26EBC39918ADB7230068BEC6 /* GeneratorNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11418AD6A31003F5CEB /* GeneratorNode.h */; };
 		26F72A9D18C9B16800D2D560 /* XMPData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26F72A9C18C9B16800D2D560 /* XMPData.mm */; };
+		6D218C7F1952053E006E459E /* XMPPicture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D218C7E1952053E006E459E /* XMPPicture.mm */; };
+		6D218C80195205C7006E459E /* XMPPicture.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C7D1952053E006E459E /* XMPPicture.h */; };
+		6D218C891952067A006E459E /* XMPClear.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D218C821952067A006E459E /* XMPClear.mm */; };
+		6D218C8A1952067A006E459E /* XMPDelay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D218C841952067A006E459E /* XMPDelay.mm */; };
+		6D218C8B1952067A006E459E /* XMPDock.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D218C861952067A006E459E /* XMPDock.mm */; };
+		6D218C8C1952067A006E459E /* XMPUndock.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D218C881952067A006E459E /* XMPUndock.mm */; };
+		6D218C8D195206B6006E459E /* XMPClear.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C811952067A006E459E /* XMPClear.h */; };
+		6D218C8E195206B6006E459E /* XMPDelay.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C831952067A006E459E /* XMPDelay.h */; };
+		6D218C8F195206B6006E459E /* XMPDock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C851952067A006E459E /* XMPDock.h */; };
+		6D218C90195206B6006E459E /* XMPUndock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C871952067A006E459E /* XMPUndock.h */; };
 		6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */; };
+		6D485DF2195120A800F21938 /* XMPPrompt.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D485DF1195120A800F21938 /* XMPPrompt.mm */; };
+		6D485DF3195122DD00F21938 /* XMPPrompt.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D485DF0195120A800F21938 /* XMPPrompt.h */; };
 		6D495E9A190F3510002530EB /* CoreMidiInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D495E8A190F3510002530EB /* CoreMidiInterface.m */; };
 		6D495E9B190F3510002530EB /* GtarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D495E8D190F3510002530EB /* GtarController.m */; };
 		6D495E9D190F3612002530EB /* GtarController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D495E8C190F3510002530EB /* GtarController.h */; };
@@ -221,6 +233,16 @@
 		6D7D46DE1919B88300EF8C75 /* XmlDictionary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46D01919B5B700EF8C75 /* XmlDictionary.h */; };
 		6D7D46DF1919B88300EF8C75 /* XmlDom.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D7D46D21919B5B700EF8C75 /* XmlDom.h */; };
 		6DA7852B18F86C1000D9A6D3 /* ChorusEffectNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */; };
+		6DA91590194675E900637AAF /* XMPCourse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DBE751A1946367D001021E5 /* XMPCourse.h */; };
+		6DA91591194675E900637AAF /* XMPChapter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DBE751E19463C67001021E5 /* XMPChapter.h */; };
+		6DA91592194675E900637AAF /* XMPSection.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DBAE8FA19463F42007E8D8A /* XMPSection.h */; };
+		6DA915A319469C8B00637AAF /* XMPSectionLesson.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DA915A219469C8B00637AAF /* XMPSectionLesson.mm */; };
+		6DA915A419469F7D00637AAF /* XMPSectionLesson.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DA915A119469C8B00637AAF /* XMPSectionLesson.h */; };
+		6DBAE8FC19463F42007E8D8A /* XMPSection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBAE8FB19463F42007E8D8A /* XMPSection.mm */; };
+		6DBE751C1946367D001021E5 /* XMPCourse.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBE751B1946367D001021E5 /* XMPCourse.mm */; };
+		6DBE752019463C67001021E5 /* XMPChapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DBE751F19463C67001021E5 /* XMPChapter.mm */; };
+		6DE60DA61948F75C00AE6B2E /* XMPNarrative.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DE60DA51948F75C00AE6B2E /* XMPNarrative.mm */; };
+		6DE60DA71948F78600AE6B2E /* XMPNarrative.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE60DA41948F75C00AE6B2E /* XMPNarrative.h */; };
 		6DE6B8F618F86F5600F9E49B /* ChorusEffectNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */; };
 		6DE6B8F918F881B300F9E49B /* DistortionNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6B8F718F881B300F9E49B /* DistortionNode.cpp */; };
 		6DE6B8FA18F881CA00F9E49B /* DistortionNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE6B8F818F881B300F9E49B /* DistortionNode.h */; };
@@ -244,6 +266,8 @@
 		6DE6B92E18F8A6AC00F9E49B /* OverdriveNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE6B92018F8A33C00F9E49B /* OverdriveNode.h */; };
 		6DE6B92F18F8A6B400F9E49B /* HardCutoffDistortionNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE6B92318F8A3BB00F9E49B /* HardCutoffDistortionNode.h */; };
 		6DE6B93018F8A73C00F9E49B /* LocalMax.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11918AD6A31003F5CEB /* LocalMax.h */; };
+		6DE73731198701FB007EA00D /* XMPChord.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DE73730198701FB007EA00D /* XMPChord.mm */; };
+		6DE7373219870398007EA00D /* XMPChord.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6DE7372F198701FB007EA00D /* XMPChord.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -263,6 +287,18 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				6DE7373219870398007EA00D /* XMPChord.h in CopyFiles */,
+				6D218C8D195206B6006E459E /* XMPClear.h in CopyFiles */,
+				6D218C8E195206B6006E459E /* XMPDelay.h in CopyFiles */,
+				6D218C8F195206B6006E459E /* XMPDock.h in CopyFiles */,
+				6D218C90195206B6006E459E /* XMPUndock.h in CopyFiles */,
+				6D218C80195205C7006E459E /* XMPPicture.h in CopyFiles */,
+				6D485DF3195122DD00F21938 /* XMPPrompt.h in CopyFiles */,
+				6DE60DA71948F78600AE6B2E /* XMPNarrative.h in CopyFiles */,
+				6DA915A419469F7D00637AAF /* XMPSectionLesson.h in CopyFiles */,
+				6DA91590194675E900637AAF /* XMPCourse.h in CopyFiles */,
+				6DA91591194675E900637AAF /* XMPChapter.h in CopyFiles */,
+				6DA91592194675E900637AAF /* XMPSection.h in CopyFiles */,
 				6D637B161922FDA900D7D7AB /* GtarSamplerNode.h in CopyFiles */,
 				6D7D46DD1919B88300EF8C75 /* FileController.h in CopyFiles */,
 				6D7D46DE1919B88300EF8C75 /* XmlDictionary.h in CopyFiles */,
@@ -429,7 +465,7 @@
 		2605803518691DE800F6668F /* XMPValue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = XMPValue.h; sourceTree = "<group>"; };
 		2605803718691DE800F6668F /* sampleinput.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = sampleinput.xml; sourceTree = "<group>"; };
 		2605803818691DE800F6668F /* spaceoddity.xmp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spaceoddity.xmp; sourceTree = "<group>"; };
-		2605803918691DE800F6668F /* test_lesson.xmp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_lesson.xmp; sourceTree = "<group>"; };
+		2605803918691DE800F6668F /* test_lesson.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test_lesson.xml; sourceTree = "<group>"; };
 		2605803B18691DE800F6668F /* Console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
 		2605803C18691DE800F6668F /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
 		2605805718691E4F00F6668F /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -659,8 +695,20 @@
 		26A513331887985000478200 /* MatrixFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixFactory.h; sourceTree = "<group>"; };
 		26F72A9B18C9B16800D2D560 /* XMPData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPData.h; sourceTree = "<group>"; };
 		26F72A9C18C9B16800D2D560 /* XMPData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPData.mm; sourceTree = "<group>"; };
+		6D218C7D1952053E006E459E /* XMPPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPicture.h; sourceTree = "<group>"; };
+		6D218C7E1952053E006E459E /* XMPPicture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPPicture.mm; sourceTree = "<group>"; };
+		6D218C811952067A006E459E /* XMPClear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPClear.h; sourceTree = "<group>"; };
+		6D218C821952067A006E459E /* XMPClear.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPClear.mm; sourceTree = "<group>"; };
+		6D218C831952067A006E459E /* XMPDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPDelay.h; sourceTree = "<group>"; };
+		6D218C841952067A006E459E /* XMPDelay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPDelay.mm; sourceTree = "<group>"; };
+		6D218C851952067A006E459E /* XMPDock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPDock.h; sourceTree = "<group>"; };
+		6D218C861952067A006E459E /* XMPDock.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPDock.mm; sourceTree = "<group>"; };
+		6D218C871952067A006E459E /* XMPUndock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPUndock.h; sourceTree = "<group>"; };
+		6D218C881952067A006E459E /* XMPUndock.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPUndock.mm; sourceTree = "<group>"; };
 		6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GtarSamplerNode.cpp; sourceTree = "<group>"; };
 		6D346EF91922F3B200837F88 /* GtarSamplerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarSamplerNode.h; sourceTree = "<group>"; };
+		6D485DF0195120A800F21938 /* XMPPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPrompt.h; sourceTree = "<group>"; };
+		6D485DF1195120A800F21938 /* XMPPrompt.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPPrompt.mm; sourceTree = "<group>"; };
 		6D495E89190F3510002530EB /* CoreMidiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreMidiInterface.h; sourceTree = "<group>"; };
 		6D495E8A190F3510002530EB /* CoreMidiInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreMidiInterface.m; sourceTree = "<group>"; };
 		6D495E8C190F3510002530EB /* GtarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarController.h; sourceTree = "<group>"; };
@@ -697,6 +745,16 @@
 		6D7D46D91919B5EF00EF8C75 /* FileRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileRequest.m; sourceTree = "<group>"; };
 		6DA7852918F86C1000D9A6D3 /* ChorusEffectNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChorusEffectNode.cpp; sourceTree = "<group>"; };
 		6DA7852A18F86C1000D9A6D3 /* ChorusEffectNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChorusEffectNode.h; sourceTree = "<group>"; };
+		6DA915A119469C8B00637AAF /* XMPSectionLesson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPSectionLesson.h; sourceTree = "<group>"; };
+		6DA915A219469C8B00637AAF /* XMPSectionLesson.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPSectionLesson.mm; sourceTree = "<group>"; };
+		6DBAE8FA19463F42007E8D8A /* XMPSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPSection.h; sourceTree = "<group>"; };
+		6DBAE8FB19463F42007E8D8A /* XMPSection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPSection.mm; sourceTree = "<group>"; };
+		6DBE751A1946367D001021E5 /* XMPCourse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPCourse.h; sourceTree = "<group>"; };
+		6DBE751B1946367D001021E5 /* XMPCourse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPCourse.mm; sourceTree = "<group>"; };
+		6DBE751E19463C67001021E5 /* XMPChapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPChapter.h; sourceTree = "<group>"; };
+		6DBE751F19463C67001021E5 /* XMPChapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPChapter.mm; sourceTree = "<group>"; };
+		6DE60DA41948F75C00AE6B2E /* XMPNarrative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPNarrative.h; sourceTree = "<group>"; };
+		6DE60DA51948F75C00AE6B2E /* XMPNarrative.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPNarrative.mm; sourceTree = "<group>"; };
 		6DE6B8F718F881B300F9E49B /* DistortionNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistortionNode.cpp; sourceTree = "<group>"; };
 		6DE6B8F818F881B300F9E49B /* DistortionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistortionNode.h; sourceTree = "<group>"; };
 		6DE6B8FD18F8837500F9E49B /* TanhDistortionNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TanhDistortionNode.cpp; sourceTree = "<group>"; };
@@ -719,6 +777,8 @@
 		6DE6B92618F8A3EA00F9E49B /* CompressorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressorNode.h; sourceTree = "<group>"; };
 		6DE6B92818F8A41500F9E49B /* EnvelopeFollowerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnvelopeFollowerNode.cpp; sourceTree = "<group>"; };
 		6DE6B92918F8A41500F9E49B /* EnvelopeFollowerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnvelopeFollowerNode.h; sourceTree = "<group>"; };
+		6DE7372F198701FB007EA00D /* XMPChord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPChord.h; sourceTree = "<group>"; };
+		6DE73730198701FB007EA00D /* XMPChord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPChord.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -905,16 +965,36 @@
 				266A221A18BEE7A9007027C1 /* XMPSample.mm */,
 				2605801218691DE800F6668F /* XMPGtarNote.h */,
 				2605801318691DE800F6668F /* XMPGtarNote.mm */,
-				2605801418691DE800F6668F /* XMPInput.h */,
-				2605801518691DE800F6668F /* XMPInput.mm */,
 				2605801618691DE800F6668F /* XMPLEDEvent.h */,
 				2605801718691DE800F6668F /* XMPLEDEvent.mm */,
+				6DBE751A1946367D001021E5 /* XMPCourse.h */,
+				6DBE751B1946367D001021E5 /* XMPCourse.mm */,
+				6DBE751E19463C67001021E5 /* XMPChapter.h */,
+				6DBE751F19463C67001021E5 /* XMPChapter.mm */,
+				6DBAE8FA19463F42007E8D8A /* XMPSection.h */,
+				6DBAE8FB19463F42007E8D8A /* XMPSection.mm */,
+				6DA915A119469C8B00637AAF /* XMPSectionLesson.h */,
+				6DA915A219469C8B00637AAF /* XMPSectionLesson.mm */,
 				2605801818691DE800F6668F /* XMPLesson.h */,
 				2605801918691DE800F6668F /* XMPLesson.mm */,
 				2605801A18691DE800F6668F /* XMPLessonChapter.h */,
 				2605801B18691DE800F6668F /* XMPLessonChapter.mm */,
 				2605801C18691DE800F6668F /* XMPLoop.h */,
 				2605801D18691DE800F6668F /* XMPLoop.mm */,
+				6DE60DA41948F75C00AE6B2E /* XMPNarrative.h */,
+				6DE60DA51948F75C00AE6B2E /* XMPNarrative.mm */,
+				6D218C7D1952053E006E459E /* XMPPicture.h */,
+				6D218C7E1952053E006E459E /* XMPPicture.mm */,
+				6D218C811952067A006E459E /* XMPClear.h */,
+				6D218C821952067A006E459E /* XMPClear.mm */,
+				6D218C831952067A006E459E /* XMPDelay.h */,
+				6D218C841952067A006E459E /* XMPDelay.mm */,
+				6D218C851952067A006E459E /* XMPDock.h */,
+				6D218C861952067A006E459E /* XMPDock.mm */,
+				6D218C871952067A006E459E /* XMPUndock.h */,
+				6D218C881952067A006E459E /* XMPUndock.mm */,
+				2605801418691DE800F6668F /* XMPInput.h */,
+				2605801518691DE800F6668F /* XMPInput.mm */,
 				2605801E18691DE800F6668F /* XMPMeasure.h */,
 				2605801F18691DE800F6668F /* XMPMeasure.mm */,
 				2605802018691DE800F6668F /* XMPNote.h */,
@@ -927,8 +1007,12 @@
 				2605802718691DE800F6668F /* XMPSong.mm */,
 				2605802818691DE800F6668F /* XMPText.h */,
 				2605802918691DE800F6668F /* XMPText.mm */,
+				6D485DF0195120A800F21938 /* XMPPrompt.h */,
+				6D485DF1195120A800F21938 /* XMPPrompt.mm */,
 				2605802A18691DE800F6668F /* XMPTrack.h */,
 				2605802B18691DE800F6668F /* XMPTrack.mm */,
+				6DE7372F198701FB007EA00D /* XMPChord.h */,
+				6DE73730198701FB007EA00D /* XMPChord.mm */,
 				2616854518E9278800094BB0 /* XMPClip.h */,
 				2616854618E9278800094BB0 /* XMPClip.mm */,
 				2616854D18E93FA500094BB0 /* XMPContent.h */,
@@ -948,7 +1032,7 @@
 			children = (
 				2605803718691DE800F6668F /* sampleinput.xml */,
 				2605803818691DE800F6668F /* spaceoddity.xmp */,
-				2605803918691DE800F6668F /* test_lesson.xmp */,
+				2605803918691DE800F6668F /* test_lesson.xml */,
 			);
 			path = test_data;
 			sourceTree = "<group>";
@@ -1573,6 +1657,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				he,
 			);
 			mainGroup = 26057F3418691C7800F6668F;
 			productRefGroup = 26057F3E18691C7800F6668F /* Products */;
@@ -1621,6 +1706,7 @@
 				2647907118692BA50077987F /* colord.cpp in Sources */,
 				2610F14318AD6A31003F5CEB /* Sampler.mm in Sources */,
 				2647908418692BA50077987F /* vertex.vsh in Sources */,
+				6DBE751C1946367D001021E5 /* XMPCourse.mm in Sources */,
 				2647908718692BA50077987F /* vertex.vsh in Sources */,
 				2605804518691DE800F6668F /* XMPInput.mm in Sources */,
 				2610F14118AD6A31003F5CEB /* Parameter.cpp in Sources */,
@@ -1633,7 +1719,9 @@
 				264EC77318B43CC9001F7224 /* EffectNode.cpp in Sources */,
 				6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */,
 				2616854718E9278800094BB0 /* XMPClip.mm in Sources */,
+				6DA915A319469C8B00637AAF /* XMPSectionLesson.mm in Sources */,
 				2610F12E18AD6A31003F5CEB /* AUOutputNode.mm in Sources */,
+				6D218C8C1952067A006E459E /* XMPUndock.mm in Sources */,
 				2647908018692BA50077987F /* MeshMd3.cpp in Sources */,
 				264EC76C18B30741001F7224 /* AudioNodeFactory.mm in Sources */,
 				264EC77D18B55208001F7224 /* SamplerNode.cpp in Sources */,
@@ -1653,6 +1741,7 @@
 				2616855218E940DE00094BB0 /* XMPSampler.mm in Sources */,
 				2605804118691DE800F6668F /* XMPElement.cpp in Sources */,
 				2605804618691DE800F6668F /* XMPLEDEvent.mm in Sources */,
+				6D218C8A1952067A006E459E /* XMPDelay.mm in Sources */,
 				6DE6B92118F8A33C00F9E49B /* OverdriveNode.cpp in Sources */,
 				2605804C18691DE800F6668F /* XMPObject.mm in Sources */,
 				2605804418691DE800F6668F /* XMPGtarNote.mm in Sources */,
@@ -1660,8 +1749,10 @@
 				264790A9187681990077987F /* WindowFactory.cpp in Sources */,
 				2647907918692BA50077987F /* DX9Text.cpp in Sources */,
 				26057F4818691C7800F6668F /* IncidentPlatform.m in Sources */,
+				6D218C891952067A006E459E /* XMPClear.mm in Sources */,
 				6DE6B92418F8A3BB00F9E49B /* HardCutoffDistortionNode.cpp in Sources */,
 				266A221B18BEE7A9007027C1 /* XMPSample.mm in Sources */,
+				6D485DF2195120A800F21938 /* XMPPrompt.mm in Sources */,
 				264790A11869304C0077987F /* NPAPIWin32Interface.cpp in Sources */,
 				264790A01869304C0077987F /* IncidentMainWindow.cpp in Sources */,
 				2605805518691DE800F6668F /* XMPValue.cpp in Sources */,
@@ -1697,15 +1788,18 @@
 				2678706218D9135800779B81 /* UILevelSlider.m in Sources */,
 				26A5132D18875EE500478200 /* MeshObj.cpp in Sources */,
 				2647908A18692BA50077987F /* sphere.cpp in Sources */,
+				6DE60DA61948F75C00AE6B2E /* XMPNarrative.mm in Sources */,
 				2647907018692BA50077987F /* color.cpp in Sources */,
 				6D7D46B91919B46F00EF8C75 /* CloudResponse.m in Sources */,
 				2647907618692BA50077987F /* DX9Plane.cpp in Sources */,
 				2647908518692BA50077987F /* vertex.vsh in Sources */,
 				2647907B18692BA50077987F /* ProtoDX9ShaderManager.cpp in Sources */,
+				6DBAE8FC19463F42007E8D8A /* XMPSection.mm in Sources */,
 				2610F14618AD6A31003F5CEB /* WavetableNode.cpp in Sources */,
 				2610F15C18AD9B08003F5CEB /* AUNodeNetwork.mm in Sources */,
 				2647909D1869304C0077987F /* DX9WindowsWnd.cpp in Sources */,
 				2605804818691DE800F6668F /* XMPLessonChapter.mm in Sources */,
+				6D218C7F1952053E006E459E /* XMPPicture.mm in Sources */,
 				2610F12918AD6A31003F5CEB /* AUAudioNode.mm in Sources */,
 				6DE6B92A18F8A41500F9E49B /* EnvelopeFollowerNode.cpp in Sources */,
 				2605804B18691DE800F6668F /* XMPNote.mm in Sources */,
@@ -1721,9 +1815,12 @@
 				2647907318692BA50077987F /* DX9Blit.cpp in Sources */,
 				2647908918692BA50077987F /* vertex.vsh in Sources */,
 				264790AC187B5F3F0077987F /* OpenGLES2View.mm in Sources */,
+				6D218C8B1952067A006E459E /* XMPDock.mm in Sources */,
+				6DBE752019463C67001021E5 /* XMPChapter.mm in Sources */,
 				2610F13518AD6A31003F5CEB /* DiffusionTankNode.cpp in Sources */,
 				2610F12C18AD6A31003F5CEB /* AudioNode.cpp in Sources */,
 				2605803D18691DE800F6668F /* hash.cpp in Sources */,
+				6DE73731198701FB007EA00D /* XMPChord.mm in Sources */,
 				2610F12A18AD6A31003F5CEB /* AUAudioNodeFactory.mm in Sources */,
 				6D7D46DB1919B5EF00EF8C75 /* FileRequest.m in Sources */,
 				6D7D46BB1919B46F00EF8C75 /* UserProfile.m in Sources */,
@@ -1866,6 +1963,11 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/IncidentPlatform/FacebookSDK",
+					"$(PROJECT_DIR)/IncidentPlatform/FacebookSDK/FBAudienceNetwork",
+				);
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";
@@ -1880,6 +1982,11 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/IncidentPlatform.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/IncidentPlatform/FacebookSDK",
+					"$(PROJECT_DIR)/IncidentPlatform/FacebookSDK/FBAudienceNetwork",
+				);
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IncidentPlatform/IncidentPlatform-Prefix.pch";

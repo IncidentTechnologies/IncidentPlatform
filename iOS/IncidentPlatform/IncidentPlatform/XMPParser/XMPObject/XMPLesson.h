@@ -15,8 +15,7 @@
     NSString *m_Author;
 }
 
-//- (id) initWithLessonName:(NSString *)LessonName;
-
+- (id) initWithLessonName:(NSString *)LessonName;
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 -(RESULT)ConstructLesson;

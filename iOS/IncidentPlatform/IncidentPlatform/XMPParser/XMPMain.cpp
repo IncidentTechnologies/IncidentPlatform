@@ -8,7 +8,7 @@ using namespace dss;
 
 RESULT TestSampleInput()
 {
-    RESULT r = R_OK;
+    RESULT r = R_SUCCESS;
     
     printf("***********************************\r\n");
     printf("Test Sample XMP Input\r\n");
@@ -28,7 +28,7 @@ Error:
 
 RESULT CreateCustomTree()
 {
-    RESULT r = R_OK;
+    RESULT r = R_SUCCESS;
 
     printf("***********************************\r\n");
     printf("Create Custom XMP Tree Test\r\n");
@@ -57,13 +57,19 @@ Error:
 }
 
 
-void main(int argv, char* argc[])
+int main(int argv, char* argc[])
 {
+    RESULT r = R_SUCCESS;
+    
     TestSampleInput();
     CreateCustomTree();
 
 
-    system("PAUSE");
+    //system("PAUSE");
+    
+    //return RESULT;
+Error:
+    return r;
 }
 */
 

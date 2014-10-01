@@ -20,18 +20,30 @@ typedef enum XMPObjectTypes
 {
     XMP_OBJECT_TEXT,
     XMP_OBJECT_LEDEVENT,
-    XMP_OBJECT_LOOP,
     XMP_OBJECT_GTARNOTE,
-    XMP_OBJECT_INPUT,
-    XMP_OBJECT_LESSON,
+    XMP_OBJECT_COURSE,
     XMP_OBJECT_CHAPTER,
+    XMP_OBJECT_SECTION,
+    XMP_OBJECT_SECTION_LESSON,
+    XMP_OBJECT_LESSON,
+    XMP_OBJECT_LESSON_CHAPTER,
+    XMP_OBJECT_CLIP,
+    XMP_OBJECT_CHORD,
+    XMP_OBJECT_LOOP,
+    XMP_OBJECT_INPUT,
+    XMP_OBJECT_NARRATIVE,
+    XMP_OBJECT_PICTURE,
+    XMP_OBJECT_CLEAR,
+    XMP_OBJECT_DELAY,
+    XMP_OBJECT_DOCK,
+    XMP_OBJECT_UNDOCK,
     XMP_OBJECT_SONG,
     XMP_OBJECT_OBJECT,
     XMP_OBJECT_TRACK,
     XMP_OBJECT_MEASURE,
-    XMP_OBJECT_CLIP,
     XMP_OBJECT_GROUP,
     XMP_OBJECT_NOTE,
+    XMP_OBJECT_PROMPT,
     XMP_OBJECT_SAMPLE,
     XMP_OBJECT_DATA,
     XMP_OBJECT_CONTENT,
@@ -49,6 +61,7 @@ typedef enum XMPObjectTypes
     XMP_OBJECT_TYPE m_type;
     XMPNode *m_xmpNode;
     NSString *m_Name;
+    
 }
 
 -(NSString*)GetName;
@@ -81,6 +94,7 @@ typedef enum XMPObjectTypes
 //-(XMPNode*)CreateXMPNodeFromObject;
 -(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent;
 -(XMPTree*)GetXMPTree;
+//-(XMPNode*)GetXMPNode;
 
 -(NSString*)Text;
 

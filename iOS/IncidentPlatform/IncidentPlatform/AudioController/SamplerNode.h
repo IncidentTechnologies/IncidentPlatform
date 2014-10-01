@@ -28,6 +28,7 @@ public:
     
     RESULT TriggerSample(int sample);
     RESULT StopSample(int sample);
+    RESULT StopAllSamples();
     SampleNode *GetSample(int sample);
     
     RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
@@ -55,6 +56,7 @@ public:
     
     RESULT TriggerBankSample(int bank, int sample);
     SampleNode *GetBankSample(int bank, int sample);
+    RESULT StopAllBankSamples();
     
     RESULT ReleaseBank(int bank);
     RESULT ReleaseBank(SamplerBankNode* &bank);

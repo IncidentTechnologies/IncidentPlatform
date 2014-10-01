@@ -220,6 +220,10 @@ Error:
     return tree;
 }
 
+-(XMPNode*)GetXMPNode {
+    return m_xmpNode;
+}
+
 -(XMPNode*)CreateXMPNodeFromObjectWithParent:(XMPNode*)parent {
     XMPNode *node = NULL;
     

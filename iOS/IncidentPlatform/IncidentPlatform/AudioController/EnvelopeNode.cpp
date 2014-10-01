@@ -6,15 +6,21 @@
 //
 //
 
+#define DEFAULT_MSATTACK 10.0f
+#define DEFAULT_ATTACKLEVEL 1.0f
+#define DEFAULT_MSDECAY 100.0f
+#define DEFAULT_SUSTAINLEVEL 1.0f
+#define DEFAULT_MSRELEASE 200.0f
+
 #include "EnvelopeNode.h"
 
 EnvelopeNode::EnvelopeNode() :
     AudioNode(),
-    m_msAttack(100.0f),
-    m_AttackLevel(1.0f),
-    m_msDecay(200.0f),
-    m_SustainLevel(0.25f),
-    m_msRelease(1000.0f),
+    m_msAttack(DEFAULT_MSATTACK),
+    m_AttackLevel(DEFAULT_ATTACKLEVEL),
+    m_msDecay(DEFAULT_MSDECAY),
+    m_SustainLevel(DEFAULT_SUSTAINLEVEL),
+    m_msRelease(DEFAULT_MSRELEASE),
     m_CLK(0.0f),
     m_releaseCLK(0.0f)
 {
@@ -40,7 +46,13 @@ void EnvelopeNode::NoteOff() {
 }
 
 float EnvelopeNode::GetNextSample(unsigned long int timestamp) {
-    float retVal = AudioNode::GetNextSample(timestamp); // first get inputs
+    float inVal = AudioNode::GetNextSample(timestamp); // first get inputs
+    return InputSample(inVal);
+
+}
+
+inline double EnvelopeNode::InputSample(double sample)
+{
     float scaleFactor = 0.0f;
     
     if(m_fNoteOn) {
@@ -65,7 +77,12 @@ float EnvelopeNode::GetNextSample(unsigned long int timestamp) {
         }
     }
     
-    retVal *= scaleFactor;
+    sample *= scaleFactor;
     
-    return retVal;
+    return sample;
+}
+
+EnvelopeNode::~EnvelopeNode()
+{
+    
 }

@@ -16,6 +16,10 @@
 #define DEFAULT_MSDECAY 100.0f
 #define DEFAULT_SUSTAINLEVEL 1.0f
 #define DEFAULT_MSRELEASE 200.0f
+#define DEFAULT_NORMALSCALE 1.0f
+
+#define DEFAULT_NORMAL_MAX 0.3f
+#define DEFAULT_NORMAL_MIN -0.3f
 
 #define MUTED_MSATTACK 10.0f
 #define MUTED_ATTACKLEVEL 0.3f
@@ -44,6 +48,9 @@ m_releaseCLK(0.0f)
 {
     m_fNoteOn = false;
     m_msCLKIncrement = 1000.0f / DEFAULT_SAMPLE_RATE;
+    m_normalScale = DEFAULT_NORMALSCALE;
+    
+    NormalizeSample();
 }
 
 GtarSampleBuffer::~GtarSampleBuffer() {
@@ -109,8 +116,7 @@ inline float GtarSampleBuffer::EnvelopeSample(float retVal){
         else {
             scaleFactor = m_SustainLevel;
         }
-        
-        
+                
         m_CLK += m_msCLKIncrement;
         m_releaseScaleFactor = scaleFactor;
     }
@@ -124,7 +130,46 @@ inline float GtarSampleBuffer::EnvelopeSample(float retVal){
     
     retVal *= scaleFactor;
     
+    retVal *= m_normalScale;
+    
     return retVal;
+}
+
+inline RESULT GtarSampleBuffer::NormalizeSample() {
+    RESULT r = R_SUCCESS;
+    
+    if(m_pBuffer != NULL && m_pBuffer_n > 0){
+
+        double buffer_max = m_pBuffer[m_pBuffer_start];
+        double buffer_min = m_pBuffer[m_pBuffer_start];
+        
+        for(unsigned long int c = m_pBuffer_start; c < m_pBuffer_end; c++){
+            buffer_max = (m_pBuffer[c] > buffer_max) ? m_pBuffer[c] : buffer_max;
+            buffer_min = (m_pBuffer[c] < buffer_min || buffer_min == 0) ? m_pBuffer[c] : buffer_min;
+        }
+        
+        if(buffer_max > DEFAULT_NORMAL_MAX){
+            
+            m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
+            
+        }else if(buffer_min < DEFAULT_NORMAL_MIN){
+            
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
+            
+        }else if(buffer_max > fabsf(buffer_min)){
+            
+            m_normalScale = DEFAULT_NORMAL_MAX / buffer_max;
+            
+        }else if(fabsf(buffer_min) > buffer_max){
+            
+            m_normalScale = fabsf(DEFAULT_NORMAL_MIN / buffer_min);
+            
+        }
+    }
+    
+    return r;
+Error:
+    return r;
 }
 
 bool GtarSampleBuffer::IsNoteOn() {
@@ -193,6 +238,10 @@ GtarSamplerNode::GtarSamplerNode()
         m_numSamples[i] = 0;
         m_nextSampleCounter[i] = 0;
     }
+    
+    m_pRewind = new Parameter(0.95, 0.6, 1.0, "Rewind");
+    m_pTransition = new Parameter(5, 3, 10, "Transition");
+    
 }
 
 GtarSamplerNode::~GtarSamplerNode() {
@@ -220,7 +269,7 @@ inline float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
                         s = m_sampleTransitionIndex[b][i];
                         m_buffers[b][s]->m_CLK = m_buffers[b][i]->m_CLK;
                         
-                        m_buffers[b][s]->m_pBuffer_c = m_sampleBufferTransitionIndex[b][s]-1;
+                        m_buffers[b][s]->m_pBuffer_c = m_sampleBufferTransitionIndex[b][s];
                         m_buffers[b][s]->NoteSlideOn();
                         
                         // turn off
@@ -298,6 +347,17 @@ Error:
     return r;
 }
 
+RESULT GtarSamplerNode::LoadSampleIntoBankAtIndex(int bank, int index, char *pszFilepath) {
+    RESULT r = R_SUCCESS;
+    
+    m_buffers[bank][index] = new GtarSampleBuffer(pszFilepath);
+        
+    return r;
+    
+Error:
+    return r;
+}
+
 RESULT GtarSamplerNode::TriggerSample(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
@@ -329,50 +389,50 @@ Error:
 
 unsigned long int GtarSamplerNode::TriggerContinuousSample(int bank, int sampleLead, int sampleTrail) {
     
-    if(sampleLead == sampleTrail || sampleTrail < 0 || m_buffers[bank][sampleLead]->m_pBuffer_c == 0){
-        // TriggerSample(bank, sampleLead);
+    if(sampleLead == sampleTrail || sampleTrail < 0){
         return -1;
     }
     
-    float currentSample;
     float currentPrevSample;
     float currentNextSample;
-    float nextSample;
+    float nextPrevSample;
+    float nextNextSample;
     
-    unsigned long int currentIndex = m_buffers[bank][sampleLead]->m_pBuffer_c;
-    unsigned long int nextIndex = 0.9 * currentIndex;
-    bool isDown = false;
+    float nextPercent = m_pRewind->getValue();
+    //float nextPercent = 0.95;
+    int transitionOffset = 5; // m_pTransition->getValue();
     
-    // Out of bounds
-    if(nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_end){
-        return -3;
-    }else if(nextIndex <= 0){
-        nextIndex++;
-    }
+    unsigned long int currentIndex = m_buffers[bank][sampleLead]->m_pBuffer_c+1;
     
-    // Determine directionality
-    currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1];
-    currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1];
+    float currentPercent = (float)currentIndex / (float)(m_buffers[bank][sampleLead]->m_pBuffer_start+m_buffers[bank][sampleLead]->m_pBuffer_n);
     
-    if(currentPrevSample > currentNextSample){
-        isDown = true;
-    }
+    unsigned long int initialNextIndex = m_buffers[bank][sampleTrail]->m_pBuffer_start + currentPercent * nextPercent * m_buffers[bank][sampleTrail]->m_pBuffer_n;
     
-    // Figure out where the two samples match
-    for(; nextIndex > m_buffers[bank][sampleTrail]->m_pBuffer_start; nextIndex--){
-     
-        nextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex];
+    unsigned long int nextIndex = initialNextIndex;
+    
+    // Fast forward Current to Zero
+    for(; currentIndex < m_buffers[bank][sampleLead]->m_pBuffer_end-transitionOffset; currentIndex++){
         
-        if(isDown){ // down
-            if(nextSample < currentPrevSample && nextSample > currentNextSample){
-                break;
-            }
-        }else{ // up
-            if(nextSample > currentPrevSample && nextSample < currentNextSample){
-                break;
-            }
+        currentPrevSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex - 1] * m_buffers[bank][sampleLead]->m_normalScale;
+        currentNextSample = m_buffers[bank][sampleLead]->m_pBuffer[currentIndex + 1] * m_buffers[bank][sampleLead]->m_normalScale;
+        
+        if(currentPrevSample < 0 && currentNextSample >= 0){
+            break;
         }
+        
     }
+    
+    // Rewind Next to Zero
+    for(; nextIndex >= m_buffers[bank][sampleTrail]->m_pBuffer_start+transitionOffset; nextIndex--){
+        
+        nextPrevSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex] * m_buffers[bank][sampleTrail]->m_normalScale;
+        nextNextSample = m_buffers[bank][sampleTrail]->m_pBuffer[nextIndex+1] * m_buffers[bank][sampleTrail]->m_normalScale;
+        
+        if(nextPrevSample < 0 && nextNextSample >= 0){
+            break;
+        }
+        
+    }    
     
     // index to transition is currentIndex
     m_sampleBufferTransitionIndex[bank][sampleLead] = currentIndex;
@@ -431,5 +491,27 @@ bool GtarSamplerNode::IsNoteOn(int bank, int sample) {
     
     return m_buffers[bank][sample]->IsNoteOn();
     
+}
+
+Parameter *GtarSamplerNode::getPrimaryParam()
+{
+    return m_pRewind;
+}
+
+
+bool GtarSamplerNode::setPrimaryParam(float value)
+{
+    return m_pRewind->setValue(value);
+}
+
+Parameter *GtarSamplerNode::getSecondaryParam()
+{
+    return m_pTransition;
+}
+
+
+bool GtarSamplerNode::setSecondaryParam(float value)
+{
+    return m_pTransition->setValue(value);
 }
 

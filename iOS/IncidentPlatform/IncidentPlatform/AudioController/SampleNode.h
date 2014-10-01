@@ -24,6 +24,8 @@ public:
     RESULT ResetSampleCounter();
     inline bool SampleDone();
     
+    inline RESULT NormalizeSample();
+    
     float GetSampleBufferLengthMS();
     RESULT SetStart(float msStart);
     RESULT SetEnd(float msEnd);
@@ -62,6 +64,8 @@ public:
     
     unsigned long int m_pBuffer_start;
     unsigned long int m_pBuffer_end;
+    
+    float m_normalScale;
     
 };
 

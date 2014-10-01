@@ -202,7 +202,7 @@ bool KSObjectNode::SetBWFilterOrder(int order)
         return false;
 }
 
-/*inline */double KSObjectNode::GetNextKSSample()
+inline double KSObjectNode::GetNextKSSample()
 {
     // first ensure that the pluck is initialized
     // TODO can we remove this check? its costing us ~1%

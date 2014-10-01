@@ -55,6 +55,18 @@ Error:
     return r;
 }
 
+RESULT SamplerBankNode::StopAllSamples()
+{
+    RESULT r = R_SUCCESS;
+    
+    for(int s = 0; s < m_samples.length(); s++){
+        m_samples[s]->Stop();
+    }
+    
+Error:
+    return r;
+}
+
 RESULT SamplerBankNode::SetSampleGain(int sample, float gain) {
     RESULT r = R_SUCCESS;
     
@@ -201,6 +213,20 @@ RESULT SamplerNode::ReleaseBank(int bank) {
 Error:
     return r;
 }
+
+
+RESULT SamplerNode::StopAllBankSamples() {
+    RESULT r = R_SUCCESS;
+    
+    for(int b = 0; b < m_banks.length(); b++){
+        m_banks[b]->StopAllSamples();
+    }
+    
+Error:
+    return r;
+}
+
+
 
 RESULT SamplerNode::CreateNewBank(SamplerBankNode* &outBank){
     RESULT r = R_SUCCESS;

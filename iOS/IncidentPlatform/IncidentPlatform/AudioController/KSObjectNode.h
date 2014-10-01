@@ -30,7 +30,7 @@ public:
     
     bool SetBWFilterOrder(int order);
 	
-	/*inline */double GetNextKSSample();
+	inline double GetNextKSSample();
     
     void Set3rdOrderHarmonicOn(bool on);
     

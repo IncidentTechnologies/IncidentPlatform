@@ -10,7 +10,7 @@ XMPTree::XMPTree(char* pszFilename) :
 {
     RESULT r = R_SUCCESS;
     
-    m_pRoot = new XMPNode("root", NULL);
+    m_pRoot = new XMPNode((char *)"root", NULL);
     m_pNodeNav = m_pRoot;
     
     if(m_pszFilename != NULL) {
@@ -31,7 +31,7 @@ Error:
 XMPTree::XMPTree() :
   m_pszFilename(NULL)
 {
-    m_pRoot = new XMPNode("root", NULL);
+    m_pRoot = new XMPNode((char *)"root", NULL);
     m_pNodeNav = m_pRoot;
 }
 
@@ -84,7 +84,7 @@ RESULT XMPTree::ConstructTree() {
             // Creates a new content node and appends it to the current node (no need to enter the level)
             if(CurrentEmptyNode != NULL)
                 CurrentEmptyNode = NULL;
-            XMPNode *TempNode = new XMPNode("content", CurrentNode, (*it)->GetValue());
+            XMPNode *TempNode = new XMPNode((char *)"content", CurrentNode, (*it)->GetValue());
             CNRM(TempNode, "XMPTree.ConstructTree: Failed to create a new content node");
             CurrentNode->AddChild(TempNode);
         } break;
@@ -96,7 +96,7 @@ RESULT XMPTree::ConstructTree() {
             CNRM((*it)->GetBuffer(), "Data node has NULL buffer!");
             CBRM(((*it)->GetBufferSize() != 0), "Data node has zero sized data!");
 
-            XMPNode *pData = new XMPNode("data", NULL, NULL, (*it)->GetBuffer(), (*it)->GetBufferSize());
+            XMPNode *pData = new XMPNode((char *)"data", NULL, NULL, (*it)->GetBuffer(), (*it)->GetBufferSize());
             CRM(CurrentNode->AddChild(pData), "AppendData: Failed to append Data Content");
         } break;
 
@@ -134,7 +134,7 @@ Error:
 RESULT XMPTree::PrintXMPDepth(int depth, SmartBuffer* &n_psmbuf, FILE *pFile) {
     if(depth != 0)
         for(int i = 0; i < depth; i++)                     
-            PrintXMPStr("    ", n_psmbuf, pFile);        
+            PrintXMPStr((char *)"    ", n_psmbuf, pFile);
 
     return R_SUCCESS;
 }
@@ -180,13 +180,13 @@ RESULT XMPTree::PrintXMPTree( XMPNode *node, int depth, SmartBuffer* &n_psmbuf, 
             fputc((char)42, pFile);
             //fputs("data", pFile);
             int byteswritten = fwrite(node->m_pDataBuffer, 1, node->m_DataBuffer_s, pFile);
-            CBRM((byteswritten == node->m_DataBuffer_s), "Written bytes %d and size %d do not match", byteswritten, node->m_DataBuffer_s);
+            CBRM((byteswritten == node->m_DataBuffer_s), "Written bytes %d and size %ldd do not match", byteswritten, node->m_DataBuffer_s);
             //fputs("enddata", pFile);
             fputc((char)42, pFile);
         }
         else {
             for(int i = 0; i < node->m_DataBuffer_s; i++) {                                           
-                sprintf(tempChRg, "%0X\0", (unsigned long int)(static_cast<unsigned long int*>(node->m_pDataBuffer) + i));
+                sprintf(tempChRg, "%0lX\0", (unsigned long int)(static_cast<unsigned long int*>(node->m_pDataBuffer) + i));
                 PrintXMPStr(tempChRg, n_psmbuf, pFile);                
 
                 // Pop in a new line every 22 numbers
@@ -215,25 +215,25 @@ RESULT XMPTree::PrintXMPTree( XMPNode *node, int depth, SmartBuffer* &n_psmbuf, 
         for(list<XMPAttribute*>::iterator attribit = node->GetAttributes()->First(); attribit != NULL; attribit++) {                        
             PrintXMPChar(' ', n_psmbuf, pFile);
             PrintXMPStr((*attribit)->GetName(), n_psmbuf, pFile);
-            PrintXMPStr("=\"", n_psmbuf, pFile);
+            PrintXMPStr((char *)"=\"", n_psmbuf, pFile);
             PrintXMPStr((*attribit)->GetXMPValue().GetPszValue(), n_psmbuf, pFile);
             PrintXMPChar('\"', n_psmbuf, pFile);           
         }
 
         if(node->GetChildren()->Size() != 0) {            
-            PrintXMPStr(">\n", n_psmbuf, pFile);
+            PrintXMPStr((char *)">\n", n_psmbuf, pFile);
 
             for(list<XMPNode*>::iterator kidit = node->GetChildren()->First(); kidit != NULL; kidit++)
                 PrintXMPTree((*kidit), depth + 1, n_psmbuf, pFile);
 
             PrintXMPDepth(depth, n_psmbuf, pFile);
-            PrintXMPStr("</", n_psmbuf, pFile);
+            PrintXMPStr((char *)"</", n_psmbuf, pFile);
             PrintXMPStr(node->GetName(), n_psmbuf, pFile);
-            PrintXMPStr(">\n", n_psmbuf, pFile);           
+            PrintXMPStr((char *)">\n", n_psmbuf, pFile);
         }
         else {
             // must be an empty tag            
-            PrintXMPStr(" />\n", n_psmbuf, pFile);
+            PrintXMPStr((char *)" />\n", n_psmbuf, pFile);
         }
     }
 
@@ -342,7 +342,7 @@ Error:
 RESULT XMPTree::AppendContent(char *pszContent) {
     RESULT r = R_SUCCESS;
 
-    XMPNode *pTemp = new XMPNode("content", NULL, pszContent);
+    XMPNode *pTemp = new XMPNode((char *)"content", NULL, pszContent);
     CRM(m_pNodeNav->AddChild(pTemp), "XMPTree:AppendContent Failed to append content");
 
 Error:
@@ -361,21 +361,21 @@ RESULT XMPTree::AppendData(char *pszDataName, long int DataID, void *pBuffer, lo
     void *pTempBuffer = NULL;
     XMPNode *pData = NULL;
 
-    pDataNode = new XMPNode("data", m_pNodeNav, NULL);
+    pDataNode = new XMPNode((char *)"data", m_pNodeNav, NULL);
     CRM(m_pNodeNav->AddChild(pDataNode), "XMPTree:AppendData Failed to add data node");
 
     // Add the name attribute
-    pDataNameAttrib = new XMPAttribute("dataname", pszDataName);
+    pDataNameAttrib = new XMPAttribute((char *)"dataname", pszDataName);
     CNRM(pDataNameAttrib, "AppendData: Failed to allocate the data name attribute");
     CRM(pDataNode->AddAttribute(pDataNameAttrib), "AppendData: Failed to add the data name attribute");
 
     // Add the DataID attribute 
-    pDataIDAtrib = new XMPAttribute("dataid", DataID);
+    pDataIDAtrib = new XMPAttribute((char *)"dataid", DataID);
     CNRM(pDataIDAtrib, "AppendData: Failed to allocate data id attribute");
     CRM(pDataNode->AddAttribute(pDataIDAtrib), "AppendData: Failed to DataID attribute"); 
 
     // Add the Data Size attribute
-    pSizeAttrib = new XMPAttribute("datasize", pBuffer_s);
+    pSizeAttrib = new XMPAttribute((char *)"datasize", pBuffer_s);
     CNRM(pSizeAttrib, "AppendData: Failed to allocate data size attribute");
     CRM(pDataNode->AddAttribute(pSizeAttrib), "AppendData: Failed to add data size attribute");
 
@@ -383,10 +383,10 @@ RESULT XMPTree::AppendData(char *pszDataName, long int DataID, void *pBuffer, lo
     // We need to make a copy of this data and give it to the node in case the memory is
     // deallocated somewhere else
     pTempBuffer = (void*)malloc(pBuffer_s);
-    CNRM(pTempBuffer, "XMPTree:AppendData: failed to allocate node buffer size %d", pBuffer_s);
+    CNRM(pTempBuffer, "XMPTree:AppendData: failed to allocate node buffer size %ld", pBuffer_s);
     memcpy(pTempBuffer, pBuffer, pBuffer_s);
 
-    pData = new XMPNode("data", NULL, NULL, pTempBuffer, pBuffer_s);
+    pData = new XMPNode((char *)"data", NULL, NULL, pTempBuffer, pBuffer_s);
     CRM(pDataNode->AddChild(pData), "AppendData: Failed to append Data Content");
 
 Error:
