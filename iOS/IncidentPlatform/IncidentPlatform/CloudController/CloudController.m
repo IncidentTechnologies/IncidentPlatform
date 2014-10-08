@@ -49,6 +49,7 @@
 #define GET_ITUNES_STATUS @"Main/ItunesStatus"
 /*#define CloudRequestTypeGetServerStatusUrl @"Main/ServerStatus"*/
 
+// Files
 #define CloudRequestTypeGetFileUrl @"UserFiles/GetFile"
 
 // Users
