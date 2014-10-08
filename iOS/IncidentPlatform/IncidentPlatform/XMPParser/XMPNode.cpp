@@ -179,7 +179,7 @@ bool XMPNode::HasContent() {
 RESULT XMPNode::AppendContentNode(char *pszContent) {
     RESULT r = R_SUCCESS;
     
-    XMPNode *contentNode = new XMPNode("content", NULL, pszContent);
+    XMPNode *contentNode = new XMPNode((char *)"content", NULL, pszContent);
     CRM(AddChild(contentNode), "AppendContentNode: Failed to AddChile node for content");
     
 Error:

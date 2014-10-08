@@ -21,6 +21,7 @@
 
 @synthesize m_cloudRequest;
 @synthesize m_status;
+@synthesize m_opho_status;
 @synthesize m_statusCode;
 @synthesize m_mimeType;
 @synthesize m_statusText;

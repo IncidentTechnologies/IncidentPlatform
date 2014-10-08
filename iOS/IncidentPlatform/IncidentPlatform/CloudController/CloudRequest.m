@@ -36,6 +36,17 @@
 @synthesize m_deviceString;
 @synthesize m_appString;
 
+@synthesize m_appId;
+@synthesize m_activationKey;
+@synthesize m_permissionLevel;
+@synthesize m_rememberLogin;
+@synthesize m_xmpId;
+@synthesize m_folderId;
+@synthesize m_xmpFile;
+@synthesize m_xmpType;
+@synthesize m_xmpData;
+@synthesize m_xmpOnly;
+
 @synthesize m_serial_lower;
 @synthesize m_serial_upper;
 

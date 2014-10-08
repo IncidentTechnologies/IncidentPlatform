@@ -29,6 +29,21 @@ typedef enum
     CloudResponseStatusOffline
 } CloudResponseStatus;
 
+typedef enum
+{
+    OphoCloudResponseStatusUnknown = 0,
+    OphoCloudResponseStatusSuccess,
+    OphoCloudResponseStatusUserError,
+    OphoCloudResponseStatusServerError,
+    OphoCloudResponseStatusInvalidParameter,
+    OphoCloudResponseStatusInvalidUrl,
+    OphoCloudResponseStatusUnauthorized,
+    OphoCloudResponseStatusPaypalError,
+    OphoCloudResponseStatusEmailError,
+    OphoCloudResponseStatusDatabaseError,
+    OphoCloudResponseStatusEmailWarning
+} OphoCloudResponseStatus;
+
 @interface CloudResponse : NSObject
 {
     
@@ -36,6 +51,7 @@ typedef enum
     
     // Response info
 	CloudResponseStatus m_status;
+    OphoCloudResponseStatus m_opho_status;
     
     NSInteger m_statusCode;
     NSString * m_mimeType;
@@ -69,6 +85,7 @@ typedef enum
 @property (nonatomic, readonly) CloudRequest * m_cloudRequest;
 
 @property (nonatomic, assign) CloudResponseStatus m_status;
+@property (nonatomic, assign) OphoCloudResponseStatus m_opho_status;
 @property (nonatomic, assign) NSInteger m_statusCode;
 @property (nonatomic, strong) NSString * m_mimeType;
 @property (nonatomic, strong) NSString * m_statusText;

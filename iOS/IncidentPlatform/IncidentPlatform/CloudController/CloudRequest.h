@@ -25,14 +25,24 @@ typedef enum
 typedef enum {
     CloudRequestTypeUnknown = 0,
     
-    CloudRequestTypeGetServerStatus,
+    CloudRequestTypeGetServerStatus,    //opho
     CloudRequestTypeGetFile,
     
-    CloudRequestTypeRegister,
-    CloudRequestTypeLoginFacebook,
-    CloudRequestTypeLogin,
-    CloudRequestTypeLoginCookie,
-    CloudRequestTypeLogout,
+    CloudRequestTypeGetUserStatus,      //opho
+    CloudRequestTypeRegister,           //opho
+    CloudRequestTypeActivate,           //opho
+    //CloudRequestTypeLoginFacebook,
+    CloudRequestTypeLogin,              //opho
+    //CloudRequestTypeLoginCookie,
+    CloudRequestTypeLogout,             //opho
+    
+    CloudRequestTypeNewXmp,             //opho
+    CloudRequestTypeDeleteXmp,          //opho
+    CloudRequestTypeSaveXmp,            //opho
+    CloudRequestTypeGetXmp,             //opho
+    CloudRequestTypeGetXmpList,         //opho
+    CloudRequestTypeSetXmpFolder,       //opho
+    CloudRequestTypeSetXmpPermission,   //opho
     
     CloudRequestTypeGetUserProfile,
     CloudRequestTypeEditUserProfile,
@@ -157,6 +167,19 @@ typedef enum {
 
 @property (nonatomic, strong) NSString *m_serial_lower;
 @property (nonatomic, strong) NSString *m_serial_upper;
+
+// Opho
+@property (nonatomic, assign) NSInteger m_appId;
+@property (nonatomic, strong) NSString * m_activationKey;
+@property (nonatomic, strong) NSString * m_permissionLevel;
+@property (nonatomic, strong) NSNumber * m_rememberLogin;
+@property (nonatomic, assign) NSInteger m_xmpId;
+@property (nonatomic, assign) NSInteger m_folderId;
+@property (nonatomic, strong) id m_xmpFile;
+@property (nonatomic, assign) NSInteger m_xmpType;
+@property (nonatomic, strong) NSData * m_xmpData;
+@property (nonatomic, strong) NSNumber * m_xmpOnly;
+
 
 - (id)initWithType:(CloudRequestType)type;
 - (id)initWithType:(CloudRequestType)type andCallbackObject:(id)obj andCallbackSelector:(SEL)sel;

@@ -47,7 +47,7 @@
 
 #define GET_SERVER_STATUS @"Main/ServerStatus"
 #define GET_ITUNES_STATUS @"Main/ItunesStatus"
-#define CloudRequestTypeGetServerStatusUrl @"Main/ServerStatus"
+/*#define CloudRequestTypeGetServerStatusUrl @"Main/ServerStatus"*/
 
 #define CloudRequestTypeGetFileUrl @"UserFiles/GetFile"
 
@@ -55,7 +55,7 @@
 #define CloudRequestTypeRegisterUrl @"Users/Register"
 #define CloudRequestTypeLoginFacebookUrl @"Users/LoginWithFacebookAccessToken"
 #define CloudRequestTypeLoginUrl @"Users/Login"
-//#define CloudRequestTypeLoginCookieUrl @"Users/LoginWithCookie"
+#define CloudRequestTypeLoginCookieUrl @"Users/LoginWithCookie"
 #define CloudRequestTypeLogoutUrl @"Users/Logout"
 #define CloudRequestTypeGetUserProfileUrl @"Users/GetUserProfile"
 #define CloudRequestTypeSearchUserProfileUrl @"Users/FindUserProfile"
@@ -139,7 +139,7 @@
     
     if ( self )  {
         m_serverName = serverName;
-        m_serverRoot = [[NSString alloc] initWithFormat:@"%@/app_iphone", serverName];                
+        m_serverRoot = [[NSString alloc] initWithFormat:@"%@/app_iphone/", serverName];
     }
     
     return self;
@@ -379,56 +379,12 @@
 	
 }
 
-- (CloudRequest*)requestFacebookLoginWithToken:(NSString*)accessToken
-                                andCallbackObj:(id)obj
-                                andCallbackSel:(SEL)sel
-{
-	
-    // Create async request
-    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeLoginFacebook andCallbackObject:obj andCallbackSelector:sel];
-    
-    cloudRequest.m_facebookAccessToken = accessToken;
-    
-    [self cloudSendRequest:cloudRequest];
-    
-    return cloudRequest;
-    
-}
-
-//- (CloudRequest*)requestLoginWithCookie:(NSHTTPCookie*)cookie 
-//                         andCallbackObj:(id)obj
-//                         andCallbackSel:(SEL)sel
-//{
-//    
-//    // Create async request
-//    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeLoginCookie andCallbackObject:obj andCallbackSelector:sel];
-//    
-//    cloudRequest.m_cookie = cookie;
-//    
-//    [self cloudSendRequest:cloudRequest];
-//    
-//    return [cloudRequest autorelease];
-//    
-//}
-
 - (CloudRequest*)requestLogoutCallbackObj:(id)obj
                            andCallbackSel:(SEL)sel
 {
     
     // Create async request
     CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeLogout andCallbackObject:obj andCallbackSelector:sel];
-    
-    // Also Delete local cookies for good measure
-//    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:SERVER_NAME]];
-//    
-//	for ( unsigned int index = 0; index < [cookies count]; index++ )
-//	{
-//		
-//		NSHTTPCookie * cookie = [cookies objectAtIndex:index];
-//		
-//		[[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-//		
-//	}
     
     m_loggedIn = NO;
     
@@ -437,6 +393,25 @@
     return cloudRequest;
 	
 }
+
+/*
+ - (CloudRequest*)requestFacebookLoginWithToken:(NSString*)accessToken
+ andCallbackObj:(id)obj
+ andCallbackSel:(SEL)sel
+ {
+	
+ // Create async request
+ CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeLoginFacebook andCallbackObject:obj andCallbackSelector:sel];
+ 
+ cloudRequest.m_facebookAccessToken = accessToken;
+ 
+ [self cloudSendRequest:cloudRequest];
+ 
+ return cloudRequest;
+ 
+ }
+ */
+
 
 - (CloudRequest*)requestUserProfile:(NSInteger)userId
                      andCallbackObj:(id)obj
@@ -1063,7 +1038,7 @@
     // Get the arguments ready based on the request type
     [self marshalArgumentsForRequest:cloudRequest withUrl:&urlString andParameters:&paramsArray andFiles:&filesArray];
     
-    NSString * rootedUrlString = [NSString stringWithFormat:@"%@/%@", SERVER_ROOT, urlString];
+    NSString * rootedUrlString = [NSString stringWithFormat:@"%@%@", SERVER_ROOT, urlString];
 #if TARGET_IPHONE_SIMULATOR
     NSLog(@"%@", rootedUrlString);
 #endif
@@ -1173,13 +1148,7 @@
     
     switch ( cloudRequest.m_type )
     {
-            
-        case CloudRequestTypeGetServerStatus:
-        {
-            url = CloudRequestTypeGetServerStatusUrl;
-            
-        } break;
-            
+        
         case CloudRequestTypeGetFile:
         {
             
@@ -1192,6 +1161,7 @@
             params = [NSArray arrayWithObject:param];
             
         } break;
+            
             
         case CloudRequestTypeRegister:
         {
@@ -1218,19 +1188,6 @@
             
         } break;
             
-        case CloudRequestTypeLoginFacebook:
-        {
-            
-            url = CloudRequestTypeLoginFacebookUrl;
-            
-            NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"data[Users][access_token]", @"Name",
-                                    cloudRequest.m_facebookAccessToken, @"Value", nil];
-            
-            params = [NSArray arrayWithObject:param];
-            
-        } break;
-            
         case CloudRequestTypeLogin:
         {
             
@@ -1244,27 +1201,32 @@
                                      @"data[User][password]", @"Name",
                                      cloudRequest.m_password, @"Value", nil];
             
+            
             params = [NSArray arrayWithObjects:param1, param2, nil];
             
         } break;
             
-//        case CloudRequestTypeLoginCookie:
-//        {
-//            
-//            url = CloudRequestTypeLoginCookieUrl;
-//            
-//            // Update the cookies
-//            [self setCakePhpCookie:cloudRequest.m_cookie];
-//            
-//        } break;
             
         case CloudRequestTypeLogout:
         {
-            
             url = CloudRequestTypeLogoutUrl;
             
         } break;
             
+        /*case CloudRequestTypeLoginFacebook:
+         {
+         
+         url = CloudRequestTypeLoginFacebookUrl;
+         
+         NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
+         @"data[Users][access_token]", @"Name",
+         cloudRequest.m_facebookAccessToken, @"Value", nil];
+         
+         params = [NSArray arrayWithObject:param];
+         
+         } break;*/
+            
+        // CONVERTING
         case CloudRequestTypeGetUserProfile: {
             
             url = CloudRequestTypeGetUserProfileUrl;
@@ -1277,6 +1239,8 @@
             
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypeEditUserProfile:
         {
             
@@ -1297,6 +1261,8 @@
             
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypeSearchUserProfile:
         {
             
@@ -1310,6 +1276,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeSearchUserProfileFacebook:
         {
             
@@ -1323,6 +1291,8 @@
             
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypeGetUserCredits:
         {
             
@@ -1330,6 +1300,8 @@
             
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypePurchaseSong:
         {
             
@@ -1343,6 +1315,8 @@
             
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypeVerifyItunesReceipt:
         {
             url = CloudRequestTypeVerifyItunesReceiptUrl;
@@ -1384,12 +1358,16 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeGetAllSongPids: url = CloudRequestTypeGetAllSongPidsUrl; break;
         case CloudRequestTypeGetAllSongsList: url = CloudRequestTypeGetAllSongsListUrl; break;
         case CloudRequestTypeGetUserSongList: url = CloudRequestTypeGetUserSongListUrl; break;
         case CloudRequestTypeGetStoreSongList:  url = CloudRequestTypeGetStoreSongListUrl; break;
         case CloudRequestTypeGetStoreFeaturesSongList:  url = CloudRequestTypeGetStoreFeaturesSongListUrl; break;
             
+            
+        // DEPRECATING
         case CloudRequestTypePutUserSongSession:
         {
             
@@ -1426,6 +1404,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeGetUserSongSessions:
         {
             
@@ -1444,6 +1424,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeAddUserFollows:
         {
             
@@ -1457,6 +1439,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeRemoveUserFollows:
         {
             
@@ -1470,6 +1454,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeGetUserFollowsList:
         {
             
@@ -1483,6 +1469,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeGetUserFollowedList:
         {
             
@@ -1496,6 +1484,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeGetUserFollowsSongSessions:
         {
             
@@ -1513,6 +1503,8 @@
             
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeGetUserGlobalSongSessions:
         {
             NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1524,6 +1516,8 @@
             url = CloudRequestTypeGetUserGlobalSongSessionsUrl;
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypeRedeemCreditCode:
         {
             url = CloudRequestTypeRedeemCreditCodeUrl;
@@ -1535,6 +1529,8 @@
             params = [NSArray arrayWithObject:param];
         } break;
             
+            
+        // DEPRECATING
         case CloudRequestTypePutLog:
         {
             
@@ -1562,10 +1558,14 @@
             files = [NSArray arrayWithObject:fileDict];
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypeGetCurrentFirmwareVersion: {
             url = CloudRequestTypeGetCurrentFirmwareVersionUrl;
         } break;
             
+            
+        // CONVERTING
         case CloudRequestTypeRegisterGtar: {
             //url = CloudRequestTypeRegisterGtarUrl;
             /*NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1666,8 +1666,6 @@
             
         case CloudRequestTypeRegister:
         {
-            
-            
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             
             XmlDom * dom = cloudResponse.m_responseXmlDom;
@@ -1692,10 +1690,8 @@
             
         } break;
             
-        case CloudRequestTypeLoginFacebook:
+        /*case CloudRequestTypeLoginFacebook:
         {
-            
-            
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             
             m_facebookAccessToken = cloudResponse.m_cloudRequest.m_facebookAccessToken;
@@ -1719,11 +1715,12 @@
             
             cloudResponse.m_responseUserProfile = userProfile;
             
-        } break;
+        } break;*/
             
         case CloudRequestTypeLogin:
         {
             
+            NSLog(@"Cloud Response: Login");
             
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             
@@ -1747,34 +1744,6 @@
             cloudResponse.m_responseUserProfile = userProfile;
             
         } break;
-            
-//        case CloudRequestTypeLoginCookie:
-//        {
-//            
-//            [m_username release];
-//            
-//            m_username = [[cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"] retain];
-//            
-//            XmlDom * dom = cloudResponse.m_responseXmlDom;
-//            
-//            NSString * result = [dom getTextFromChildWithName:@"StatusText"];
-//            
-//            if ( [result isEqualToString:@"Ok"] == YES )
-//            {
-//                m_loggedIn = YES;
-//            }
-//            else
-//            {
-//                m_loggedIn = NO;
-//            }
-//            
-//            XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
-//            
-//            UserProfile * userProfile = [[[UserProfile alloc] initWithXmlDom:profileDom] autorelease];
-//            
-//            cloudResponse.m_responseUserProfile = userProfile;
-//            
-//        } break;
             
         case CloudRequestTypeLogout: {
             m_loggedIn = NO;
@@ -1982,6 +1951,8 @@
         } break;
             
         default: {
+            
+            NSLog(@"Cloud request type DEFAULT");
             // nothing
         } break;
     }

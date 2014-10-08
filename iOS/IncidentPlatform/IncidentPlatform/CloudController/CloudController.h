@@ -36,6 +36,7 @@
     #define kServerAddress @"http://cloud.incidenttech.dev/"
 #endif
 
+
 @interface CloudController : NSObject {
     BOOL m_online;
     BOOL m_loggedIn;
@@ -80,16 +81,19 @@
 - (NSNumber*)requestUserCredits;
 
 
-// external request access
 - (CloudRequest*)requestServerStatusCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 - (CloudRequest*)requestFile:(NSInteger)fileId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestRegisterUsername:(NSString*)username andPassword:(NSString*)password andEmail:(NSString*)email andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
-//- (void)requestRegisterUsername:(NSString*)username andFacebookAccessToken:(NSString*)facebookAccessToken andEmail:(NSString*)email andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 - (CloudRequest*)requestLoginUsername:(NSString*)username andPassword:(NSString*)password andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
-//- (CloudRequest*)requestLoginWithCookie:(NSHTTPCookie*)cookie andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
-- (CloudRequest*)requestFacebookLoginWithToken:(NSString*)accessToken andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 - (CloudRequest*)requestLogoutCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
+
+//- (void)requestRegisterUsername:(NSString*)username andFacebookAccessToken:(NSString*)facebookAccessToken andEmail:(NSString*)email andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+/*- (CloudRequest*)requestFacebookLoginWithToken:(NSString*)accessToken andCallbackObj:(id)obj andCallbackSel:(SEL)sel;*/
 - (CloudRequest*)requestUserProfile:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 - (CloudRequest*)requestUserProfileEdit:(NSString*)name andEmail:(NSString*)email andImage:(UIImage*)profPic andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 - (CloudRequest*)requestUserProfileSearch:(NSString*)search andCallbackObj:(id)obj andCallbackSel:(SEL)sel;

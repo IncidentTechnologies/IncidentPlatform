@@ -62,6 +62,8 @@ typedef enum XMPObjectTypes
     XMPNode *m_xmpNode;
     NSString *m_Name;
     
+    XMPObject * tempObject;
+    
 }
 
 -(NSString*)GetName;

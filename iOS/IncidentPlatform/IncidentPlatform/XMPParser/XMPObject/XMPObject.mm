@@ -149,7 +149,7 @@ Error:
             else {
                 // Check to see this node isn't already present
                 if([self ContentHasXMPNode:(*it)] == false) {
-                    XMPObject *tempObject = [XMPObjectFactory MakeXMPObject:(*it)];
+                    tempObject = [XMPObjectFactory MakeXMPObject:(*it)];
                     if(tempObject != NULL)
                         [m_contents addObject:tempObject];
                 }
