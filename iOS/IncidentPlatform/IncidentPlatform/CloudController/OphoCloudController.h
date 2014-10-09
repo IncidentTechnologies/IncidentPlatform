@@ -14,6 +14,23 @@
 @class CloudRequest;
 @class CloudResponse;
 
+typedef enum
+{
+    OphoXmpTypeSong = 1,
+    OphoXmpTypeSongSession,
+    OphoXmpTypeSequence,
+    OphoXmpTypeXMPSample,
+    OphoXmpTypeXMPInstrument,
+    OphoXmpTypeXMPClip,
+    OphoXmpTypeXMPEffect
+} OphoXmpType;
+
+
+#define PERMISSIONS_PUBLIC @"PUBLIC"
+#define PERMISSIONS_PRIVATE @"PRIVATE"
+#define PERMISSIONS_OPEN @"OPEN"
+
+
 #define OPHO_DEV_SERVER
 //#define OPHO_SERVER
 
@@ -24,6 +41,7 @@
 #ifdef OPHO_SERVER
     #define kServerAddress @"http://api.opho.com/"
 #endif
+
 
 @interface OphoCloudController : NSObject {
     BOOL m_online;
@@ -53,21 +71,10 @@
 - (id)initWithServer:(NSString*)serverName;
 + (OphoCloudController*)sharedSingleton;
 
-// Misc
-
-//- (NSHTTPCookie*)getCakePhpCookie;
-//- (void)setCakePhpCookie:(NSHTTPCookie*)cookie;
-
 - (void)handleError;
 - (void)errorWindowFinished;
 - (void)queryOnlineStatus;
 - (void)receiveOnlineStatus:(CloudResponse*)cloudResponse;
-
-// Syncronous convenience functions
-- (BOOL)requestServerStatus;
-- (BOOL)requestItunesServerStatus;
-- (NSNumber*)requestUserCredits;
-
 
 // Opho Server Requests
 - (CloudRequest*)requestServerStatusCallbackObj:(id)obj andCallbackSel:(SEL)sel;
@@ -102,11 +109,9 @@
 - (CloudRequest*)requestSetXmpPermissionWithId:(NSInteger)xmpId andUserId:(NSInteger)userId andPermission:(NSString *)permission andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 
-
 // Deprecated or converting //----------------------------------------------
 
 - (CloudRequest*)requestFile:(NSInteger)fileId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
-
 
 
 - (void)registerConnection:(NSURLConnection*)connection toResponse:(CloudResponse*)cloudResponse;

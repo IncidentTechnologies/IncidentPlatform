@@ -36,7 +36,6 @@
     #define kServerAddress @"http://cloud.incidenttech.dev/"
 #endif
 
-
 @interface CloudController : NSObject {
     BOOL m_online;
     BOOL m_loggedIn;

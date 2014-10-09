@@ -16,13 +16,10 @@
 #import "XmlDictionary.h"
 #import "XmlDom.h"
 
-#define SERVER_NAME_DEFAULT @"http://www.strumhub.com/v0.53"
-#define SERVER_ROOT_DEFAULT @"http://www.strumhub.com/v0.53/app_iphone"
+#define SERVER_NAME_DEFAULT @"http://api.opho.com/"
+#define SERVER_ROOT_DEFAULT @"http://api.opho.com/"
 #define SERVER_NAME m_serverName
 #define SERVER_ROOT m_serverRoot
-
-#define GET_SERVER_STATUS @"Main/ServerStatus"
-#define GET_ITUNES_STATUS @"Main/ItunesStatus"
 
 #define CloudRequestTypeGetFileUrl @"UserFiles/GetFile"
 
@@ -49,7 +46,6 @@
 #define POST_BOUNDARY @"------gTarPlayFormBoundary0123456789"
 
 #define URL_REQUEST_TIMEOUT 30
-//#define URL_REQUEST_TIMEOUT 0.0000001
 
 // X number of time outs every Y seconds sends us offline
 #define ERRORS_BEFORE_OFFLINE 6
@@ -156,57 +152,6 @@
         [NSTimer scheduledTimerWithTimeInterval:TEST_ONLINE_STATUS_PERIOD target:self selector:@selector(queryOnlineStatus) userInfo:nil repeats:NO];
     }
 }
-
-#pragma mark -
-#pragma mark Syncronous convenience
-/*
-// These functions haven't been used in a long time and are probably dead
-- (BOOL)requestServerStatus {
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@", SERVER_ROOT, GET_SERVER_STATUS];
-    XmlDom * dom = [[XmlDom alloc] initWithXmlData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]];
-    NSString * response = [dom getTextFromChildWithName:@"StatusText"];
-    
-    BOOL status = NO;
-    
-    // The request succeeded, the server is there
-    if ( [response isEqualToString:@"Ok"] )
-        status = YES;
-    else
-        status = NO;
-    
-    return status;
-}
-
-
-- (BOOL)requestItunesServerStatus {
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@", SERVER_ROOT, GET_ITUNES_STATUS];
-    XmlDom * dom = [[XmlDom alloc] initWithXmlData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]]];
-    NSString * response = [dom getTextFromChildWithName:@"StatusText"];
-    
-    BOOL status = NO;
-    
-    // The request succeeded, the server is there
-    if ( [response isEqualToString:@"Ok"] )
-        status = YES;
-    else
-        status = NO;
-    
-    return status;
-}
-
-
-- (NSNumber*)requestUserCredits {
-    // Create sync request
-    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeGetUserCredits];
-    CloudResponse * cloudResponse = [self cloudSendRequest:cloudRequest];
-    NSNumber * credits = nil;
-    
-    if ( cloudResponse.m_status == CloudResponseStatusSuccess )
-        credits = cloudResponse.m_responseUserCredits;
-    
-    return credits;
-}
-*/
 
 #pragma mark - Server requests
 
@@ -845,8 +790,6 @@
     
     switch ( cloudRequest.m_type )
     {
-        
-        // OPHO
         case CloudRequestTypeGetServerStatus:
         {
             url = CloudRequestTypeGetServerStatusUrl;
@@ -867,49 +810,47 @@
             
         } break;
             
-        // OPHO
         case CloudRequestTypeGetUserStatus:
         {
             url = CloudRequestTypeGetUserStatusUrl;
             
         } break;
             
-        // OPHO
         case CloudRequestTypeRegister:
         {
             
             url = CloudRequestTypeRegisterUrl;
             
             NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"data[User][username]", @"Name",
+                                     @"username", @"Name",
                                      cloudRequest.m_username, @"Value", nil];
             
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"data[User][password]", @"Name",
+                                     @"password", @"Name",
                                      cloudRequest.m_password, @"Value", nil];
             
-            NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"data[User][password_verification]", @"Name",
-                                     cloudRequest.m_password, @"Value", nil];
+            // password verification?
             
             NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"data[User][email]", @"Name",
+                                     @"email", @"Name",
                                      cloudRequest.m_email, @"Value", nil];
             
-            params = [NSArray arrayWithObjects:param1, param2, param3, param4, nil];
+            params = [NSArray arrayWithObjects:param1, param2, param4, nil];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeActivate:
         {
             url = CloudRequestTypeActivateUrl;
             
-            // key
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"key", @"Name",
+                                     cloudRequest.m_activationKey, @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, nil];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeLogin:
         {
             
@@ -922,7 +863,6 @@
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"password", @"Name",
                                      cloudRequest.m_password, @"Value", nil];
-            
             // Optional: email
             
             NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -934,81 +874,146 @@
             
         } break;
             
-        // OPHO
         case CloudRequestTypeLogout:
         {
             url = CloudRequestTypeLogoutUrl;
             
         } break;
             
-        // OPHO
         case CloudRequestTypeNewXmp:
         {
             url = CloudRequestTypeNewXmpUrl;
             
-            // xmpfolderid=#
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpfolderid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, nil];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeDeleteXmp:
         {
             url = CloudRequestTypeDeleteXmpUrl;
             
-            // xmpid=#
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, nil];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeSaveXmp:
         {
             url = CloudRequestTypeSaveXmpUrl;
             
-            //xmpid
-            //xmpfile
-            //xmpdata
+            NSMutableArray * tempParams = [[NSMutableArray alloc] init];
+            
+            if(cloudRequest.m_xmpId > 0){
+                NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+                
+                [tempParams addObject:param];
+            }
+            
+            if(cloudRequest.m_xmpFile != nil){
+                
+                NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         @"xmpfile", @"Name",
+                                         cloudRequest.m_xmpFile, @"Value", nil];
+                
+                [tempParams addObject:param];
+            }
+            
+            if(cloudRequest.m_xmpData != nil){
+                
+                NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         @"xmpdata", @"Name",
+                                         cloudRequest.m_xmpData, @"Value", nil];
+                
+                [tempParams addObject:param];
+            }
+            
+            
+            params = [NSArray arrayWithArray:tempParams];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeGetXmp:
         {
             url = CloudRequestTypeGetXmpUrl;
             
-            //xmpid
-            //xmponly
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmponly", @"Name",
+                                     cloudRequest.m_xmpOnly, @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, nil];
             
         } break;
 
-        // OPHO
         case CloudRequestTypeGetXmpList:
         {
             url = CloudRequestTypeGetXmpListUrl;
             
-            //type
-            //appid
-            //permission
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"type", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_type], @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"userid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
+            
+            NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"appid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_appId], @"Value", nil];
+            
+            NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"permission", @"Name",
+                                     cloudRequest.m_permissionLevel, @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, param3, param4, nil];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeSetXmpFolder:
         {
             url = CloudRequestTypeSetXmpFolderUrl;
             
-            //xmpid
-            //xmpfolderid
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpfolderid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, nil];
             
         } break;
             
-        // OPHO
         case CloudRequestTypeSetXmpPermission:
         {
             url = CloudRequestTypeSetXmpPermissionUrl;
             
-            //xmpid
-            //userid
-            //permission
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"userid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
+            
+            NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"permission", @"Name",
+                                     cloudRequest.m_permissionLevel, @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, param3, nil];
             
         } break;
             
