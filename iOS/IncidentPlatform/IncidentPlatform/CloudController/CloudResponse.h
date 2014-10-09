@@ -80,6 +80,9 @@ typedef enum
     NSInteger m_responseFirmwareMajorVersion;
     NSInteger m_responseFirmwareMinorVersion;
     
+    // Opho
+    NSArray * m_xmpList;
+    
 }
 
 @property (nonatomic, readonly) CloudRequest * m_cloudRequest;
@@ -109,6 +112,9 @@ typedef enum
 @property (nonatomic, strong) NSArray * m_responseProductIds;
 @property (nonatomic, assign) NSInteger m_responseFirmwareMajorVersion;
 @property (nonatomic, assign) NSInteger m_responseFirmwareMinorVersion;
+
+// Opho
+@property (nonatomic, strong) NSArray * m_xmpList;
 
 - (id)initWithCloudRequest:(CloudRequest*)cloudRequest;
 

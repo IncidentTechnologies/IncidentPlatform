@@ -18,11 +18,11 @@ typedef enum
 {
     OphoXmpTypeSong = 1,
     OphoXmpTypeSongSession,
-    OphoXmpTypeSequence,
     OphoXmpTypeXMPSample,
     OphoXmpTypeXMPInstrument,
     OphoXmpTypeXMPClip,
-    OphoXmpTypeXMPEffect
+    OphoXmpTypeXMPEffect,
+    OphoXmpTypeSequence
 } OphoXmpType;
 
 

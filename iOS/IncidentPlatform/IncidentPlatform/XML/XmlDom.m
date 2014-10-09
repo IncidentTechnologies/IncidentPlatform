@@ -299,8 +299,9 @@
         
         XmlDom * dom = [[XmlDom alloc] initWithXmlDictionary:dict];
         
-        [domArray addObject:dom];
-        
+        if(dom != nil){
+            [domArray addObject:dom];
+        }
         
     }
     

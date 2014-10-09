@@ -960,8 +960,10 @@
             url = CloudRequestTypeGetXmpListUrl;
             
             NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"type", @"Name",
-                                     [NSNumber numberWithInt:cloudRequest.m_type], @"Value", nil];
+                                     @"xmptype", @"Name",
+                                     [NSNumber numberWithInt:4], @"Value", nil];
+            
+            //cloudRequest.m_type
             
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"userid", @"Name",
@@ -975,7 +977,7 @@
                                      @"permission", @"Name",
                                      cloudRequest.m_permissionLevel, @"Value", nil];
             
-            params = [NSArray arrayWithObjects:param1, param2, param3, param4, nil];
+            params = [NSArray arrayWithObjects:param1, nil];
             
         } break;
             
@@ -1086,15 +1088,6 @@
             
     }
     
-    //
-    //
-    //
-    
-    // Get Opho Status Return Info
-    // StatusCode
-    // StatusDetail
-    // StatusText
-    // Errors?
     
     switch ( cloudResponse.m_cloudRequest.m_type )
     {
@@ -1181,8 +1174,10 @@
         } break;
             
         case CloudRequestTypeLogout: {
+            
             m_loggedIn = NO;
             m_facebookAccessToken = nil;
+            
         } break;
             
         case CloudRequestTypeNewXmp:
@@ -1212,6 +1207,23 @@
         case CloudRequestTypeGetXmpList:
         {
             NSLog(@"Cloud Response: Get Xmp List");
+            
+            XmlDom * dom = cloudResponse.m_responseXmlDom;
+            
+            NSString * result = [dom getTextFromChildWithName:@"StatusText"];
+            
+            if ( [result isEqualToString:@"Ok"] == YES )
+            {
+                m_loggedIn = YES;
+            }
+            else
+            {
+                m_loggedIn = NO;
+            }
+            
+            NSArray * xmpList = [[dom getChildWithName:@"xmplist"] getChildArrayWithName:@"xmp"];
+            
+            cloudResponse.m_xmpList = xmpList;
             
         } break;
             
