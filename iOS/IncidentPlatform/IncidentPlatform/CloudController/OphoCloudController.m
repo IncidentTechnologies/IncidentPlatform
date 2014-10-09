@@ -38,7 +38,7 @@
 #define CloudRequestTypeDeleteXmpUrl @"xmp/delete/"
 #define CloudRequestTypeSaveXmpUrl @"xmp/save/"
 #define CloudRequestTypeGetXmpUrl @"xmp/get/"
-#define CloudRequestTypeGetXmpListUrl @"xmp/getlist/"
+#define CloudRequestTypeGetXmpListUrl @"xmp/list/"
 #define CloudRequestTypeSetXmpFolderUrl @"xmp/setfolder/"
 #define CloudRequestTypeSetXmpPermissionUrl @"xmp/setpermission/"
 
@@ -796,7 +796,6 @@
             
         } break;
             
-        // CONVERTING/DEPRECATING
         case CloudRequestTypeGetFile:
         {
             
@@ -829,13 +828,11 @@
                                      @"password", @"Name",
                                      cloudRequest.m_password, @"Value", nil];
             
-            // password verification?
-            
-            NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
+            NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"email", @"Name",
                                      cloudRequest.m_email, @"Value", nil];
             
-            params = [NSArray arrayWithObjects:param1, param2, param4, nil];
+            params = [NSArray arrayWithObjects:param1, param2, param3, nil];
             
         } break;
             
@@ -863,6 +860,7 @@
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"password", @"Name",
                                      cloudRequest.m_password, @"Value", nil];
+            
             // Optional: email
             
             NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1088,6 +1086,16 @@
             
     }
     
+    //
+    //
+    //
+    
+    // Get Opho Status Return Info
+    // StatusCode
+    // StatusDetail
+    // StatusText
+    // Errors?
+    
     switch ( cloudResponse.m_cloudRequest.m_type )
     {
             
@@ -1229,6 +1237,7 @@
 
 // Do some generic processing of the response data
 - (void)preprocessResultsForResponse:(CloudResponse*)cloudResponse {
+    
     // Parse the received data into an XmlDom
     XmlDom * dom = [[XmlDom alloc] initWithXmlData:cloudResponse.m_receivedData];
     cloudResponse.m_responseXmlDom = dom;
@@ -1240,14 +1249,18 @@
     else
         cloudResponse.m_status = CloudResponseStatusFailure;
     
-    // also see if we have been logged out as a result of this
+    // Also see if we have been logged out as a result of this
     if ( [result isEqualToString:@"Unauthorized"] == YES )
         m_loggedIn = NO;
     
     NSString * detail = [dom getTextFromChildWithName:@"StatusDetail"];
+    XmlDom * firstError = [[dom getChildrenFromChildWithName:@"Errors"] firstObject];
+    NSString * firstErrorText = [firstError getText];
     
     // Our net code is a little inconsistent on where failure reason is reported
-    if ( detail != nil )
+    if(firstErrorText != nil)
+        cloudResponse.m_statusText = firstErrorText;
+    else if ( detail != nil )
         cloudResponse.m_statusText = detail;
     else if ( result != nil )
         cloudResponse.m_statusText = result;
