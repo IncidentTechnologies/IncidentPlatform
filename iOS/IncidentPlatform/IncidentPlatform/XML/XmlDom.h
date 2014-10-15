@@ -28,8 +28,12 @@
 - (NSInteger)getIntegerFromChildWithName:(NSString*)childName;
 - (NSNumber*)getNumberFromChildWithName:(NSString*)childName;
 - (NSInteger)getDateFromChildWithName:(NSString*)childName;
+- (NSString *)getValueFromChildWithName:(id)childName;
+- (NSString *)getAttribute:(NSString *)attribute fromChildWithName:(id)childName;
 - (NSArray*)getChildrenFromChildWithName:(NSString*)childName;
 
+- (NSString *)getAttribute:(NSString *)attribute;
+- (NSString*)getValue;
 - (NSString*)getText;
 - (NSInteger)getInteger;
 - (NSNumber*)getNumber;

@@ -285,6 +285,7 @@
 #pragma mark Opho XMP
 
 - (CloudRequest*)requestNewXmpWithFolderId:(NSInteger)folderId
+                                   andName:(NSString *)name
                             andCallbackObj:(id)obj
                             andCallbackSel:(SEL)sel
 {
@@ -292,6 +293,7 @@
     // Create async request
     CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeNewXmp andCallbackObject:obj andCallbackSelector:sel];
     
+    cloudRequest.m_xmpName = name;
     cloudRequest.m_folderId = folderId;
     
     [self cloudSendRequest:cloudRequest];
@@ -314,8 +316,8 @@
 }
 
 - (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId
-                           andXmpFile:(id)file
-                           andXmpData:(NSData *)data
+                           andXmpFile:(NSData *)file
+                           andXmpData:(NSString *)data
                        andCallbackObj:(id)obj
                        andCallbackSel:(SEL)sel
 {
@@ -349,8 +351,6 @@
 
 - (CloudRequest*)requestGetXmpListWithType:(NSInteger)type
                                  andUserId:(NSInteger)userId
-                                  andAppId:(NSInteger)appId
-                             andPermission:(NSString *)permission
                             andCallbackObj:(id)obj
                             andCallbackSel:(SEL)sel
 {
@@ -359,8 +359,6 @@
     
     cloudRequest.m_xmpType = type;
     cloudRequest.m_userId = userId;
-    cloudRequest.m_appId = appId;
-    cloudRequest.m_permissionLevel = permission;
     
     [self cloudSendRequest:cloudRequest];
     
@@ -886,7 +884,12 @@
                                      @"xmpfolderid", @"Name",
                                      [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
             
-            params = [NSArray arrayWithObjects:param1, nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"name", @"Name",
+                                     cloudRequest.m_xmpName, @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param2, nil];
             
         } break;
             
@@ -934,8 +937,8 @@
                 [tempParams addObject:param];
             }
             
-            
             params = [NSArray arrayWithArray:tempParams];
+            
             
         } break;
             
@@ -949,7 +952,7 @@
             
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"xmponly", @"Name",
-                                     cloudRequest.m_xmpOnly, @"Value", nil];
+                                     @"false", @"Value", nil];
             
             params = [NSArray arrayWithObjects:param1, param2, nil];
             
@@ -959,25 +962,17 @@
         {
             url = CloudRequestTypeGetXmpListUrl;
             
+            NSLog(@"CloudRequest Type is %i",cloudRequest.m_type);
+            
             NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"xmptype", @"Name",
-                                     [NSNumber numberWithInt:4], @"Value", nil];
-            
-            //cloudRequest.m_type
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpType], @"Value", nil];
             
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"userid", @"Name",
                                      [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
             
-            NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"appid", @"Name",
-                                     [NSNumber numberWithInt:cloudRequest.m_appId], @"Value", nil];
-            
-            NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"permission", @"Name",
-                                     cloudRequest.m_permissionLevel, @"Value", nil];
-            
-            params = [NSArray arrayWithObjects:param1, nil];
+            params = [NSArray arrayWithObjects:param1, param2, nil];
             
         } break;
             
@@ -1088,6 +1083,19 @@
             
     }
     
+    XmlDom * dom = cloudResponse.m_responseXmlDom;
+    
+    NSString * result = [dom getTextFromChildWithName:@"StatusText"];
+    
+    if ( [result isEqualToString:@"Ok"] == YES )
+    {
+        m_loggedIn = YES;
+        
+    }else{
+        
+        m_loggedIn = NO;
+    }
+    
     
     switch ( cloudResponse.m_cloudRequest.m_type )
     {
@@ -1116,19 +1124,6 @@
         {
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             
-            XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
-            NSString * result = [dom getTextFromChildWithName:@"StatusText"];
-            
-            if ( [result isEqualToString:@"Ok"] == YES )
-            {
-                m_loggedIn = YES;
-            }
-            else
-            {
-                m_loggedIn = NO;
-            }
-            
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
             
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
@@ -1152,19 +1147,6 @@
             
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             
-            XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
-            NSString * result = [dom getTextFromChildWithName:@"StatusText"];
-            
-            if ( [result isEqualToString:@"Ok"] == YES )
-            {
-                m_loggedIn = YES;
-            }
-            else
-            {
-                m_loggedIn = NO;
-            }
-            
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
             
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
@@ -1184,6 +1166,10 @@
         {
             NSLog(@"Cloud Response: New Xmp");
             
+            XmlDom * xml = [dom getChildWithName:@"xmp"];
+            
+            cloudResponse.m_id = [[xml getTextFromChildWithName:@"xmp_id"] intValue];
+            
         } break;
             
         case CloudRequestTypeDeleteXmp:
@@ -1202,24 +1188,14 @@
         {
             NSLog(@"Cloud Response: Get Xmp");
             
+            XmlDom * dom = cloudResponse.m_responseXmlDom;
+            cloudResponse.m_xmpDom = [dom getChildWithName:@"xmp"];
+            
         } break;
             
         case CloudRequestTypeGetXmpList:
         {
             NSLog(@"Cloud Response: Get Xmp List");
-            
-            XmlDom * dom = cloudResponse.m_responseXmlDom;
-            
-            NSString * result = [dom getTextFromChildWithName:@"StatusText"];
-            
-            if ( [result isEqualToString:@"Ok"] == YES )
-            {
-                m_loggedIn = YES;
-            }
-            else
-            {
-                m_loggedIn = NO;
-            }
             
             NSArray * xmpList = [[dom getChildWithName:@"xmplist"] getChildArrayWithName:@"xmp"];
             

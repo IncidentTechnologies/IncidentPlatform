@@ -175,11 +175,11 @@ typedef enum {
 @property (nonatomic, strong) NSNumber * m_rememberLogin;
 @property (nonatomic, assign) NSInteger m_xmpId;
 @property (nonatomic, assign) NSInteger m_folderId;
-@property (nonatomic, strong) id m_xmpFile;
 @property (nonatomic, assign) NSInteger m_xmpType;
-@property (nonatomic, strong) NSData * m_xmpData;
+@property (nonatomic, strong) NSData * m_xmpFile;
+@property (nonatomic, strong) NSString * m_xmpData;
 @property (nonatomic, strong) NSNumber * m_xmpOnly;
-
+@property (nonatomic, strong) NSString * m_xmpName;
 
 - (id)initWithType:(CloudRequestType)type;
 - (id)initWithType:(CloudRequestType)type andCallbackObject:(id)obj andCallbackSelector:(SEL)sel;

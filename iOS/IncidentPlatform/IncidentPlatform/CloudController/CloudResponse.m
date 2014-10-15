@@ -47,6 +47,8 @@
 @synthesize m_responseFirmwareMinorVersion;
 
 @synthesize m_xmpList;
+@synthesize m_xmpDom;
+@synthesize m_id;
 
 - (id)initWithCloudRequest:(CloudRequest*)cloudRequest
 {

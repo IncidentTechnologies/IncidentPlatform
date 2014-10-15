@@ -22,7 +22,7 @@ typedef enum
     OphoXmpTypeXMPInstrument,
     OphoXmpTypeXMPClip,
     OphoXmpTypeXMPEffect,
-    OphoXmpTypeSequence
+    OphoXmpTypeAppDefined
 } OphoXmpType;
 
 
@@ -94,15 +94,15 @@ typedef enum
 
 // Opho XMP Requests
 
-- (CloudRequest*)requestNewXmpWithFolderId:(NSInteger)folderId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+- (CloudRequest*)requestNewXmpWithFolderId:(NSInteger)folderId andName:(NSString *)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestDeleteXmpWithId:(NSInteger)xmpId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
-- (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFile:(id)file andXmpData:(NSData *)data andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+- (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFile:(NSData *)file andXmpData:(NSString *)data andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestGetXmpWithId:(NSInteger)xmpId isXmpOnly:(BOOL)xmpOnly andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
-- (CloudRequest*)requestGetXmpListWithType:(NSInteger)type andUserId:(NSInteger)userId andAppId:(NSInteger)appId andPermission:(NSString*)permission andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+- (CloudRequest*)requestGetXmpListWithType:(NSInteger)type andUserId:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestSetXmpFolderWithId:(NSInteger)xmpId andFolderId:(NSInteger)folderId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 

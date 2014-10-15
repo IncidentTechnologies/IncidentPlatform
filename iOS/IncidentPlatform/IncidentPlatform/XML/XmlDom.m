@@ -241,6 +241,32 @@
 
 }
 
+- (NSString *)getValueFromChildWithName:(id)childName
+{
+    if(childName == nil){
+        return nil;
+    }
+    
+    XmlDom * childDom = [self getChildWithName:childName];
+    
+    NSString * value = [childDom getValue];
+    
+    return value;
+}
+
+- (NSString *)getAttribute:(NSString *)attribute fromChildWithName:(id)childName
+{
+    if(childName == nil){
+        return nil;
+    }
+    
+    XmlDom * childDom = [self getChildWithName:childName];
+    
+    NSString * attrValue = [childDom getAttribute:attribute];
+    
+    return attrValue;
+}
+
 - (NSArray*)getChildrenFromChildWithName:(NSString*)childName
 {
     
@@ -255,7 +281,13 @@
     
 }
 
+
 #pragma mark - Helpers
+- (NSString*)getValue
+{
+    return [m_backingDictionary objectForKey:@"value"];
+}
+
 - (NSString*)getText
 {
     return [m_backingDictionary objectForKey:XML_DICTIONARY_TEXT_NODE];
@@ -283,6 +315,11 @@
 
     return [[dateFormat dateFromString:dateString] timeIntervalSince1970];
 
+}
+
+- (NSString *)getAttribute:(NSString *)attribute
+{
+    return [m_backingDictionary objectForKey:attribute];
 }
 
 - (NSArray*)getChildren

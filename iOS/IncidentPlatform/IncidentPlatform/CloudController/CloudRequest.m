@@ -46,6 +46,7 @@
 @synthesize m_xmpType;
 @synthesize m_xmpData;
 @synthesize m_xmpOnly;
+@synthesize m_xmpName;
 
 @synthesize m_serial_lower;
 @synthesize m_serial_upper;
