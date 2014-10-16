@@ -108,6 +108,8 @@ typedef enum
 
 - (CloudRequest*)requestSetXmpPermissionWithId:(NSInteger)xmpId andUserId:(NSInteger)userId andPermission:(NSString *)permission andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
+- (CloudRequest*)requestSetXmpNameWithId:(NSInteger)xmpId andName:(NSString *)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 
 // Deprecated or converting //----------------------------------------------
 

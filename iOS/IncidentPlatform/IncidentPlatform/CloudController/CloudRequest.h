@@ -43,6 +43,7 @@ typedef enum {
     CloudRequestTypeGetXmpList,         //opho
     CloudRequestTypeSetXmpFolder,       //opho
     CloudRequestTypeSetXmpPermission,   //opho
+    CloudRequestTypeSetXmpName,         //opho
     
     CloudRequestTypeGetUserProfile,
     CloudRequestTypeEditUserProfile,

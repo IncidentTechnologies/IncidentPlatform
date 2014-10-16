@@ -41,6 +41,7 @@
 #define CloudRequestTypeGetXmpListUrl @"xmp/list/"
 #define CloudRequestTypeSetXmpFolderUrl @"xmp/setfolder/"
 #define CloudRequestTypeSetXmpPermissionUrl @"xmp/setpermission/"
+#define CloudRequestTypeSetXmpNameUrl @"xmp/setname/"
 
 // maybe append a clock() or tick() to this thing
 #define POST_BOUNDARY @"------gTarPlayFormBoundary0123456789"
@@ -393,6 +394,22 @@
     cloudRequest.m_xmpId = xmpId;
     cloudRequest.m_userId = userId;
     cloudRequest.m_permissionLevel = permission;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
+}
+
+- (CloudRequest*)requestSetXmpNameWithId:(NSInteger)xmpId
+                                 andName:(NSString *)name
+                          andCallbackObj:(id)obj
+                          andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeSetXmpName andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_xmpId = xmpId;
+    cloudRequest.m_xmpName = name;
     
     [self cloudSendRequest:cloudRequest];
     
@@ -1012,6 +1029,22 @@
             
         } break;
             
+        case CloudRequestTypeSetXmpName:
+        {
+            url = CloudRequestTypeSetXmpNameUrl;
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"name", @"Name",
+                                     cloudRequest.m_xmpName, @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, nil];
+            
+        }
+            
         default: break;
     }
     
@@ -1214,7 +1247,14 @@
             NSLog(@"Cloud Response: Set Xmp Permission");
             
         } break;
-                        
+            
+        case CloudRequestTypeSetXmpName:
+        {
+            NSLog(@"Cloud Response: Set Xmp Name");
+            
+        } break;
+        
+            
         default: {
             
             NSLog(@"Cloud request type DEFAULT");
