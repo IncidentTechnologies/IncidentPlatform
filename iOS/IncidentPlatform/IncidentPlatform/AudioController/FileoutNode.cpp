@@ -25,19 +25,19 @@ FileoutNode::FileoutNode(char *pszFilepath, bool fOverwrite) :
     // Create the file
     AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
     
-    AudioFileTypeID fileType = kAudioFileM4AType;
+    AudioFileTypeID fileType = kAudioFileCAFType;
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
     
     OutputDataFormat.mSampleRate         = 44100.0;
-    OutputDataFormat.mFormatID           = kAudioFormatMPEG4AAC;
-    OutputDataFormat.mFormatFlags        = kMPEG4Object_AAC_Main;
-    OutputDataFormat.mChannelsPerFrame   = 1;
-    OutputDataFormat.mBytesPerPacket     = 0;
-    OutputDataFormat.mBytesPerFrame      = 0;
-    OutputDataFormat.mFramesPerPacket    = 1024;
-    OutputDataFormat.mBitsPerChannel     = 0;
-    OutputDataFormat.mReserved           = 0;
+    OutputDataFormat.mFormatID           = kAudioFormatLinearPCM;
+    OutputDataFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+    OutputDataFormat.mChannelsPerFrame = 1;
+    OutputDataFormat.mBytesPerPacket = 2; //0
+    OutputDataFormat.mBytesPerFrame = 2; //0
+    OutputDataFormat.mFramesPerPacket = 1; //1024
+    OutputDataFormat.mBitsPerChannel = 16; //0;
+    OutputDataFormat.mReserved = 0;
     
     
     UInt32 flags = (fOverwrite) ? kAudioFileFlags_EraseFile : 0;
@@ -60,6 +60,7 @@ FileoutNode::FileoutNode(char *pszFilepath, bool fOverwrite) :
     
     if(status)
         DEBUG_LINEOUT("FileoutNode: ExtAudioFileSetProperty:kExtAudioFileProperty_CodecManufacturer failed: %s", CAX4CCString(status).get());
+    
     
     // Tell the ExtAudioFile API what format we'll be sending samples in
     //LocalDataFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked | kAudioFormatFlagsNativeEndian;
@@ -140,7 +141,7 @@ AudioStreamBasicDescription FileoutNode::GetClientFormatDescription(bool fStereo
     size_t bytesPerSample = sizeof (AudioSampleType);
     
     ClientDataFormat.mFormatID          = kAudioFormatLinearPCM;
-    ClientDataFormat.mFormatFlags       = kLinearPCMFormatFlagIsSignedInteger;
+    ClientDataFormat.mFormatFlags       = kAudioFormatFlagIsSignedInteger;
     ClientDataFormat.mChannelsPerFrame  = 1;                    // 1 indicates mono
     ClientDataFormat.mBytesPerFrame     = bytesPerSample;       //ClientDataFormat.mChannelsPerFrame * sizeof(float);
     ClientDataFormat.mFramesPerPacket   = 1;

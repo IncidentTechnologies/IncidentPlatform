@@ -217,7 +217,7 @@ AudioStreamBasicDescription SampleBuffer::GetClientFormatDescription(bool fStere
     size_t bytesPerSample = sizeof (AudioSampleType);
     
     ClientDataFormat.mFormatID = kAudioFormatLinearPCM;
-    ClientDataFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger;
+    ClientDataFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
     ClientDataFormat.mChannelsPerFrame = 1; // 1 indicates mono
     ClientDataFormat.mBytesPerFrame = bytesPerSample; //ClientDataFormat.mChannelsPerFrame * sizeof(float);
     ClientDataFormat.mFramesPerPacket = 1;
@@ -233,7 +233,7 @@ Boolean IsAACHardwareEncoderAvailable() {
     
     // get an array of AudioClassDescriptions for all installed encoders for the given format
     // the specifier is the format that we are interested in - this is 'aac ' in our case
-    UInt32 encoderSpecifier = kAudioFormatMPEG4AAC;
+    UInt32 encoderSpecifier = kAudioFormatLinearPCM;
     UInt32 size;
     
     OSStatus status = AudioFormatGetPropertyInfo(kAudioFormatProperty_Encoders,
@@ -259,13 +259,13 @@ Boolean IsAACHardwareEncoderAvailable() {
     }
     
     for (UInt32 i=0; i < numEncoders; ++i)
-        if (encoderDescriptions[i].mSubType == kAudioFormatMPEG4AAC && encoderDescriptions[i].mManufacturer == kAppleHardwareAudioCodecManufacturer)
+        if (encoderDescriptions[i].mSubType == kAudioFormatLinearPCM && encoderDescriptions[i].mManufacturer == kAppleHardwareAudioCodecManufacturer)
             isAvailable = true;
     
     return isAvailable;
 }
 
-// Currentlt configured for m4a
+// Currently configured for wav
 RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     RESULT r = R_SUCCEED;
     
@@ -280,19 +280,19 @@ RESULT SampleBuffer::SaveToFile(char *pszFilepath, bool fOverwrite) {
     // Create the file
     AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
     
-    AudioFileTypeID fileType = kAudioFileM4AType;
+    AudioFileTypeID fileType = kAudioFileCAFType;
     
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
     
     OutputDataFormat.mSampleRate = 44100.0;
-    OutputDataFormat.mFormatID = kAudioFormatMPEG4AAC;
-    OutputDataFormat.mFormatFlags = kMPEG4Object_AAC_Main;
+    OutputDataFormat.mFormatID = kAudioFormatLinearPCM;
+    OutputDataFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
     OutputDataFormat.mChannelsPerFrame = 1;
-    OutputDataFormat.mBytesPerPacket = 0;
-    OutputDataFormat.mBytesPerFrame = 0;
-    OutputDataFormat.mFramesPerPacket = 1024;
-    OutputDataFormat.mBitsPerChannel = 0;
+    OutputDataFormat.mBytesPerPacket = 2; //0
+    OutputDataFormat.mBytesPerFrame = 2; //0
+    OutputDataFormat.mFramesPerPacket = 1; //1024
+    OutputDataFormat.mBitsPerChannel = 16; //0;
     OutputDataFormat.mReserved = 0;
     
     

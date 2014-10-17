@@ -319,6 +319,7 @@
 - (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId
                            andXmpFile:(NSData *)file
                            andXmpData:(NSString *)data
+                              andName:(NSString *)name
                        andCallbackObj:(id)obj
                        andCallbackSel:(SEL)sel
 {
@@ -328,6 +329,7 @@
     cloudRequest.m_xmpId = xmpId;
     cloudRequest.m_xmpFile = file;
     cloudRequest.m_xmpData = data;
+    cloudRequest.m_xmpName = name;
     
     [self cloudSendRequest:cloudRequest];
     
@@ -746,11 +748,12 @@
     for ( NSDictionary * fileDict in filesArray ) {
         NSString * name = [fileDict objectForKey:@"Name"];
         NSString * filename = [fileDict objectForKey:@"Filename"];
-        NSString * contentType = nil;
         
         id fileData = [fileDict objectForKey:@"Data"];
         
-        NSData * data = nil;
+        // Default
+        NSString * contentType = @"audio/wav";
+        NSData * data = [[NSData alloc] initWithData:[fileDict objectForKey:@"Data"]];
         
         if ( [fileData isKindOfClass:[UIImage class]] == YES )
         {
@@ -761,18 +764,22 @@
 //          contentType = @"image/png";
         }
         
+        /*
         if ( [fileData isKindOfClass:[NSString class]] == YES )
         {
             data = [(NSString*)fileData dataUsingEncoding:NSUTF8StringEncoding];
             contentType = @"application/octet-stream";
         }
-            
+         */
+        
         // Some params might be optional
-        if ( name != nil && filename != nil && data != nil )
+        if ( name != nil && filename != nil && [data length] > 0 )
         {
+            NSLog(@"Name is %@, filename is %@, data is %@",name,filename,data);
+            
             [postBodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", name, filename] dataUsingEncoding:NSUTF8StringEncoding]];
             [postBodyData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
-            [postBodyData appendData:data];
+            [postBodyData appendData:[NSData dataWithData:data]];
             [postBodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 
         }
@@ -781,10 +788,15 @@
     
     // Convert the POST body to data bytes
 //    NSData * postBodyData = [postBody dataUsingEncoding:NSUTF8StringEncoding];
-#if TARGET_IPHONE_SIMULATOR
+//#if TARGET_IPHONE_SIMULATOR
     NSString * postString = [[NSString alloc] initWithData:postBodyData encoding:NSUTF8StringEncoding];
-    NSLog(postString);
-#endif
+    
+    NSLog(@"POST STRING");
+    NSLog(@"%@",postString);
+//#endif
+    
+    
+    
     // Stick the post body (now as encoded bytes) into the request
 	[request setHTTPBody:postBodyData];
 	
@@ -927,6 +939,7 @@
             url = CloudRequestTypeSaveXmpUrl;
             
             NSMutableArray * tempParams = [[NSMutableArray alloc] init];
+            NSMutableArray * tempFiles = [[NSMutableArray alloc] init];
             
             if(cloudRequest.m_xmpId > 0){
                 NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -938,11 +951,12 @@
             
             if(cloudRequest.m_xmpFile != nil){
                 
-                NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         @"xmpfile", @"Name",
-                                         cloudRequest.m_xmpFile, @"Value", nil];
+                NSDictionary * fileDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         @"xmp_file", @"Name",
+                                         cloudRequest.m_xmpName, @"Filename",
+                                         cloudRequest.m_xmpFile, @"Data", nil];
                 
-                [tempParams addObject:param];
+                [tempFiles addObject:fileDict];
             }
             
             if(cloudRequest.m_xmpData != nil){
@@ -954,6 +968,7 @@
                 [tempParams addObject:param];
             }
             
+            files = [NSArray arrayWithArray:tempFiles];
             params = [NSArray arrayWithArray:tempParams];
             
             
