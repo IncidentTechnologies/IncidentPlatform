@@ -32,6 +32,7 @@ public:
     SampleNode *GetSample(int sample);
     
     RESULT LoadSampleIntoBank(char *pszFilepath, SampleNode* &outSample);
+    RESULT LoadSampleStringIntoBank(const void *sampleBuffer, unsigned long int bufferLength, SampleNode* &outSample);
     
     RESULT SetSampleGain(int sample, float gain);
     RESULT SetBankGain(float gain);
@@ -64,6 +65,7 @@ public:
     
     RESULT CreateNewBank(SamplerBankNode* &outBank);
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* &outSampleNode);
+    RESULT LoadSampleStringIntoBank(int bank, const void *sampleBuffer, unsigned long int bufferLength, SampleNode* &outSampleNode);
     
     RESULT SetBankGain(int bank, float gain);
     

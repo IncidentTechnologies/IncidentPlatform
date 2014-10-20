@@ -27,6 +27,18 @@ m_pBuffer_end(0)
     NormalizeSample();
 }
 
+SampleBuffer::SampleBuffer(const void *sampleBuffer, unsigned long int bufferLength) :
+m_pBuffer_c(0),
+m_pBuffer(NULL),
+m_pBuffer_n(0),
+m_SampleRate(DEFAULT_SAMPLE_RATE),
+m_pBuffer_start(0),
+m_pBuffer_end(0)
+{
+    LoadSampleBufferFromString(sampleBuffer,bufferLength);
+    NormalizeSample();
+}
+
 SampleBuffer::~SampleBuffer() {
     if(m_pBuffer != NULL) {
         free(m_pBuffer);
@@ -216,6 +228,8 @@ AudioStreamBasicDescription SampleBuffer::GetClientFormatDescription(bool fStere
     
     size_t bytesPerSample = sizeof (AudioSampleType);
     
+    //printf("Get Client Format Description: %zu bytes per sample",bytesPerSample);
+    
     ClientDataFormat.mFormatID = kAudioFormatLinearPCM;
     ClientDataFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
     ClientDataFormat.mChannelsPerFrame = 1; // 1 indicates mono
@@ -378,6 +392,28 @@ Error:
     return r;
 }
 
+RESULT SampleBuffer::LoadSampleBufferFromString(const void *pszBuffer, unsigned long int bufferLength){
+    RESULT r = R_SUCCESS;
+    
+    char * pszPointer = (char *)pszBuffer;
+    
+    UInt64 totalFramesInFile = bufferLength / 2.0;
+    
+    // Set up the buffer from the length
+    m_pBuffer_n = (unsigned long int)(totalFramesInFile);
+    m_pBuffer_start = 0;
+    m_pBuffer_end = m_pBuffer_n;
+    
+    // Convert all the samples to float and put into the other buffer
+    m_pBuffer = (float *)malloc(sizeof(float) * m_pBuffer_n);
+    for(int i = 0; i < m_pBuffer_n; i++) {
+        m_pBuffer[i] = (signed short)((pszPointer[i*2])+(pszPointer[i*2+1]<<8)) / 32767.0f;
+    }
+    
+Error:
+    return r;
+}
+
 RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
     RESULT r = R_SUCCESS;
     
@@ -450,6 +486,8 @@ RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
             m_pBuffer[i] = pAudioSampleBuffer[i] / 32768.0f;
     }
     
+    printf("number of frames in file: %lu",m_pBuffer_n);
+    
     // Kill the buffer
     free(pAudioSampleBuffer);
     pAudioSampleBuffer = NULL;
@@ -469,6 +507,15 @@ m_fPlaying(FALSE)
 {
     SetChannelCount(1, CONN_OUT);
     m_pSampleBuffer = new SampleBuffer(pszFilenamePath);
+}
+
+SampleNode::SampleNode(const void *sampleBuffer, unsigned long int bufferLength) :
+m_pSampleBuffer(NULL),
+m_fPlaying(FALSE)
+{
+    SetChannelCount(1, CONN_OUT);
+    
+    m_pSampleBuffer = new SampleBuffer(sampleBuffer, bufferLength);
 }
 
 RESULT SampleNode::SaveToFile(char *pszFilepath, bool fOverwrite) {

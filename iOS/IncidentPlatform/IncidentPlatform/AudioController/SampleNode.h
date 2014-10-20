@@ -17,9 +17,11 @@
 class SampleBuffer {
 public:
     SampleBuffer(char *pszFilename);
+    SampleBuffer(const void *sampleBuffer, unsigned long int bufferLength);
     ~SampleBuffer();
     
     RESULT LoadSampleBufferFromPath(char *pszPath);
+    RESULT LoadSampleBufferFromString(const void *pszBuffer, unsigned long int bufferLength);
     inline float GetNextSample(unsigned long int timestamp);
     RESULT ResetSampleCounter();
     inline bool SampleDone();
@@ -74,6 +76,7 @@ public:
 class SampleNode : public GeneratorNode {
 public:
     SampleNode(char *pszFilename);
+    SampleNode(const void *pszBuffer, unsigned long int bufferLength);
     ~SampleNode();
     
     float GetNextSample(unsigned long int timestamp);

@@ -114,6 +114,30 @@ Error:
     return r;
 }
 
+RESULT SamplerBankNode::LoadSampleStringIntoBank(const void *sampleBuffer, unsigned long int bufferLength, SampleNode* &outSample) {
+    RESULT r = R_SUCCESS;
+    
+    SampleNode *newSample = new SampleNode(sampleBuffer,bufferLength);
+    
+    // Check, connect, and push the new sample
+    CNRM(newSample, "SamplerBankNode: Failed to create sample");
+    CRM(m_levelNode->ConnectInput(0, newSample, 0), "SamplerBankNode: Failed to connect new sample node to output");
+    CRM(m_samples.Append(newSample), "SamplerBankNode: Failed to add sample to bank");
+    
+    // pass out the sample
+    outSample = newSample;
+    
+    return r;
+    
+Error:
+    
+    if(newSample != NULL){
+        delete newSample;
+        newSample = NULL;
+    }
+    return r;
+}
+
 /*
 float SamplerBankNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
@@ -252,6 +276,20 @@ RESULT SamplerNode::LoadSampleIntoBank(int bank, char *pszFilepath, SampleNode* 
     tempBank = m_banks[bank];
     
     CRM(tempBank->LoadSampleIntoBank(pszFilepath, outSampleNode), "SamplerNode: Failed to add sample with path %s", pszFilepath);
+    
+Error:
+    return r;
+}
+
+RESULT SamplerNode::LoadSampleStringIntoBank(int bank, const void *sampleBuffer, unsigned long int bufferLength, SampleNode* &outSampleNode) {
+    RESULT r = R_SUCCESS;
+    SamplerBankNode *tempBank = NULL;
+    
+    CBRM((bank < m_banks.length()), "SamplerNode: Can't add sample to non-existent bank");
+    
+    tempBank = m_banks[bank];
+    
+    CRM(tempBank->LoadSampleStringIntoBank(sampleBuffer, bufferLength, outSampleNode), "SamplerNode: Failed to add sample buffer");
     
 Error:
     return r;
