@@ -117,6 +117,7 @@ typedef enum
 @property (nonatomic, strong) NSArray * m_xmpList;
 @property (nonatomic, strong) XmlDom * m_xmpDom;
 @property (nonatomic, assign) NSInteger m_id;
+@property (nonatomic, strong) NSString * m_xmpName;
 
 - (id)initWithCloudRequest:(CloudRequest*)cloudRequest;
 

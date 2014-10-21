@@ -1217,6 +1217,7 @@
             XmlDom * xml = [dom getChildWithName:@"xmp"];
             
             cloudResponse.m_id = [[xml getTextFromChildWithName:@"xmp_id"] intValue];
+            cloudResponse.m_xmpName = [xml getTextFromChildWithName:@"xmp_name"];
             
         } break;
             

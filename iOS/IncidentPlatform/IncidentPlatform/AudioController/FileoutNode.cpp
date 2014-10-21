@@ -25,7 +25,7 @@ FileoutNode::FileoutNode(char *pszFilepath, bool fOverwrite) :
     // Create the file
     AudioStreamBasicDescription LocalDataFormat = GetClientFormatDescription(false);
     
-    AudioFileTypeID fileType = kAudioFileCAFType;
+    AudioFileTypeID fileType = kAudioFileWAVEType;
     AudioStreamBasicDescription OutputDataFormat;
     memset(&OutputDataFormat, 0, sizeof(AudioStreamBasicDescription));
     

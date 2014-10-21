@@ -49,6 +49,7 @@
 @synthesize m_xmpList;
 @synthesize m_xmpDom;
 @synthesize m_id;
+@synthesize m_xmpName;
 
 - (id)initWithCloudRequest:(CloudRequest*)cloudRequest
 {
