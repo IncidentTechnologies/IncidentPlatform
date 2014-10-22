@@ -1240,6 +1240,8 @@
             XmlDom * dom = cloudResponse.m_responseXmlDom;
             cloudResponse.m_xmpDom = [dom getChildWithName:@"xmp"];
             
+            cloudResponse.m_id = [[dom getTextFromChildWithName:@"xmpid"] intValue];
+            
         } break;
             
         case CloudRequestTypeGetXmpList:
