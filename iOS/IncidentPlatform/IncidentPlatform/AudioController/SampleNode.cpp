@@ -486,8 +486,6 @@ RESULT SampleBuffer::LoadSampleBufferFromPath(char *pszPath) {
             m_pBuffer[i] = pAudioSampleBuffer[i] / 32768.0f;
     }
     
-    printf("number of frames in file: %lu",m_pBuffer_n);
-    
     // Kill the buffer
     free(pAudioSampleBuffer);
     pAudioSampleBuffer = NULL;
