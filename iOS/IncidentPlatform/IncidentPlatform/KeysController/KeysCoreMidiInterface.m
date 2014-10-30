@@ -41,7 +41,7 @@
         m_connected = NO;
         
         // Create the midi client
-        OSStatus oss = MIDIClientCreate(CFSTR("AE Midi Client"), MIDIStateChangedHandler, (__bridge void *)(self), &m_pMidiClient);
+        OSStatus oss = MIDIClientCreate(CFSTR("AE Midi Client"), KeysMIDIStateChangedHandler, (__bridge void *)(self), &m_pMidiClient);
         
         if( oss != 0 )
         {
@@ -51,7 +51,7 @@
         }
         
         // Set up the Input Port
-        oss = MIDIInputPortCreate(m_pMidiClient, (CFStringRef)@"Midi Client Input Port", MIDIReadHandler, (__bridge void *)(self), &m_pMidiInputPort);
+        oss = MIDIInputPortCreate(m_pMidiClient, (CFStringRef)@"Midi Client Input Port", KeysMIDIReadHandler, (__bridge void *)(self), &m_pMidiInputPort);
         
         if( oss != 0 )
         {
@@ -285,7 +285,7 @@
 
 #pragma mark - C-style callbacks
 
-void MIDIStateChangedHandler(const MIDINotification *message, void *refCon)
+void KeysMIDIStateChangedHandler(const MIDINotification *message, void *refCon)
 {
     
     KeysCoreMidiInterface * coreMidiInterface = (__bridge KeysCoreMidiInterface *)(refCon);
@@ -360,7 +360,7 @@ void MIDIStateChangedHandler(const MIDINotification *message, void *refCon)
     }
 }
 
-void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void *pSrcConnCon)
+void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void *pSrcConnCon)
 {
     
     KeysCoreMidiInterface * coreMidiInterface = (__bridge KeysCoreMidiInterface *)(pSrcConnCon);
@@ -383,7 +383,7 @@ void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void
 }
 
 // This is called when a Send has completed
-void MIDICompletionHander(MIDISysexSendRequest *request)
+void KeysMIDICompletionHander(MIDISysexSendRequest *request)
 {
     
     // If the interface gets torn down below us, this is set to null
@@ -463,7 +463,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
         sendRequest->bytesToSend = bufferLength;
         sendRequest->complete = false;
         
-        sendRequest->completionProc = MIDICompletionHander;
+        sendRequest->completionProc = KeysMIDICompletionHander;
         sendRequest->completionRefCon = (__bridge void *)(self);
         
         NSValue * sendPtr = [NSValue valueWithPointer:sendRequest];
@@ -509,7 +509,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
             sendRequest->bytesToSend = bufferLength;
             sendRequest->complete = false;
             
-            sendRequest->completionProc = MIDICompletionHander;
+            sendRequest->completionProc = KeysMIDICompletionHander;
             sendRequest->completionRefCon = (__bridge void *)(self);
             
             NSValue * sendPtr = [NSValue valueWithPointer:sendRequest];

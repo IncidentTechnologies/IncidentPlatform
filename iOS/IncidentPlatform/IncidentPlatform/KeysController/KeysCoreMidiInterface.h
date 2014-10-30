@@ -98,9 +98,9 @@ typedef enum {
 } KEYS_MESSAGE;
 
 // C-style MIDI callback functions
-void MIDIStateChangedHandler(const MIDINotification *message, void *refCon);
-void MIDICompletionHander(MIDISysexSendRequest  *request);
-void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void *pSrcConnCon);
+void KeysMIDIStateChangedHandler(const MIDINotification *message, void *refCon);
+void KeysMIDICompletionHander(MIDISysexSendRequest  *request);
+void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void *pSrcConnCon);
 
 @class KeysController;
 
