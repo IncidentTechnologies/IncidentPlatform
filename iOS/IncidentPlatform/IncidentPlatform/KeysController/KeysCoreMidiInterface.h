@@ -34,6 +34,7 @@ typedef enum {
     KEYS_FIRMWARE_ACK = 0x35,
     KEYS_BATTERY_STATUS_ACK = 0x36,
     KEYS_BATTERY_CHARGE_ACK = 0x37,
+    KEYS_RANGE_ACK = 0x40,
     
     // Piezo stuff
     KEYS_GET_PIEZO_CT_MATRIX_ACK = 0x38,
@@ -54,7 +55,7 @@ typedef enum {
     KEYS_SET_LED_EX = 0x0A,
     
     KEYS_SET_NOTE_ACTIVE = 0x01,
-    KEYS_SET_FRET_FOLLOW = 0x02,
+    KEYS_SET_KEY_FOLLOW = 0x02,
     
     KEYS_SET_SLIDE_STATE = 0x0B,
     
@@ -62,6 +63,7 @@ typedef enum {
     KEYS_REQUEST_BATTERY_STATUS = 0x0E,
     KEYS_REQUEST_FIRMWARE_VERSION = 0x04,
     KEYS_REQUEST_SERIAL_NUMBER = 0x18,
+    KEYS_REQUEST_KEYS_RANGE = 0x19,
     
     KEYS_DOWNLOAD_NEW_FIRMWARE = 0x05,
     KEYS_EXECUTE_FIRMWARE_UPGRADE = 0x06,
@@ -142,11 +144,12 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 
 // Effects
 - (BOOL)sendSetNoteActiveRed:(unsigned char)red andGreen:(unsigned char) green andBlue:(unsigned char)blue;
-- (BOOL)sendSetFretFollowRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue;
+- (BOOL)sendSetKeyFollowRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue;
 
 // Requests
 - (BOOL)sendRequestBatteryStatus;
 - (BOOL)sendRequestSerialNumber:(unsigned char)byte;
+- (BOOL)sendRequestKeysRange;
 - (BOOL)sendEnableDebug;
 - (BOOL)sendDisableDebug;
 
@@ -154,6 +157,7 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 - (BOOL)sendRequestResetUserspace;
 
 // Piezo
+/*
 - (BOOL)sendPiezoSensitivityString:(unsigned char)str thresh:(unsigned char)thresh;
 - (BOOL)sendPiezoCrossTalkMatrixRow:(unsigned char)row Column:(unsigned char)column value:(unsigned char)value;
 - (BOOL)sendPiezoWindowIndex:(unsigned char)index value:(unsigned char)value;
@@ -161,6 +165,7 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 - (BOOL)sendRequestPiezoSensitivityString:(unsigned char)str;
 - (BOOL)sendRequestPiezoCrossTalkMatrixRow:(unsigned char)row Column:(unsigned char)column;
 - (BOOL)sendRequestPiezoWindowIndex:(unsigned char)index;
+*/
 
 - (BOOL)sendRequestCertDownload;
 - (BOOL)sendRequestFirmwareVersion;

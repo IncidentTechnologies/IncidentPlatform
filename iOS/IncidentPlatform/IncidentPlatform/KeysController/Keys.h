@@ -60,16 +60,29 @@ typedef unsigned char KeysPressVelocity;
 
 /*!
  @abstract A press of a key.
- @discussion A KeysPress combines a KeysPosition (string-fret pair) with a KeysVelocity corresponding to the velocity
- of the pluck.
- @field position The KeysPosition of this pluck.
- @field velocity The KeysPressVelocity of this pluck.
+ @discussion A KeysPress combines a KeysPosition (key) with a KeysVelocity corresponding to the velocity
+ of the tap.
+ @field position The KeysPosition of this tap.
+ @field velocity The KeysPressVelocity of this tap.
  */
 typedef struct
 {
     KeyPosition position;
     KeysPressVelocity velocity;
 } KeysPress;
+
+
+/*!
+ @abstract A range of keys representing a chain of keyboards.
+ @discussion A KeysRange combines the min and max KeyPosition of the set of connected Keys boards.
+ @field keyMin The key at the lower end of the range.
+ @field keyMax The key at the upper end of the range.
+ */
+typedef struct
+{
+    KeyPosition keyMin;
+    KeyPosition keyMax;
+} KeysRange;
 
 /*!
  @abstract The RGB color components of a guitar LED.

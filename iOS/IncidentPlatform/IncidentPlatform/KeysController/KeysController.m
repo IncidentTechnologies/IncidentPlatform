@@ -91,11 +91,54 @@ static bool AmIBeingDebugged(void) {
         // Set a default color map
         KeysLedColorMap colorMap;
         
-        for(int i = 0; i < KeysPerOctaveCount; i++){
-            colorMap.keyColor[i].red = 3;
-            colorMap.keyColor[i].green = 3;
-            colorMap.keyColor[i].red = 0;
-        }
+        // Define all the LED Colors
+        colorMap.keyColor[0].red = 3;
+        colorMap.keyColor[0].green = 0;
+        colorMap.keyColor[0].blue = 0;
+        
+        colorMap.keyColor[1].red = 2;
+        colorMap.keyColor[1].green = 1;
+        colorMap.keyColor[1].blue = 0;
+        
+        colorMap.keyColor[2].red = 3;
+        colorMap.keyColor[2].green = 3;
+        colorMap.keyColor[2].blue = 0;
+        
+        colorMap.keyColor[3].red = 0;
+        colorMap.keyColor[3].green = 3;
+        colorMap.keyColor[3].blue = 0;
+        
+        colorMap.keyColor[4].red = 0;
+        colorMap.keyColor[4].green = 0;
+        colorMap.keyColor[4].blue = 3;
+        
+        colorMap.keyColor[5].red = 2;
+        colorMap.keyColor[5].green = 0;
+        colorMap.keyColor[5].blue = 2;
+        
+        colorMap.keyColor[6].red = 3;
+        colorMap.keyColor[6].green = 0;
+        colorMap.keyColor[6].blue = 0;
+        
+        colorMap.keyColor[7].red = 2;
+        colorMap.keyColor[7].green = 1;
+        colorMap.keyColor[7].blue = 0;
+        
+        colorMap.keyColor[8].red = 3;
+        colorMap.keyColor[8].green = 3;
+        colorMap.keyColor[8].blue = 0;
+        
+        colorMap.keyColor[9].red = 0;
+        colorMap.keyColor[9].green = 3;
+        colorMap.keyColor[9].blue = 0;
+        
+        colorMap.keyColor[10].red = 0;
+        colorMap.keyColor[10].green = 0;
+        colorMap.keyColor[10].blue = 3;
+        
+        colorMap.keyColor[11].red = 2;
+        colorMap.keyColor[11].green = 0;
+        colorMap.keyColor[11].blue = 2;
         
         
         self.colorMap = colorMap;
@@ -406,7 +449,6 @@ static bool AmIBeingDebugged(void) {
 {
     
     unsigned char msgType = (data[0] & 0xF0) >> 4;
-    unsigned char oct = (data[0] & 0xF);
     
     double currentTime = [NSDate timeIntervalSinceReferenceDate];
     
@@ -422,7 +464,6 @@ static bool AmIBeingDebugged(void) {
             
             [responseDictionary setValue:@"notifyObserversKeysNoteOff:" forKey:@"Selector"];
             [responseDictionary setValue:[[NSNumber alloc] initWithChar:key] forKey:@"Key"];
-            [responseDictionary setValue:[[NSNumber alloc] initWithChar:oct] forKey:@"Octave"];
             
             [self midiCallbackDispatch:responseDictionary];
             
@@ -444,7 +485,6 @@ static bool AmIBeingDebugged(void) {
                 
                 [responseDictionary setValue:@"notifyObserversKeysNoteOn:" forKey:@"Selector"];
                 [responseDictionary setValue:[[NSNumber alloc] initWithChar:key] forKey:@"Key"];
-                [responseDictionary setValue:[[NSNumber alloc] initWithChar:oct] forKey:@"Octave"];
                 [responseDictionary setValue:[[NSNumber alloc] initWithChar:velocity] forKey:@"Velocity"];
                 
                 [self midiCallbackDispatch:responseDictionary];
@@ -462,16 +502,15 @@ static bool AmIBeingDebugged(void) {
             
             switch ( KeysMsgType )
             {
-                case RX_FRET_UP:
+                case RX_KEY_UP:
                 {
-                    // Fret Up
+                    // Key Up
                     unsigned char key = data[2];
                     
                     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
                     
                     [responseDictionary setValue:@"notifyObserversKeyUp:" forKey:@"Selector"];
                     [responseDictionary setValue:[[NSNumber alloc] initWithChar:key] forKey:@"Key"];
-                    [responseDictionary setValue:[[NSNumber alloc] initWithChar:oct] forKey:@"Octave"];
                     
                     [self midiCallbackDispatch:responseDictionary];
                     
@@ -479,16 +518,15 @@ static bool AmIBeingDebugged(void) {
                     
                 } break;
                     
-                case RX_FRET_DOWN:
+                case RX_KEY_DOWN:
                 {
-                    // Fret Down
+                    // Key Down
                     unsigned char key = data[2];
                     
                     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
                     
                     [responseDictionary setValue:@"notifyObserversKeyDown:" forKey:@"Selector"];
                     [responseDictionary setValue:[[NSNumber alloc] initWithChar:key] forKey:@"Key"];
-                    [responseDictionary setValue:[[NSNumber alloc] initWithChar:oct] forKey:@"Octave"];
                     
                     [self midiCallbackDispatch:responseDictionary];
                     
@@ -556,6 +594,26 @@ static bool AmIBeingDebugged(void) {
                         [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxBatteryCharge %@", m_delegate]
                               atLogLevel:KeysControllerLogLevelWarn];
                     }
+                } break;
+                    
+                case RX_KEY_RANGE_CHANGE:
+                case KEYS_RANGE_ACK:
+                {
+                    
+                    // Key Down
+                    unsigned char keyMin = (data[0] & 0xF);
+                    unsigned char keyMax = data[2];
+                    
+                    NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
+                    
+                    [responseDictionary setValue:@"notifyObserversKeysRangeChange:" forKey:@"Selector"];
+                    [responseDictionary setValue:[[NSNumber alloc] initWithChar:keyMin] forKey:@"KeyMin"];
+                    [responseDictionary setValue:[[NSNumber alloc] initWithChar:keyMax] forKey:@"KeyMax"];
+                    
+                    [self midiCallbackDispatch:responseDictionary];
+                    
+                    //[responseDictionary release];
+                    
                 } break;
                     
                 case KEYS_SERIAL_NUMBER_ACK: {
@@ -725,7 +783,6 @@ static bool AmIBeingDebugged(void) {
 {
     
     NSNumber * keyNumber = [dictionary objectForKey:@"Key"];
-    NSNumber * octaveNumber = [dictionary objectForKey:@"Octave"];
     NSNumber * velocityNumber = [dictionary objectForKey:@"Velocity"];
     
     KeysPress keysPress;
@@ -800,6 +857,26 @@ static bool AmIBeingDebugged(void) {
         if ( [observer respondsToSelector:@selector(keysDisconnected)] == YES )
         {
             [observer keysDisconnected];
+        }
+    }
+}
+
+- (void)notifyObserversKeysRangeChange:(NSDictionary *)dictionary
+{
+    NSNumber * keyMin = [dictionary objectForKey:@"KeyMin"];
+    NSNumber * keyMax = [dictionary objectForKey:@"KeyMax"];
+    
+    KeysRange keysRange;
+    keysRange.keyMin = (KeyPosition)keyMin;
+    keysRange.keyMax = (KeyPosition)keyMax;
+    
+    for ( NSValue * nonretainedObserver in m_observerList )
+    {
+        id observer = [nonretainedObserver nonretainedObjectValue];
+        
+        if ( [observer respondsToSelector:@selector(keysRangeChange:)] == YES )
+        {
+            [observer keysRangeChange:keysRange];
         }
     }
 }
@@ -1226,19 +1303,19 @@ static bool AmIBeingDebugged(void) {
     KeysControllerStatus status = KeysControllerStatusOk;
     
     if ( m_spoofed == YES ) {
-        [self logMessage:@"turnOnLedAtStr: Connection spoofed, no-op"
+        [self logMessage:@"turnOnLedAtKey: Connection spoofed, no-op"
               atLogLevel:KeysControllerLogLevelInfo];
         
         status = KeysControllerStatusOk;
     }
     else if ( m_connected == NO ){
-        [self logMessage:@"turnOnLedAtStr: Not connected"
+        [self logMessage:@"turnOnLedAtKey: Not connected"
               atLogLevel:KeysControllerLogLevelWarn];
         
         status = KeysControllerStatusNotConnected;
     }
     else if ( m_coreMidiInterface == nil ) {
-        [self logMessage:@"turnOnLedAtStr: KeysCoreMidiInterface is invalid"
+        [self logMessage:@"turnOnLedAtKey: KeysCoreMidiInterface is invalid"
               atLogLevel:KeysControllerLogLevelError];
         
         status = KeysControllerStatusError;
@@ -1247,7 +1324,7 @@ static bool AmIBeingDebugged(void) {
         BOOL result = [m_coreMidiInterface sendSetLedStateKey:position andRed:red andGreen:green andBlue:blue andMessage:0];
         
         if ( result == NO ) {
-            [self logMessage:@"turnOnLedAtStr: Setting LED state failed"
+            [self logMessage:@"turnOnLedAtKey: Setting LED state failed"
                   atLogLevel:KeysControllerLogLevelError];
             
             status = KeysControllerStatusError;
@@ -1326,9 +1403,9 @@ static bool AmIBeingDebugged(void) {
             
             // subtract one to zero-base the string
             BOOL result = [m_coreMidiInterface sendSetLedStateKey:position
-                                                            andRed:m_colorMap.keyColor[key-1].red
-                                                          andGreen:m_colorMap.keyColor[key-1].green
-                                                           andBlue:m_colorMap.keyColor[key-1].blue
+                                                            andRed:m_colorMap.keyColor[key].red
+                                                          andGreen:m_colorMap.keyColor[key].green
+                                                           andBlue:m_colorMap.keyColor[key].blue
                                                         andMessage:0];
             
             if ( result == NO )
@@ -1582,6 +1659,38 @@ static bool AmIBeingDebugged(void) {
 }
 
 #pragma mark - Requests
+
+- (BOOL)sendRequestKeysRange
+{
+    if ( m_spoofed == YES )
+    {
+        [self logMessage:@"SendRequestKeysRange: Connection spoofed, no-op"
+              atLogLevel:KeysControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO )
+    {
+        [self logMessage:@"SendRequestKeysRange: Not connected"
+              atLogLevel:KeysControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil )
+    {
+        [self logMessage:@"SendRequestKeysRange: KeysCoreMidiInterface is invalid"
+              atLogLevel:KeysControllerLogLevelError];
+        return NO;
+    }
+    
+    BOOL result = [m_coreMidiInterface sendRequestKeysRange];
+    
+    if ( result == NO )
+    {
+        [self logMessage:@"SendRequestKeysRange: SendRequestKeysRange failed"
+              atLogLevel:KeysControllerLogLevelError];
+    }
+    
+    return result;
+}
 
 - (BOOL)sendRequestBatteryStatus
 {
@@ -1874,7 +1983,7 @@ static bool AmIBeingDebugged(void) {
     
     BOOL result;
     
-    result = [m_coreMidiInterface sendSetFretFollowRed:0 andGreen:0 andBlue:0];
+    result = [m_coreMidiInterface sendSetKeyFollowRed:0 andGreen:0 andBlue:0];
     
     if ( result == NO )
     {
@@ -1906,10 +2015,10 @@ static bool AmIBeingDebugged(void) {
     KeysControllerStatus status = KeysControllerStatusOk;
     
     switch ( effect )  {
-        case KeysControllerEffectFretFollow:
+        case KeysControllerEffectKeyFollow:
         {
             // Enable FF mode
-            BOOL result = [m_coreMidiInterface sendSetFretFollowRed:red andGreen:green andBlue:blue];
+            BOOL result = [m_coreMidiInterface sendSetKeyFollowRed:red andGreen:green andBlue:blue];
             
             if ( result == NO )
             {
@@ -1936,12 +2045,12 @@ static bool AmIBeingDebugged(void) {
             
         } break;
             
-        case KeysControllerEffectFretFollowNoteActive:
+        case KeysControllerEffectKeyFollowNoteActive:
         {
             // Enable FF mode
             BOOL result;
             
-            result = [m_coreMidiInterface sendSetFretFollowRed:red andGreen:green andBlue:blue];
+            result = [m_coreMidiInterface sendSetKeyFollowRed:red andGreen:green andBlue:blue];
             
             if ( result == NO )
             {

@@ -81,17 +81,17 @@ typedef enum KeysControllerThread KeysControllerThread;
  @abstract The effects available to the Keys device.
  @discussion There are several special effects available on the Keys device.
  @const KeysControllerEffectNone No special effects.
- @const KeysControllerEffectFretFollow When the user presses a string into contact with a fret, the underlying LED is
+ @const KeysControllerEffectKeyFollow When the user presses a key down, the underlying LED is
  lit. The LED is turned off when the string and fret are unpressed.
  @const KeysControllerEffectNoteActive When a note is plucked, the underlying LED is lit.
- @const KeysControllerEffectFretFollowNoteActive Both Fret Follow and Note Active effects are active.
+ @const KeysControllerEffectKeyFollowNoteActive Both Key Follow and Note Active effects are active.
  */
 enum KeysControllerEffect
 {
     KeysControllerEffectNone = 0,
-    KeysControllerEffectFretFollow,
+    KeysControllerEffectKeyFollow,
     KeysControllerEffectNoteActive,
-    KeysControllerEffectFretFollowNoteActive
+    KeysControllerEffectKeyFollowNoteActive
 };
 typedef enum KeysControllerEffect KeysControllerEffect;
 
@@ -152,6 +152,12 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  likely should be handled very differently.
  */
 - (void)keysDisconnected;
+
+/*!
+ @abstract Keys range change notification
+ @discussion This function is called when an additional Keys board has been added/removed.
+ */
+- (void)keysRangeChange:(KeysRange)range;
 @end
 
 /*!

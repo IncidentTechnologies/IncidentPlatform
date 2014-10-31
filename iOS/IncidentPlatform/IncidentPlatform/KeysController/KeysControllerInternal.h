@@ -40,12 +40,13 @@ typedef SInt32 MIDINotificationMessageID;
 
 typedef enum KEYS_RX_MSG_TYPE
 {
-    RX_FRET_UP = 0x30,
-    RX_FRET_DOWN = 0x31,
+    RX_KEY_UP = 0x30,
+    RX_KEY_DOWN = 0x31,
     RX_FW_VERSION = 0x32,
     RX_FW_UPDATE_ACK = 0x35,
     RX_BATTERY_STATUS = 0x36,
     RX_BATTERY_CHARGE = 0x37,
+    RX_KEY_RANGE_CHANGE = 0x38,
     
     // Piezo stuff
     //RX_GET_PIEZO_CT_MATRIX_ACK = 0x38,
@@ -140,6 +141,7 @@ typedef enum KEYS_RX_MSG_TYPE
 - (void)notifyObserversKeysNoteOff:(NSDictionary*)dictionary;
 - (void)notifyObserversKeysConnected:(NSDictionary*)dictionary;
 - (void)notifyObserversKeysDisconnected:(NSDictionary*)dictionary;
+- (void)notifyObserversKeysRangeChange:(NSDictionary*)dictionary;
 
 - (void)firmwareResponseHandler:(unsigned char)status;
 - (BOOL)sendFirmwarePage:(int)page;
@@ -153,6 +155,7 @@ typedef enum KEYS_RX_MSG_TYPE
 // Requests
 - (BOOL)sendRequestBatteryStatus;
 - (BOOL)sendRequestSerialNumber;
+- (BOOL)sendRequestKeysRange;
 - (BOOL)sendEnableDebug;
 - (BOOL)sendDisableDebug;
 

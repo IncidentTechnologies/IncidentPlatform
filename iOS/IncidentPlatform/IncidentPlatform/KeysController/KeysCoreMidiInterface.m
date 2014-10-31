@@ -562,7 +562,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     return result;
 }
 
-- (BOOL)sendSetFretFollowRed:(unsigned char)red
+- (BOOL)sendSetKeyFollowRed:(unsigned char)red
                     andGreen:(unsigned char)green
                      andBlue:(unsigned char)blue
 {
@@ -620,6 +620,23 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     
     if ( result == NO )
         [m_keysController logMessage:[NSString stringWithFormat:@"SendRequestSerialNumber: Failed to send SysEx Buffer"] atLogLevel:KeysControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendRequestKeysRange
+{
+    int sendBufferLength = 4;
+    unsigned char sendBuffer[sendBufferLength];
+    
+    sendBuffer[0] = 0xF0; // SysEx Message
+    sendBuffer[1] = KEYS_DEVICE_ID;
+    sendBuffer[2] = (unsigned char)KEYS_REQUEST_KEYS_RANGE;
+    sendBuffer[4] = 0xF7; // End SysEx Message
+    
+    BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
+    if ( result == NO )
+        [m_keysController logMessage:[NSString stringWithFormat:@"SendRequestKeysRange: Failed to request Keys Range"] atLogLevel:KeysControllerLogLevelError];
     
     return result;
 }
@@ -825,7 +842,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
 }
 
 #pragma mark - Piezo Functions
-
+/*
 - (BOOL)sendRequestPiezoSensitivityString:(unsigned char)str {
     BOOL result = false;
     
@@ -961,23 +978,23 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     
     return result;
 }
+*/
 
 #pragma mark - Set LED State
 
-- (BOOL)sendCCSetLedStatusFret:(unsigned char)fret
-                     andString:(unsigned char)str
+- (BOOL)sendCCSetLedStatusKey:(unsigned char)key
                         andRed:(unsigned char)red
                       andGreen:(unsigned char)green
                        andBlue:(unsigned char)blue
                     andMessage:(unsigned char)message
 {
     
-    int sendBufferLength = 3;
+    int sendBufferLength = 2; //3;
     unsigned char sendBuffer[sendBufferLength];
     
-    sendBuffer[0] = 0xB0 + (str & 0xF);
+    sendBuffer[0] = 0xB0 + (key & 0xF);
     sendBuffer[1] = 0x33;
-    sendBuffer[2] = fret;
+    //sendBuffer[2] = fret;
     
     BOOL result = [self sendBuffer:sendBuffer withLength:sendBufferLength];
     
@@ -989,7 +1006,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
         return result;
     }
     
-    sendBuffer[0] = 0xB0 + (str & 0xF);
+    sendBuffer[0] = 0xB0 + (key & 0xF);
     sendBuffer[1] = 0x34;
     sendBuffer[2] = [self encodeValueWithRed:red andGreen:green andBlue:blue andMessage:message];
     
@@ -1004,8 +1021,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     return result;
 }
 
-- (BOOL)sendSetLedStateFret:(unsigned char)fret
-                  andString:(unsigned char)str
+- (BOOL)sendSetLedStateKey:(unsigned char)key
                      andRed:(unsigned char)red
                    andGreen:(unsigned char)green
                     andBlue:(unsigned char)blue
@@ -1018,8 +1034,8 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     sendBuffer[0] = 0xF0; // SysEx Message
     sendBuffer[1] = KEYS_DEVICE_ID;
     sendBuffer[2] = (unsigned char)KEYS_MSG_SET_LED;
-    sendBuffer[3] = (unsigned char)str;
-    sendBuffer[4] = (unsigned char)fret;
+    sendBuffer[3] = (unsigned char)key;
+//    sendBuffer[4] = (unsigned char)fret;
     sendBuffer[5] = [self encodeValueWithRed:red andGreen:green andBlue:blue andMessage:message];
     sendBuffer[6] = 0xF7; // End SysEx Message
     
