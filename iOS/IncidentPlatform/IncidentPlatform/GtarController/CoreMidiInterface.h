@@ -21,6 +21,7 @@ typedef enum GTAR_MSG_TYPE
     GTAR_MSG_REQ_CERT_DOWNLOAD = 0x03,
     GTAR_MSG_REQ_FW_VERSION = 0x04,
     GTAR_MSG_DWLD_FW_PAGE = 0x05,
+    GTAR_MSG_DWLD_PIEZO_FW_PAGE = 0x1F,
     GTAR_MSG_DBG_ENABLE = 0x11,
     GTAR_MSG_DBG_DISABLE = 0x12,
     GTAR_MSG_REQ_BAT_STATUS = 0x0E,
@@ -31,7 +32,10 @@ typedef enum {
     GTAR_FRET_DOWN = 0x31,
     GTAR_FRET_UP = 0x30,
     GTAR_CURRENT_FIRMWARE_VERSION = 0x32,
+    
     GTAR_FIRMWARE_ACK = 0x35,
+    GTAR_PIEZO_FIRMWARE_ACK = 0x40,
+    
     GTAR_BATTERY_STATUS_ACK = 0x36,
     GTAR_BATTERY_CHARGE_ACK = 0x37,
     
@@ -65,6 +69,7 @@ typedef enum {
     
     GTAR_DOWNLOAD_NEW_FIRMWARE = 0x05,
     GTAR_EXECUTE_FIRMWARE_UPGRADE = 0x06,
+    GTAR_DOWNLOAD_NEW_PIEZO_FIRMWARE = 0x1F,
     
     GTAR_ENABLE_VELOCITY = 0x0C,
     GTAR_DISABLE_VELOCITY = 0x0D,
@@ -166,6 +171,7 @@ void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void
 - (BOOL)sendRequestCertDownload;
 - (BOOL)sendRequestFirmwareVersion;
 - (BOOL)sendFirmwarePackagePage:(unsigned char*)page andPageSize:(int)pageSize andFirmwareSize:(int)firmwareSize andPageCount:(int)pageCount andCurrentPage:(int)currentPage andChecksum:(unsigned char)checksum;
+- (BOOL)sendPiezoFirmwarePackagePage:(unsigned char*)page andPageSize:(int)pageSize andFirmwareSize:(int)firmwareSize andPageCount:(int)pageCount andCurrentPage:(int)currentPage andChecksum:(unsigned char)checksum;
 
 
 - (BOOL)sendCCSetLedStatusFret:(unsigned char)fret andString:(unsigned char)str andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;

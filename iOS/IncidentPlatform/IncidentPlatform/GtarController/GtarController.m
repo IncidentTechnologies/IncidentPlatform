@@ -549,13 +549,16 @@ static bool AmIBeingDebugged(void) {
 
                 } break;
                     
-                case RX_FW_UPDATE_ACK:
-                {
+                case RX_FW_UPDATE_ACK: {
                     // Firmware Ack
                     unsigned char status = data[2];
-                    
                     [self firmwareResponseHandler:status];
-
+                } break;
+                    
+                case RX_PIEZO_FW_UPDATE_ACK: {
+                    // Piezo Firmware Ack
+                    unsigned char status = data[2];
+                    [self piezoFirmwareResponseHandler:status];
                 } break;
                     
                 case RX_BATTERY_STATUS:
@@ -891,47 +894,29 @@ static bool AmIBeingDebugged(void) {
     }
 }
 
-- (void)notifyObserversGtarDisconnected:(NSDictionary*)dictionary
-{
-    
+- (void)notifyObserversGtarDisconnected:(NSDictionary*)dictionary {
     // The dictionary will be nil and unused
-
-    for ( NSValue * nonretainedObserver in m_observerList )
-    {
+    for ( NSValue * nonretainedObserver in m_observerList ) {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
         if ( [observer respondsToSelector:@selector(gtarDisconnected)] == YES )
-        {
             [observer gtarDisconnected];
-        }
     }
 }
 
 #pragma mark - Internal firmware handling
 
-- (void)firmwareResponseHandler:(unsigned char)status
-{
-    
-    if ( status == 0x00 )
-    {
-        
+- (void)firmwareResponseHandler:(unsigned char)status {
+    if ( status == 0x00 ) {
         // success
         if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateProgress:)] == YES )
-        {
             [m_delegate receivedFirmwareUpdateProgress:((m_firmwareCurrentPage+1)*100)/GTAR_CONTROLLER_MAX_FIRMWARE_PAGES];
-        }
         else
-        {
-            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateProgress: %@", m_delegate]
-                  atLogLevel:GtarControllerLogLevelWarn];
-            
-        }
+            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateProgress: %@", m_delegate] atLogLevel:GtarControllerLogLevelWarn];
         
-        if ( m_firmwareCancelation == YES || m_firmwareUpdating == NO)
-        {
+        if ( m_firmwareCancelation == YES || m_firmwareUpdating == NO) {
             
-            @synchronized ( self )
-            {
+            @synchronized ( self ) {
                 m_firmwareUpdating = NO;
                 m_firmwareCancelation = NO;
             }
@@ -952,18 +937,14 @@ static bool AmIBeingDebugged(void) {
 //            }
             
         }
-        else if ( m_firmwareCurrentPage < GTAR_CONTROLLER_MAX_FIRMWARE_PAGES )
-        {
+        else if ( m_firmwareCurrentPage < GTAR_CONTROLLER_MAX_FIRMWARE_PAGES ) {
             // send the next page
             m_firmwareCurrentPage++;
             
             [self sendFirmwarePage:m_firmwareCurrentPage];
         }
-        else
-        {
-            
-            @synchronized ( self )
-            {
+        else {
+            @synchronized ( self ) {
                 // we are done
                 //[m_firmware release];
                 
@@ -974,52 +955,34 @@ static bool AmIBeingDebugged(void) {
             }
             
             if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateStatusSucceeded)] == YES )
-            {
                 [m_delegate receivedFirmwareUpdateStatusSucceeded];
-            }
             else
-            {
-                [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusSucceeded %@", m_delegate]
-                      atLogLevel:GtarControllerLogLevelWarn];
-                
-            }
-            
+                [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusSucceeded %@", m_delegate] atLogLevel:GtarControllerLogLevelWarn];
         }
         
     }
-    else
-    {
-        // failure
-        switch ( status )
-        {
-            case 0x01:
-            {
-                [self logMessage:[NSString stringWithFormat:@"Firmware update invalid parameter"]
-                      atLogLevel:GtarControllerLogLevelError];
+    else {
+        // Failure
+        switch ( status ) {
+            case 0x01: {
+                [self logMessage:[NSString stringWithFormat:@"Firmware update invalid parameter"] atLogLevel:GtarControllerLogLevelError];
             } break;
                 
-            case 0x02:
-            {
-                [self logMessage:[NSString stringWithFormat:@"Firmware update out of memory"]
-                      atLogLevel:GtarControllerLogLevelError];
+            case 0x02: {
+                [self logMessage:[NSString stringWithFormat:@"Firmware update out of memory"] atLogLevel:GtarControllerLogLevelError];
             } break;
                 
-            case 0x03:
-            {
-                [self logMessage:[NSString stringWithFormat:@"Firmware update will not fit in flash"]
-                      atLogLevel:GtarControllerLogLevelError];
+            case 0x03: {
+                [self logMessage:[NSString stringWithFormat:@"Firmware update will not fit in flash"] atLogLevel:GtarControllerLogLevelError];
             } break;
                 
             default:
-            case 0x04:
-            {
-                [self logMessage:[NSString stringWithFormat:@"Firmware update unknown error"]
-                      atLogLevel:GtarControllerLogLevelError];
+            case 0x04: {
+                [self logMessage:[NSString stringWithFormat:@"Firmware update unknown error"] atLogLevel:GtarControllerLogLevelError];
             } break;
         }
         
-        @synchronized ( self )
-        {
+        @synchronized ( self ) {
             //[m_firmware release];
             
             m_firmware = nil;
@@ -1029,23 +992,112 @@ static bool AmIBeingDebugged(void) {
         }
         
         if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateStatusFailed)] == YES )
-        {
             [m_delegate receivedFirmwareUpdateStatusFailed];
-        }
         else
-        {
-            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusFailed %@", m_delegate]
-                  atLogLevel:GtarControllerLogLevelWarn];
+            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusFailed %@", m_delegate] atLogLevel:GtarControllerLogLevelWarn];
+    }
+}
+
+- (void)piezoFirmwareResponseHandler:(unsigned char)status {
+    if ( status == 0x00 ) {
+        // success
+        if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateProgress:)] == YES )
+            [m_delegate receivedFirmwareUpdateProgress:((m_firmwareCurrentPage + 1) * 100) / GTAR_CONTROLLER_MAX_FIRMWARE_PAGES];
+        else
+            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateProgress: %@", m_delegate] atLogLevel:GtarControllerLogLevelWarn];
+        
+        if ( m_firmwareCancelation == YES || m_firmwareUpdating == NO) {
             
+            @synchronized ( self ) {
+                m_firmwareUpdating = NO;
+                m_firmwareCancelation = NO;
+            }
+            
+            // Cancel the transfer, abort now.
+            [self logMessage:[NSString stringWithFormat:@"Piezo Firmware update canceled, aborting transfer"] atLogLevel:GtarControllerLogLevelInfo];
+        }
+        else if ( m_piezoFirmwareCurrentPage < GTAR_CONTROLLER_MAX_FIRMWARE_PAGES ) {
+            // send the next page
+            m_piezoFirmwareCurrentPage++;
+            [self sendPiezoFirmwarePage:m_piezoFirmwareCurrentPage];
+        }
+        else {
+            @synchronized ( self ) {
+                // We are done
+                //[m_firmware release];
+                
+                m_piezoFirmware = nil;
+                m_firmwareUpdating = NO;
+                m_firmwareCancelation = NO;
+            }
+            
+            if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateStatusSucceeded)] == YES )
+                [m_delegate receivedFirmwareUpdateStatusSucceeded];
+            else
+                [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusSucceeded %@", m_delegate] atLogLevel:GtarControllerLogLevelWarn];
         }
         
     }
-    
-    
+    else {
+        // Failure
+        switch ( status ) {
+            case 0x01: {
+                [self logMessage:[NSString stringWithFormat:@"Piezo Firmware update invalid parameter"] atLogLevel:GtarControllerLogLevelError];
+            } break;
+                
+            case 0x02: {
+                [self logMessage:[NSString stringWithFormat:@"Piezo Firmware update out of memory"] atLogLevel:GtarControllerLogLevelError];
+            } break;
+                
+            case 0x03: {
+                [self logMessage:[NSString stringWithFormat:@"Piezo Firmware update will not fit in flash"] atLogLevel:GtarControllerLogLevelError];
+            } break;
+                
+            default:
+            case 0x04: {
+                [self logMessage:[NSString stringWithFormat:@"Piezo Firmware update unknown error"] atLogLevel:GtarControllerLogLevelError];
+            } break;
+        }
+        
+        @synchronized ( self ) {
+            //[m_firmware release];
+            
+            m_piezoFirmware = nil;
+            m_firmwareUpdating = NO;
+            m_firmwareCancelation = NO;
+        }
+        
+        if ( [m_delegate respondsToSelector:@selector(receivedFirmwareUpdateStatusFailed)] == YES )
+            [m_delegate receivedFirmwareUpdateStatusFailed];
+        else
+            [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareUpdateStatusFailed %@", m_delegate] atLogLevel:GtarControllerLogLevelWarn];
+    }
 }
 
-- (BOOL)sendFirmwarePage:(int)page
-{
+- (BOOL) sendPiezoFirmwarePage:(int)page {
+    if ( [m_piezoFirmware length] == 0 ) {
+        [self logMessage:@"SendFirmwarePAge: Firmware length 0" atLogLevel:GtarControllerLogLevelWarn];
+        return false;
+    }
+    
+    unsigned char * firmwareBytes = (unsigned char *)[m_piezoFirmware bytes];
+    unsigned char checksum = 0;
+    
+    // Sum all the bytes
+    for ( int i = 0; i < GTAR_CONTROLLER_PAGE_SIZE; i++ )
+        checksum += firmwareBytes[(page * GTAR_CONTROLLER_PAGE_SIZE) + i];
+    
+    BOOL result = [m_coreMidiInterface sendPiezoFirmwarePackagePage:(firmwareBytes + (page * GTAR_CONTROLLER_PAGE_SIZE))
+                                                   andPageSize:GTAR_CONTROLLER_PAGE_SIZE
+                                               andFirmwareSize:[m_piezoFirmware length]
+                                                  andPageCount:GTAR_CONTROLLER_MAX_FIRMWARE_PAGES
+                                                andCurrentPage:page
+                                                   andChecksum:checksum];
+    
+    return result;
+}
+
+- (BOOL)sendFirmwarePage:(int)page {
     
     if ( [m_firmware length] == 0 ) {
         [self logMessage:@"SendFirmwarePAge: Firmware length 0" atLogLevel:GtarControllerLogLevelWarn];
@@ -2091,6 +2143,51 @@ static bool AmIBeingDebugged(void) {
 //    return result; 
 //}
 
+- (BOOL)sendPiezoFirmwareUpdate:(NSData*)firmware {
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"SendPiezoFirmwareUpdate: Connection spoofed, no-op"
+              atLogLevel:GtarControllerLogLevelInfo];
+        return NO;
+    }
+    else if ( m_connected == NO ) {
+        [self logMessage:@"SendPiezoFirmwareUpdate: Not connected"
+              atLogLevel:GtarControllerLogLevelWarn];
+        return NO;
+    }
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"SendPiezoFirmwareUpdate: CoreMidiInterface is invalid"
+              atLogLevel:GtarControllerLogLevelError];
+        return NO;
+    }
+    
+    @synchronized ( self ) {
+        
+        if ( m_firmwareCancelation == YES ) {
+            [self logMessage:@"SendPiezoFirmwareUpdate: Cancellation in progress"
+                  atLogLevel:GtarControllerLogLevelWarn];
+            return NO;
+        }
+        
+        if ( m_firmwareUpdating == YES ) {
+            [self logMessage:@"SendPiezoFirmwareUpdate: Firmware update in progress"
+                  atLogLevel:GtarControllerLogLevelWarn];
+            return NO;
+        }
+        
+        //[m_firmware release];
+        m_piezoFirmware = [[NSData alloc] initWithData:firmware];
+        m_piezoFirmwareCurrentPage = 0;
+        m_firmwareUpdating = YES;
+        
+        BOOL result = [self sendPiezoFirmwarePage:m_piezoFirmwareCurrentPage];
+        
+        if ( result == NO )
+            [self logMessage:@"SendPiezoFirmwareUpdate: Failed to send firmware package page" atLogLevel:GtarControllerLogLevelError];
+        
+        return result;
+    }
+}
+
 - (BOOL)sendFirmwareUpdate:(NSData*)firmware {
     
     if ( m_spoofed == YES ) {
@@ -2130,10 +2227,8 @@ static bool AmIBeingDebugged(void) {
         m_firmwareUpdating = YES;
         BOOL result = [self sendFirmwarePage:m_firmwareCurrentPage];
         
-        if ( result == NO ) {
-            [self logMessage:@"SendFirmwareUpdate: Failed to send firmware package page"
-                  atLogLevel:GtarControllerLogLevelError];
-        }
+        if ( result == NO )
+            [self logMessage:@"SendFirmwareUpdate: Failed to send firmware package page" atLogLevel:GtarControllerLogLevelError];
         
         return result;
     }

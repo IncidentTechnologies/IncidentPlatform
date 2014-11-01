@@ -43,7 +43,10 @@ typedef enum GTAR_RX_MSG_TYPE
     RX_FRET_UP = 0x30,
     RX_FRET_DOWN = 0x31,
     RX_FW_VERSION = 0x32,
+    
     RX_FW_UPDATE_ACK = 0x35,
+    RX_PIEZO_FW_UPDATE_ACK = 0x40,
+    
     RX_BATTERY_STATUS = 0x36,
     RX_BATTERY_CHARGE = 0x37,
     
@@ -78,11 +81,16 @@ typedef enum GTAR_RX_MSG_TYPE
     NSMutableArray * m_observerList;
         
     double m_previousPluckTime[GtarStringCount][GtarFretCount];
+
+    BOOL m_firmwareCancelation;
+    BOOL m_firmwareUpdating;
     
     NSData * m_firmware;
     int m_firmwareCurrentPage;
-    BOOL m_firmwareCancelation;
-    BOOL m_firmwareUpdating;
+    
+    NSData * m_piezoFirmware;
+    int m_piezoFirmwareCurrentPage;
+    
     BOOL m_scaleVelocity;
     
     BOOL m_fPendingMatrixValue;
@@ -122,27 +130,30 @@ typedef enum GTAR_RX_MSG_TYPE
 - (BOOL) ReleasePendingSensitivityValue;
 - (BOOL) IsPendingSensitivityValue;
 
-- (BOOL)sendRequestCommitUserspace;
-- (BOOL)sendRequestResetUserspace;
+- (BOOL) sendRequestCommitUserspace;
+- (BOOL) sendRequestResetUserspace;
 
 - (BOOL)checkNoteInterarrivalTime:(double)time forFret:(GtarFret)fret andString:(GtarString)str;
 - (void)logMessage:(NSString*)str atLogLevel:(GtarControllerLogLevel)level;
 - (int)getFretFromMidiNote:(int)midiNote andString:(int)str;
 
-- (void)midiConnectionHandler:(BOOL)connected;
-- (void)midiCallbackHandler:(char*)data;
-- (void)midiCallbackDispatch:(NSDictionary*)dictionary;
-- (void)midiCallbackWorkerThread:(NSDictionary*)dictionary;
+- (void) midiConnectionHandler:(BOOL)connected;
+- (void) midiCallbackHandler:(char*)data;
+- (void) midiCallbackDispatch:(NSDictionary*)dictionary;
+- (void) midiCallbackWorkerThread:(NSDictionary*)dictionary;
 
-- (void)notifyObserversGtarFretDown:(NSDictionary*)dictionary;
-- (void)notifyObserversGtarFretUp:(NSDictionary*)dictionary;
-- (void)notifyObserversGtarNoteOn:(NSDictionary*)dictionary;
-- (void)notifyObserversGtarNoteOff:(NSDictionary*)dictionary;
-- (void)notifyObserversGtarConnected:(NSDictionary*)dictionary;
-- (void)notifyObserversGtarDisconnected:(NSDictionary*)dictionary;
+- (void) notifyObserversGtarFretDown:(NSDictionary*)dictionary;
+- (void) notifyObserversGtarFretUp:(NSDictionary*)dictionary;
+- (void) notifyObserversGtarNoteOn:(NSDictionary*)dictionary;
+- (void) notifyObserversGtarNoteOff:(NSDictionary*)dictionary;
+- (void) notifyObserversGtarConnected:(NSDictionary*)dictionary;
+- (void) notifyObserversGtarDisconnected:(NSDictionary*)dictionary;
 
-- (void)firmwareResponseHandler:(unsigned char)status;
-- (BOOL)sendFirmwarePage:(int)page;
+- (void) firmwareResponseHandler:(unsigned char)status;
+- (void) piezoFirmwareResponseHandler:(unsigned char)status;
+
+- (BOOL) sendFirmwarePage:(int)page;
+- (BOOL) sendPiezoFirmwarePage:(int)page;
 
 // CC style set LED messages (not async)
 //- (RESULT)ccTurnOffAllLeds;
@@ -169,8 +180,10 @@ typedef enum GTAR_RX_MSG_TYPE
 - (BOOL)sendRequestCertDownload;
 - (BOOL)sendRequestFirmwareVersion;
 //- (BOOL)sendFirmwarePackagePage:(void*)pBuffer bufferSize:(int)pBuffer_n fwSize:(int)fwSize fwPages:(int)fwPages curPage:(int)curPage withCheckSum:(unsigned char)checkSum;
+
 - (BOOL)sendFirmwareUpdate:(NSData*)firmware;
 - (BOOL)sendFirmwareUpdateCancelation;
+- (BOOL)sendPiezoFirmwareUpdate:(NSData*)firmware;
 
 - (BOOL)sendNoteMessage:(unsigned char)midiVal channel:(unsigned char)channel withVelocity:(unsigned char)midiVel andType:(const char*)type;
 

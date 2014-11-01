@@ -745,14 +745,13 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     return result;
 }
 
-- (BOOL)sendFirmwarePackagePage:(unsigned char*)page
-                    andPageSize:(int)pageSize
-                andFirmwareSize:(int)firmwareSize
-                   andPageCount:(int)pageCount
-                 andCurrentPage:(int)currentPage
-                    andChecksum:(unsigned char)checksum
+- (BOOL)sendPiezoFirmwarePackagePage:(unsigned char*)page
+                         andPageSize:(int)pageSize
+                     andFirmwareSize:(int)firmwareSize
+                        andPageCount:(int)pageCount
+                      andCurrentPage:(int)currentPage
+                         andChecksum:(unsigned char)checksum
 {
-    
     // All data bytes must be converted to midi data bytes which have a zero for the MSB
     int j = 0;
     unsigned char tempBuffer[pageSize*2];
@@ -762,9 +761,8 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     signed char startCounter = 1;
     signed char endCounter = 6;
     
-    for ( int i = 0; i < pageSize; i++ )
-    {
-        // add current fragment and begining of next 
+    for ( int i = 0; i < pageSize; i++ ) {
+        // Add current fragment and begining of next
         tempBuffer[j] += (page[i] >> startCounter) & 0x7F;
         tempBuffer[j + 1] = (0x7F & (page[i] << endCounter));
         
@@ -774,8 +772,81 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
         endCounter -= 1;
         
         // boundary check
-        if ( startCounter == 8 && endCounter < 0 )
-        {
+        if ( startCounter == 8 && endCounter < 0 ) {
+            j++;
+            startCounter = 1;
+            endCounter = 6;
+        }
+    }
+    
+    j++;
+    
+    unsigned char sendBuffer[pageSize*2];
+    
+    int sendBufferLength = j + 14;
+    
+    memset(sendBuffer, 0, pageSize);
+    
+    sendBuffer[0] = 0xF0; //SysEx
+    sendBuffer[1] = GTAR_DEVICE_ID;
+    sendBuffer[2] = (unsigned char)GTAR_MSG_DWLD_PIEZO_FW_PAGE;
+    sendBuffer[3] = (firmwareSize & 0xFF0000) >> 16;
+    sendBuffer[4] = (firmwareSize & 0x00FF00) >> 8;
+    sendBuffer[5] = (firmwareSize & 0x0000FF) >> 0;
+    sendBuffer[6] = (unsigned char)pageCount;
+    sendBuffer[7] = (unsigned char)currentPage;
+    sendBuffer[8] = 0;
+    sendBuffer[9] = (j & 0xFF00) >> 8;
+    sendBuffer[10] = (j & 0x00FF);
+    sendBuffer[11] = 0x00;
+    
+    memcpy(sendBuffer + 12, tempBuffer, j);
+    
+    sendBuffer[j + 12] = (checksum >> 1) & 0x7F;;
+    sendBuffer[j + 13] = 0xF7;
+    
+    NSLog(@"%x %x %x   %x %x %x   %x %x %x   %x %x %x",
+          sendBuffer[0], sendBuffer[1], sendBuffer[2], sendBuffer[3],
+          sendBuffer[4], sendBuffer[5], sendBuffer[6], sendBuffer[7],
+          sendBuffer[8], sendBuffer[9], sendBuffer[10], sendBuffer[11] );
+    
+    BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
+    
+    if ( result == NO )
+        [m_gtarController logMessage:[NSString stringWithFormat:@"SendPiezoFirmwarePackagePage: Failed to send SysEx Buffer"]
+                          atLogLevel:GtarControllerLogLevelError];
+    
+    return result;
+}
+
+- (BOOL)sendFirmwarePackagePage:(unsigned char*)page
+                    andPageSize:(int)pageSize
+                andFirmwareSize:(int)firmwareSize
+                   andPageCount:(int)pageCount
+                 andCurrentPage:(int)currentPage
+                    andChecksum:(unsigned char)checksum
+{
+    // All data bytes must be converted to midi data bytes which have a zero for the MSB
+    int j = 0;
+    unsigned char tempBuffer[pageSize*2];
+    
+    memset(tempBuffer, 0, pageSize * 2);
+    
+    signed char startCounter = 1;
+    signed char endCounter = 6;
+    
+    for ( int i = 0; i < pageSize; i++ ) {
+        // Add current fragment and begining of next
+        tempBuffer[j] += (page[i] >> startCounter) & 0x7F;
+        tempBuffer[j + 1] = (0x7F & (page[i] << endCounter));
+        
+        // var upkeep
+        j += 1;
+        startCounter += 1;
+        endCounter -= 1;
+        
+        // boundary check
+        if ( startCounter == 8 && endCounter < 0 ) {
             j++;
             startCounter = 1;
             endCounter = 6;
@@ -816,10 +887,8 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
     if ( result == NO )
-    {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendFirmwarePackagePage: Failed to send SysEx Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
-    }
     
     return result;
 }
