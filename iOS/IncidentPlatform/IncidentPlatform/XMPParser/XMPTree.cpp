@@ -261,7 +261,7 @@ RESULT XMPTree::SaveXMPToFile(char *pszFilename, bool fOverwrite) {
         pFile = fopen(pszFilename, "wb");
         
         SmartBuffer *pTemp = NULL;
-        CRM(PrintXMPTree(*m_pRoot->GetChildren()->First(), 0, pTemp, pFile), "SaveXMPToFile: Faild due to PrintXMPTree Failure");            
+        CRM(PrintXMPTree(*m_pRoot->GetChildren()->First(), 0, pTemp, pFile), "SaveXMPToFile: Failed due to PrintXMPTree Failure");            
     }
     else        
         CBRM(0, "File %s already exists or overwrite flag not set!", pszFilename);        
