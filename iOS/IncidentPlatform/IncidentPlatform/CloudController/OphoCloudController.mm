@@ -321,8 +321,8 @@
 }
 
 - (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId
-                           andXmpFile:(NSData *)file
-                           andXmpData:(NSString *)data
+                           andXmpFileData:(NSData *)filedata
+                           andXmpDataString:(NSString *)datastring
                               andName:(NSString *)name
                        andCallbackObj:(id)obj
                        andCallbackSel:(SEL)sel
@@ -331,8 +331,8 @@
     CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeSaveXmp andCallbackObject:obj andCallbackSelector:sel];
     
     cloudRequest.m_xmpId = xmpId;
-    cloudRequest.m_xmpFile = file;
-    cloudRequest.m_xmpData = data;
+    cloudRequest.m_xmpFile = filedata;
+    cloudRequest.m_xmpData = datastring;
     cloudRequest.m_xmpName = name;
     
     [self cloudSendRequest:cloudRequest];
@@ -967,7 +967,6 @@
             files = [NSArray arrayWithArray:tempFiles];
             params = [NSArray arrayWithArray:tempParams];
             
-            
         } break;
             
         case CloudRequestTypeGetXmp:
@@ -1164,10 +1163,25 @@
         case CloudRequestTypeLogin: {
             NSLog(@"Cloud Response: Login");
             
+            // Currently need to parse the response string to get the ID
+            
+            NSLog(@"Status detail for user ID: %@",cloudResponse.m_statusText);
+            
+            NSArray * statusArray = [cloudResponse.m_statusText componentsSeparatedByString:@" "];
+            
+            cloudResponse.m_responseUserId = [statusArray[1] intValue];
+            
+            /*
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
             cloudResponse.m_responseUserProfile = userProfile;
+<<<<<<< HEAD:iOS/IncidentPlatform/IncidentPlatform/CloudController/OphoCloudController.mm
+=======
+            */
+            
+            
+>>>>>>> e327a3b290e8294e9f2e322f57329a851e7a8a3f:iOS/IncidentPlatform/IncidentPlatform/CloudController/OphoCloudController.m
         } break;
             
         case CloudRequestTypeLogout: {

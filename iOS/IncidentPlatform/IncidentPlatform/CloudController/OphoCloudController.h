@@ -105,8 +105,12 @@ typedef enum
 
 - (CloudRequest*)requestDeleteXmpWithId:(NSInteger)xmpId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
+<<<<<<< HEAD
 - (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFile:(NSData *)file andXmpData:(NSString *)data andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 - (CloudRequest*)requestSaveXmpWithSampleNode:(SampleNode *)sampleNode andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+=======
+- (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFileData:(NSData *)filedata andXmpDataString:(NSString *)datastring andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+>>>>>>> e327a3b290e8294e9f2e322f57329a851e7a8a3f
 
 - (CloudRequest*)requestGetXmpWithId:(NSInteger)xmpId isXmpOnly:(BOOL)xmpOnly andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
