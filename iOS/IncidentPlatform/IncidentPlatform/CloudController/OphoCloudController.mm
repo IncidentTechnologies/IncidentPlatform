@@ -16,6 +16,8 @@
 #import "XmlDictionary.h"
 #import "XmlDom.h"
 
+#include "SampleNode.h"
+
 #define SERVER_NAME_DEFAULT @"http://api.opho.com/"
 #define SERVER_ROOT_DEFAULT @"http://api.opho.com/"
 #define SERVER_NAME m_serverName
@@ -260,6 +262,8 @@
     cloudRequest.m_username = username;
     cloudRequest.m_password = password;
     cloudRequest.m_rememberLogin = [NSNumber numberWithBool:YES];
+
+    //[cloudRequest setM_rememberLogin:[NSNumber numberWithBool:YES]];
     
     [self cloudSendRequest:cloudRequest];
     
@@ -333,6 +337,31 @@
     
     [self cloudSendRequest:cloudRequest];
     
+    return cloudRequest;
+}
+
+// Async Save XMP API call - Creates new XMP asset
+- (CloudRequest*)requestSaveXmpWithSampleNode:(SampleNode *)sampleNode andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel {
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeSaveXmp andCallbackObject:obj andCallbackSelector:sel];
+    
+    // Create a file from the SampleNode
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *strPath = [paths objectAtIndex:0];
+    NSString * strNewPath = [strPath stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.wav", name]];
+    NSLog(@"Using Custom Sound Filepath %@", strNewPath);
+    char *pathName = (char *)malloc(sizeof(char) * [strNewPath length]);
+    pathName = (char *) [strNewPath UTF8String];
+    
+    sampleNode->SaveToFile(pathName, true);
+    
+    // Create the data
+    NSData *dataFile = [[NSData alloc] initWithContentsOfFile:strNewPath];
+    
+    // Give the file to the request
+    cloudRequest.m_xmpFile = dataFile;
+    cloudRequest.m_xmpName = [NSString stringWithFormat:@"%@.wav", name];       // Need to upload file with extension, so server can convert from WAV
+    
+    [self cloudSendRequest:cloudRequest];
     return cloudRequest;
 }
 
@@ -462,36 +491,27 @@
 #pragma mark -
 #pragma mark Cloud functions
 
-- (CloudResponse*)cloudSendRequest:(CloudRequest*)cloudRequest
-{
-    
+- (CloudResponse*)cloudSendRequest:(CloudRequest*)cloudRequest {
     // If queue send requests
-    if ( cloudRequest.m_isSynchronous == YES )
-    {
+    if ( cloudRequest.m_isSynchronous == YES ) {
         // Sync requests just go 
         return [self cloudProcessRequest:cloudRequest];
     }
-    else if ( cloudRequest.m_type == CloudRequestTypeGetFile )
-    {
+    else if ( cloudRequest.m_type == CloudRequestTypeGetFile ) {
         // bypass the request queue for file requests.
         [self cloudProcessRequest:cloudRequest];
         
         return nil;
     }
-    else
-    {
+    else {
         // Async requests go in the queue
-        @synchronized(m_requestQueue)
-        {
-            
+        @synchronized(m_requestQueue) {
             [m_requestQueue addObject:cloudRequest];
             
-            if ( [m_requestQueue count] == 1 )
-            {
+            if ( [m_requestQueue count] == 1 ) {
                 // If this is the only thing in the queue, send it
                 [self cloudProcessRequest:cloudRequest];
             }
-            
         }
         
         return nil;
@@ -500,8 +520,7 @@
     
 }
 
-- (CloudResponse*)cloudProcessRequest:(CloudRequest*)cloudRequest
-{
+- (CloudResponse*) cloudProcessRequest:(CloudRequest*)cloudRequest {
     // Create a response object
     CloudResponse * cloudResponse = [[CloudResponse alloc] initWithCloudRequest:cloudRequest];
     
@@ -517,8 +536,7 @@
             
             return cloudResponse;
         }
-        else
-        {
+        else {
             cloudRequest.m_status = CloudRequestStatusOffline;
             cloudResponse.m_status = CloudResponseStatusOffline;
             cloudResponse.m_statusText = @"Offline, try again in a few minutes";
@@ -534,44 +552,32 @@
     NSURLRequest * urlRequest = [self createPostForRequest:cloudRequest];
     
     // Is this a async or sync request?
-    if ( cloudRequest.m_isSynchronous == YES )
-    {
+    if ( cloudRequest.m_isSynchronous == YES ) {
         
         NSURLResponse * urlResponse = nil;
-        
         NSError * error = nil;
-        
         NSData * responseData = [NSURLConnection sendSynchronousRequest:urlRequest
                                                       returningResponse:&urlResponse
                                                                   error:&error];
-        
         // See if our connection failed
-        if ( error != nil )
-        {
+        if ( error != nil ) {
             
             NSLog( @"Sync connection error: %@", [error localizedDescription] );
-            
             cloudRequest.m_status = CloudRequestStatusConnectionError;
-            
             cloudResponse.m_status = CloudResponseStatusConnectionError;
-            
             cloudResponse.m_statusText = [error localizedDescription];
             
         }
-        else
-        {
+        else {
             
             cloudResponse.m_receivedData = [responseData mutableCopy];
-            
             cloudResponse.m_receivedDataString = [NSString stringWithCString:(char*)[responseData bytes] encoding:NSASCIIStringEncoding];
             
             // Extract http response info
             NSHTTPURLResponse * httpResponse = (NSHTTPURLResponse*)urlResponse;
             
             cloudResponse.m_mimeType = [httpResponse MIMEType];
-            
             cloudResponse.m_statusCode = [httpResponse statusCode];
-            
             cloudResponse.m_cloudRequest.m_status = CloudRequestStatusCompleted;
             
             // Parse the results
@@ -582,15 +588,12 @@
         return cloudResponse;
         
     }
-    else
-    {
+    else {
         
         // Create a connection
         NSURLConnection * connection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self startImmediately:NO];
         
-        if ( connection == nil )
-        {
-            
+        if ( connection == nil ) {
             NSLog( @"Async connection error" );
             
             cloudRequest.m_status = CloudRequestStatusConnectionError;
@@ -601,9 +604,7 @@
             [self cloudReturnResponse:cloudResponse];
             
         }
-        else
-        {
-            
+        else {
             // The request has been sent
             cloudRequest.m_status = CloudRequestStatusSent;
             
@@ -614,15 +615,11 @@
         
         // Schedule it on the main thread, otherwise it won't work.
         [connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-        
         [connection start];
-        
         
         // The response is returned asynchronously
         return nil;
-        
-    }
-    
+    } // ! m_isSynchronous
 }
 
 - (void)cloudReceiveResponse:(CloudResponse*)cloudResponse
@@ -697,17 +694,16 @@
     // Get the arguments ready based on the request type
     [self marshalArgumentsForRequest:cloudRequest withUrl:&urlString andParameters:&paramsArray andFiles:&filesArray];
     
-    NSString * rootedUrlString = [NSString stringWithFormat:@"%@%@", SERVER_ROOT, urlString];
-#if TARGET_IPHONE_SIMULATOR
-    NSLog(@"%@", rootedUrlString);
-#endif
     // Create a POST request object
+    NSString * rootedUrlString = [NSString stringWithFormat:@"%@%@", SERVER_ROOT, urlString];
     NSMutableURLRequest * request = [[NSMutableURLRequest alloc] init];
-	
     [request setURL:[NSURL URLWithString:rootedUrlString]];
     
+#if TARGET_IPHONE_SIMULATOR
+    NSLog(@"%@", [request URL]);
+#endif
+    
 	[request setHTTPMethod:@"POST"];
-	
     [request setTimeoutInterval:URL_REQUEST_TIMEOUT];
     
     // Set the ContentType to multipart/form-data. This is what CakePHP expects
@@ -1136,147 +1132,102 @@
     NSString * result = [dom getTextFromChildWithName:@"StatusText"];
     
     if ( [result isEqualToString:@"Ok"] == YES )
-    {
         m_loggedIn = YES;
-        
-    }else{
-        
+    else
         m_loggedIn = NO;
-    }
     
-    
-    switch ( cloudResponse.m_cloudRequest.m_type )
-    {
+    switch ( cloudResponse.m_cloudRequest.m_type ) {
             
-        case CloudRequestTypeGetServerStatus:
-        {
+        case CloudRequestTypeGetServerStatus: {
             // If we got this far, the server is up
         } break;
             
-        case CloudRequestTypeGetFile:
-        {
-            
+        case CloudRequestTypeGetFile: {
             // Handled above, no-op
-            
-            
         } break;
             
-        case CloudRequestTypeGetUserStatus:
-        {
-            
+        case CloudRequestTypeGetUserStatus: {
             NSLog(@"Cloud Response: Get User Status");
-            
         } break;
             
-        case CloudRequestTypeRegister:
-        {
+        case CloudRequestTypeRegister: {
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
-            
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
-            
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
-            
             cloudResponse.m_responseUserProfile = userProfile;
-
-            
         } break;
             
-        case CloudRequestTypeActivate:
-        {
-            
+        case CloudRequestTypeActivate: {
             NSLog(@"Cloud Response: Activate");
-            
         } break;
             
-        case CloudRequestTypeLogin:
-        {
-            
+        case CloudRequestTypeLogin: {
             NSLog(@"Cloud Response: Login");
             
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
-            
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
-            
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
-            
             cloudResponse.m_responseUserProfile = userProfile;
-            
         } break;
             
         case CloudRequestTypeLogout: {
-            
             m_loggedIn = NO;
             m_facebookAccessToken = nil;
-            
         } break;
             
-        case CloudRequestTypeNewXmp:
-        {
+        case CloudRequestTypeNewXmp: {
             NSLog(@"Cloud Response: New Xmp");
+            
+            XmlDom *xml = [dom getChildWithName:@"xmp"];
+            
+            if(xml != NULL) {
+                cloudResponse.m_id = [[xml getTextFromChildWithName:@"xmp_id"] intValue];
+                cloudResponse.m_xmpName = [xml getTextFromChildWithName:@"xmp_name"];
+            }
+        } break;
+            
+        case CloudRequestTypeDeleteXmp: {
+            NSLog(@"Cloud Response: Delete Xmp");
+        } break;
+            
+        case CloudRequestTypeSaveXmp: {
+            NSLog(@"Cloud Response: Save Xmp");
             
             XmlDom * xml = [dom getChildWithName:@"xmp"];
             
             cloudResponse.m_id = [[xml getTextFromChildWithName:@"xmp_id"] intValue];
             cloudResponse.m_xmpName = [xml getTextFromChildWithName:@"xmp_name"];
-            
         } break;
             
-        case CloudRequestTypeDeleteXmp:
-        {
-            NSLog(@"Cloud Response: Delete Xmp");
-            
-        } break;
-            
-        case CloudRequestTypeSaveXmp:
-        {
-            NSLog(@"Cloud Response: Save Xmp");
-            
-        } break;
-            
-        case CloudRequestTypeGetXmp:
-        {
+        case CloudRequestTypeGetXmp: {
             NSLog(@"Cloud Response: Get Xmp");
             
             XmlDom * dom = cloudResponse.m_responseXmlDom;
             cloudResponse.m_xmpDom = [dom getChildWithName:@"xmp"];
-            
             cloudResponse.m_id = [[dom getTextFromChildWithName:@"xmpid"] intValue];
-            
         } break;
             
-        case CloudRequestTypeGetXmpList:
-        {
+        case CloudRequestTypeGetXmpList: {
             NSLog(@"Cloud Response: Get Xmp List");
             
             NSArray * xmpList = [[dom getChildWithName:@"xmplist"] getChildArrayWithName:@"xmp"];
-            
             cloudResponse.m_xmpList = xmpList;
-            
         } break;
             
-        case CloudRequestTypeSetXmpFolder:
-        {
+        case CloudRequestTypeSetXmpFolder: {
             NSLog(@"Cloud Response: Set Xmp Folder");
-            
         } break;
             
-        case CloudRequestTypeSetXmpPermission:
-        {
+        case CloudRequestTypeSetXmpPermission: {
             NSLog(@"Cloud Response: Set Xmp Permission");
-            
         } break;
             
-        case CloudRequestTypeSetXmpName:
-        {
+        case CloudRequestTypeSetXmpName: {
             NSLog(@"Cloud Response: Set Xmp Name");
-            
         } break;
         
-            
         default: {
-            
             NSLog(@"Cloud request type DEFAULT");
-            // nothing
         } break;
     }
 }

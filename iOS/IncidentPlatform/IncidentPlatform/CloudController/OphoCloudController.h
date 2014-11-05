@@ -14,6 +14,8 @@
 @class CloudRequest;
 @class CloudResponse;
 
+class SampleNode;
+
 typedef enum
 {
     OphoXmpTypeSong = 1,
@@ -31,8 +33,9 @@ typedef enum
 #define PERMISSIONS_OPEN @"OPEN"
 
 
-#define OPHO_DEV_SERVER
+//#define OPHO_DEV_SERVER
 //#define OPHO_SERVER
+#define OPHO_LOCAL_SERVER
 
 #ifdef OPHO_DEV_SERVER
     #define kServerAddress @"http://api-dev.opho.com/"
@@ -40,6 +43,10 @@ typedef enum
 
 #ifdef OPHO_SERVER
     #define kServerAddress @"http://api.opho.com/"
+#endif
+
+#ifdef OPHO_LOCAL_SERVER
+    #define kServerAddress @"http://api.opho.dev/"
 #endif
 
 
@@ -99,6 +106,7 @@ typedef enum
 - (CloudRequest*)requestDeleteXmpWithId:(NSInteger)xmpId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFile:(NSData *)file andXmpData:(NSString *)data andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+- (CloudRequest*)requestSaveXmpWithSampleNode:(SampleNode *)sampleNode andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestGetXmpWithId:(NSInteger)xmpId isXmpOnly:(BOOL)xmpOnly andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 

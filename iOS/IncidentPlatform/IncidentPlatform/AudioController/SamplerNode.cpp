@@ -117,7 +117,7 @@ Error:
 RESULT SamplerBankNode::LoadSampleStringIntoBank(const void *sampleBuffer, unsigned long int bufferLength, SampleNode* &outSample) {
     RESULT r = R_SUCCESS;
     
-    SampleNode *newSample = new SampleNode(sampleBuffer,bufferLength);
+    SampleNode *newSample = new SampleNode((void*)sampleBuffer, bufferLength);
     
     // Check, connect, and push the new sample
     CNRM(newSample, "SamplerBankNode: Failed to create sample");

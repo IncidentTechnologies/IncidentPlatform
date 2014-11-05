@@ -27,15 +27,15 @@ m_pBuffer_end(0)
     NormalizeSample();
 }
 
-SampleBuffer::SampleBuffer(const void *sampleBuffer, unsigned long int bufferLength) :
-m_pBuffer_c(0),
-m_pBuffer(NULL),
-m_pBuffer_n(0),
-m_SampleRate(DEFAULT_SAMPLE_RATE),
-m_pBuffer_start(0),
-m_pBuffer_end(0)
+SampleBuffer::SampleBuffer(void *buffer, unsigned long int bufferLength) :
+  m_pBuffer_c(0),
+  m_pBuffer(NULL),
+  m_pBuffer_n(0),
+  m_SampleRate(DEFAULT_SAMPLE_RATE),
+  m_pBuffer_start(0),
+  m_pBuffer_end(0)
 {
-    LoadSampleBufferFromString(sampleBuffer,bufferLength);
+    LoadSampleBufferFromString((const void*)buffer, bufferLength);
     NormalizeSample();
 }
 
@@ -395,8 +395,7 @@ Error:
 RESULT SampleBuffer::LoadSampleBufferFromString(const void *pszBuffer, unsigned long int bufferLength){
     RESULT r = R_SUCCESS;
     
-    char * pszPointer = (char *)pszBuffer;
-    
+    unsigned char *pszPointer = (unsigned char *)pszBuffer;
     UInt64 totalFramesInFile = bufferLength / 2.0;
     
     // Set up the buffer from the length
@@ -406,8 +405,20 @@ RESULT SampleBuffer::LoadSampleBufferFromString(const void *pszBuffer, unsigned 
     
     // Convert all the samples to float and put into the other buffer
     m_pBuffer = (float *)malloc(sizeof(float) * m_pBuffer_n);
+    
     for(int i = 0; i < m_pBuffer_n; i++) {
-        m_pBuffer[i] = (signed short)((pszPointer[i*2])+(pszPointer[i*2+1]<<8)) / 32767.0f;
+        unsigned char byteMSB = pszPointer[i * 2 + 1] & 0xFF;
+        unsigned char byteLSB = pszPointer[i * 2] & 0xFF;
+        int value = (byteMSB << 8) + byteLSB;
+        
+        // 2s complement
+        if(value > 32768) {
+            value = value - 65536;
+            m_pBuffer[i] = value / 32768.0;
+        }
+        else {
+            m_pBuffer[i] = value / 32767.0;
+        }
     }
     
 Error:
@@ -499,21 +510,28 @@ Error:
 // SampleNode
 /*************************************/
 
+SampleNode::SampleNode(int xmpid) :
+  m_pSampleBuffer(NULL),
+  m_fPlaying(FALSE)
+{
+    // First lets grab the XMP asset
+    // TODO
+}
+
 SampleNode::SampleNode(char *pszFilenamePath) :
-m_pSampleBuffer(NULL),
-m_fPlaying(FALSE)
+  m_pSampleBuffer(NULL),
+  m_fPlaying(FALSE)
 {
     SetChannelCount(1, CONN_OUT);
     m_pSampleBuffer = new SampleBuffer(pszFilenamePath);
 }
 
-SampleNode::SampleNode(const void *sampleBuffer, unsigned long int bufferLength) :
-m_pSampleBuffer(NULL),
-m_fPlaying(FALSE)
+SampleNode::SampleNode(void *buffer, unsigned long int bufferLength) :
+  m_pSampleBuffer(NULL),
+  m_fPlaying(FALSE)
 {
     SetChannelCount(1, CONN_OUT);
-    
-    m_pSampleBuffer = new SampleBuffer(sampleBuffer, bufferLength);
+    m_pSampleBuffer = new SampleBuffer(buffer, bufferLength);
 }
 
 RESULT SampleNode::SaveToFile(char *pszFilepath, bool fOverwrite) {

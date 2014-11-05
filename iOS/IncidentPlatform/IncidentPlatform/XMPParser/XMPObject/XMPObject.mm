@@ -14,7 +14,6 @@
 -(id) init {
     RESULT r = R_SUCCESS;
     
-    //m_xmpNode = NULL;
     CPRM((self = [super init]), "initWithParentLesson: Failed to init super");
     
     m_type = XMP_OBJECT_OBJECT;
@@ -33,6 +32,16 @@
 Error:
     return NULL;
 }
+
+/*
+-(id) initWithXMPNode:(long*)xmpid {
+    RESULT r = R_SUCCESS;
+    
+    return self;
+Error:
+    return NULL;
+}
+ */
 
 -(XMPValue)GetXMPValueOfChild:(NSString *)childName withAttribute:(NSString*)attributeName {
     XMPObject *childObject = [self GetChildWithName:childName];

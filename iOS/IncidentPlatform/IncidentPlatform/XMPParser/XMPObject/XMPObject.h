@@ -72,6 +72,8 @@ typedef enum XMPObjectTypes
 
 -(id) initWithXMPNode:(XMPNode*)xmpNode;
 
+//-(id) initWithXMPNode:(long*)xmpid;
+
 -(RESULT)AddXMPObject:(XMPObject*)xmpObj;
 -(RESULT)AddXMPVariable:(XMPValue*)xmpVar;
 

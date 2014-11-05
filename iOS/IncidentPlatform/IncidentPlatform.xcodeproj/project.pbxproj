@@ -159,6 +159,8 @@
 		26A5132518873B5500478200 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 26A512FB188734CF00478200 /* vertex.glsl */; };
 		26A5132D18875EE500478200 /* MeshObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26A5132B18875EE500478200 /* MeshObj.cpp */; };
 		26A5132F188762E600478200 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26A5132E188762C200478200 /* teapot.obj */; };
+		26BC1F531A08785C00703337 /* SoundRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26BC1F521A08785C00703337 /* SoundRecorder.mm */; };
+		26BC1F571A08985F00703337 /* SoundRecorder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26BC1F511A08785C00703337 /* SoundRecorder.h */; };
 		26CC24A518BDC24000716750 /* DiffusionTankNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10518AD6A31003F5CEB /* DiffusionTankNode.h */; };
 		26CC24A618BDC67000716750 /* ReverbNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F11F18AD6A31003F5CEB /* ReverbNode.h */; };
 		26CC24A718BDC7A200716750 /* FirstOrderFilterNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2610F10F18AD6A31003F5CEB /* FirstOrderFilterNode.h */; };
@@ -197,7 +199,7 @@
 		6D218C8F195206B6006E459E /* XMPDock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C851952067A006E459E /* XMPDock.h */; };
 		6D218C90195206B6006E459E /* XMPUndock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D218C871952067A006E459E /* XMPUndock.h */; };
 		6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */; };
-		6D365E0319E5FD24007CE2AC /* OphoCloudController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D365E0219E5FD24007CE2AC /* OphoCloudController.m */; };
+		6D365E0319E5FD24007CE2AC /* OphoCloudController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D365E0219E5FD24007CE2AC /* OphoCloudController.mm */; };
 		6D365E0419E600AA007CE2AC /* OphoCloudController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D365E0119E5FD24007CE2AC /* OphoCloudController.h */; };
 		6D485DF2195120A800F21938 /* XMPPrompt.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D485DF1195120A800F21938 /* XMPPrompt.mm */; };
 		6D485DF3195122DD00F21938 /* XMPPrompt.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D485DF0195120A800F21938 /* XMPPrompt.h */; };
@@ -296,6 +298,7 @@
 			files = (
 				6DBF368F1A02C0F300A9486F /* Keys.h in CopyFiles */,
 				6DBF36901A02C0F300A9486F /* KeysController.h in CopyFiles */,
+				26BC1F571A08985F00703337 /* SoundRecorder.h in CopyFiles */,
 				6DBF36911A02C0F300A9486F /* KeysControllerInternal.h in CopyFiles */,
 				6D365E0419E600AA007CE2AC /* OphoCloudController.h in CopyFiles */,
 				6DE7373219870398007EA00D /* XMPChord.h in CopyFiles */,
@@ -481,7 +484,7 @@
 		2605803C18691DE800F6668F /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
 		2605805718691E4F00F6668F /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		2605805818691E4F00F6668F /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
-		2610F0E918AD6A31003F5CEB /* AUAudioNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUAudioNode.h; sourceTree = "<group>"; };
+		2610F0E918AD6A31003F5CEB /* AUAudioNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = AUAudioNode.h; path = IncidentPlatform/AudioController/AUAudioNode.h; sourceTree = SOURCE_ROOT; };
 		2610F0EA18AD6A31003F5CEB /* AUAudioNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AUAudioNode.mm; sourceTree = "<group>"; };
 		2610F0EB18AD6A31003F5CEB /* AUAudioNodeFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUAudioNodeFactory.h; sourceTree = "<group>"; };
 		2610F0EC18AD6A31003F5CEB /* AUAudioNodeFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AUAudioNodeFactory.mm; sourceTree = "<group>"; };
@@ -522,7 +525,7 @@
 		2610F15018AD8A1D003F5CEB /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		2610F15318AD9125003F5CEB /* CADebugPrintf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugPrintf.cpp; sourceTree = "<group>"; };
 		2610F15418AD9125003F5CEB /* CADebugPrintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugPrintf.h; sourceTree = "<group>"; };
-		2610F15A18AD9B08003F5CEB /* AUNodeNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUNodeNetwork.h; sourceTree = "<group>"; };
+		2610F15A18AD9B08003F5CEB /* AUNodeNetwork.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = AUNodeNetwork.h; sourceTree = "<group>"; };
 		2610F15B18AD9B08003F5CEB /* AUNodeNetwork.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AUNodeNetwork.mm; sourceTree = "<group>"; };
 		261641EC18DA804300AEF042 /* LevelNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelNode.cpp; sourceTree = "<group>"; };
 		261641ED18DA804300AEF042 /* LevelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelNode.h; sourceTree = "<group>"; };
@@ -704,6 +707,8 @@
 		26A5132E188762C200478200 /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 		26A513301887664600478200 /* GLES2MeshObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLES2MeshObj.h; path = GLES2/GLES2MeshObj.h; sourceTree = "<group>"; };
 		26A513331887985000478200 /* MatrixFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixFactory.h; sourceTree = "<group>"; };
+		26BC1F511A08785C00703337 /* SoundRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundRecorder.h; sourceTree = "<group>"; };
+		26BC1F521A08785C00703337 /* SoundRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SoundRecorder.mm; sourceTree = "<group>"; };
 		26F72A9B18C9B16800D2D560 /* XMPData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPData.h; sourceTree = "<group>"; };
 		26F72A9C18C9B16800D2D560 /* XMPData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPData.mm; sourceTree = "<group>"; };
 		6D218C7D1952053E006E459E /* XMPPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPicture.h; sourceTree = "<group>"; };
@@ -718,8 +723,8 @@
 		6D218C881952067A006E459E /* XMPUndock.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPUndock.mm; sourceTree = "<group>"; };
 		6D346EF81922F3B200837F88 /* GtarSamplerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GtarSamplerNode.cpp; sourceTree = "<group>"; };
 		6D346EF91922F3B200837F88 /* GtarSamplerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GtarSamplerNode.h; sourceTree = "<group>"; };
-		6D365E0119E5FD24007CE2AC /* OphoCloudController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OphoCloudController.h; sourceTree = "<group>"; };
-		6D365E0219E5FD24007CE2AC /* OphoCloudController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OphoCloudController.m; sourceTree = "<group>"; };
+		6D365E0119E5FD24007CE2AC /* OphoCloudController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = OphoCloudController.h; sourceTree = "<group>"; };
+		6D365E0219E5FD24007CE2AC /* OphoCloudController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OphoCloudController.mm; sourceTree = "<group>"; };
 		6D485DF0195120A800F21938 /* XMPPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPrompt.h; sourceTree = "<group>"; };
 		6D485DF1195120A800F21938 /* XMPPrompt.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMPPrompt.mm; sourceTree = "<group>"; };
 		6D495E89190F3510002530EB /* CoreMidiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreMidiInterface.h; sourceTree = "<group>"; };
@@ -955,6 +960,7 @@
 		2605800918691DE800F6668F /* XMPParser */ = {
 			isa = PBXGroup;
 			children = (
+				2605801118691DE800F6668F /* XMPObject */,
 				2605800A18691DE800F6668F /* XMPAttribute.cpp */,
 				2605800B18691DE800F6668F /* XMPAttribute.h */,
 				2605800C18691DE800F6668F /* XMPElement.cpp */,
@@ -962,7 +968,6 @@
 				2605800E18691DE800F6668F /* XMPMain.cpp */,
 				2605800F18691DE800F6668F /* XMPNode.cpp */,
 				2605801018691DE800F6668F /* XMPNode.h */,
-				2605801118691DE800F6668F /* XMPObject */,
 				2605802C18691DE800F6668F /* XMPParser.cpp */,
 				2605802D18691DE800F6668F /* XMPParser.h */,
 				2605802E18691DE800F6668F /* XMPTest.cpp */,
@@ -1070,6 +1075,7 @@
 		2610F0E818AD6A31003F5CEB /* AudioController */ = {
 			isa = PBXGroup;
 			children = (
+				26BC1F501A08784600703337 /* SoundRecorder */,
 				264EC76818B3055C001F7224 /* TestData */,
 				2610F14B18AD6A9F003F5CEB /* iPublicUtility */,
 				2610F14918AD6A75003F5CEB /* AudioNode */,
@@ -1416,6 +1422,15 @@
 			name = GLES2;
 			sourceTree = "<group>";
 		};
+		26BC1F501A08784600703337 /* SoundRecorder */ = {
+			isa = PBXGroup;
+			children = (
+				26BC1F511A08785C00703337 /* SoundRecorder.h */,
+				26BC1F521A08785C00703337 /* SoundRecorder.mm */,
+			);
+			name = SoundRecorder;
+			sourceTree = "<group>";
+		};
 		6D495E88190F3510002530EB /* GtarController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1440,7 +1455,7 @@
 				6D7D46A31919B46F00EF8C75 /* CloudController.h */,
 				6D7D46A41919B46F00EF8C75 /* CloudController.m */,
 				6D365E0119E5FD24007CE2AC /* OphoCloudController.h */,
-				6D365E0219E5FD24007CE2AC /* OphoCloudController.m */,
+				6D365E0219E5FD24007CE2AC /* OphoCloudController.mm */,
 			);
 			path = CloudController;
 			sourceTree = "<group>";
@@ -1756,6 +1771,7 @@
 				264EC77318B43CC9001F7224 /* EffectNode.cpp in Sources */,
 				6D346EFA1922F3B200837F88 /* GtarSamplerNode.cpp in Sources */,
 				2616854718E9278800094BB0 /* XMPClip.mm in Sources */,
+				26BC1F531A08785C00703337 /* SoundRecorder.mm in Sources */,
 				6DA915A319469C8B00637AAF /* XMPSectionLesson.mm in Sources */,
 				2610F12E18AD6A31003F5CEB /* AUOutputNode.mm in Sources */,
 				6D218C8C1952067A006E459E /* XMPUndock.mm in Sources */,
@@ -1796,7 +1812,7 @@
 				2605805518691DE800F6668F /* XMPValue.cpp in Sources */,
 				2605804A18691DE800F6668F /* XMPMeasure.mm in Sources */,
 				2605804018691DE800F6668F /* XMPAttribute.cpp in Sources */,
-				6D365E0319E5FD24007CE2AC /* OphoCloudController.m in Sources */,
+				6D365E0319E5FD24007CE2AC /* OphoCloudController.mm in Sources */,
 				6DE6B91218F8929C00F9E49B /* ButterWorthFilterNode.cpp in Sources */,
 				2647907218692BA50077987F /* DimensionImpDX9.cpp in Sources */,
 				2605803E18691DE800F6668F /* SmartBuffer.cpp in Sources */,

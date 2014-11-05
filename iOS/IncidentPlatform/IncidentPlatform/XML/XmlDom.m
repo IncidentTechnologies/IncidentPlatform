@@ -11,360 +11,255 @@
 
 @implementation XmlDom
 
-- (id)initWithXmlString:(NSString*)xmlString
-{
-    
+- (id)initWithXmlString:(NSString*)xmlString {
     if ( xmlString == nil )
-    {
         return nil;
-    }
     
     NSDictionary * xmlDictionary = [XmlDictionary dictionaryFromXmlBlob:xmlString];
     
     if ( xmlDictionary == nil )
-    {
         return nil;
-    }
     
     self = [self initWithXmlDictionary:xmlDictionary];
     
     
-    if ( self )
-    {
+    if ( self ) {
         // nothing else to do
     }
     
     return self;
-    
 }
 
-- (id)initWithXmlData:(NSData*)xmlData
-{
-    
+- (id)initWithXmlData:(NSData*)xmlData {
     if ( xmlData == nil )
-    {
         return nil;
-    }
 
     NSDictionary * xmlDictionary = [XmlDictionary dictionaryFromXmlBlobData:xmlData];
     
     if ( xmlDictionary == nil )
-    {
         return nil;
-    }
     
     self = [self initWithXmlDictionary:xmlDictionary];
     
     
-    if ( self )
-    {
+    if ( self ) {
         // nothing else to do
     }
     
     return self;
-
 }
  
-- (id)initWithXmlDictionary:(NSDictionary*)xmlDictionary
-{
-    
+- (id)initWithXmlDictionary:(NSDictionary*)xmlDictionary {
     if ( xmlDictionary == nil )
-    {
         return nil;
-    }
     
     if ( [xmlDictionary isKindOfClass:[NSDictionary class]] == NO )
-    {
         return nil;
-    }
     
     self = [super init];
-    
-    if ( self )
-    {
-        // save the dictionary
-        m_backingDictionary = xmlDictionary;
 
-    }
+    // save the dictionary
+    if ( self )
+        m_backingDictionary = xmlDictionary;
     
     return self;
-    
 }
 
 
 #pragma mark - Navigation
 
-- (XmlDom*)getChildWithName:(NSString*)childName
-{
-    
-    if ( childName == nil ) {
-        return nil;
-    }
+- (XmlDom*)getChildWithName:(NSString*)childName {
+    if ( childName == NULL )
+        return NULL;
     
     NSDictionary * child = [m_backingDictionary objectForKey:childName];
     
-    if ( child == nil ) {
-        return nil;
-    }
+    if ( child == NULL )
+        return NULL;
     
-    if ( [child isKindOfClass:[NSString class]] )
-    {
+    if ( [child isKindOfClass:[NSString class]] ) {
 //        NSLog(@"Child is an attribute string, creating dummy text node");
         
         NSMutableDictionary * tempChild = [[NSMutableDictionary alloc] init];
         [tempChild setObject:child forKey:XML_DICTIONARY_TEXT_NODE];
         child = tempChild;
     }
-    else if ( ![child isKindOfClass:[NSDictionary class]] )
-    {
+    else if ( ![child isKindOfClass:[NSDictionary class]] ) {
 //        NSLog(@"Child is not a dictionary");
-        return nil;
+        return NULL;
     }
     
     XmlDom * returnDom = [[XmlDom alloc] initWithXmlDictionary:child];
     return returnDom;
 }
 
-- (NSArray*)getChildArrayWithName:(NSString*)childName
-{
-    
+- (NSArray*)getChildArrayWithName:(NSString*)childName {
     if ( childName == nil )
-    {
         return nil;
-    }
     
     NSArray * child = [m_backingDictionary objectForKey:childName];
     
     if ( child == nil )
-    {
         return nil;
-    }
     
-    if ( [child isKindOfClass:[NSDictionary class]] )
-    {
+    if ( [child isKindOfClass:[NSDictionary class]] ) {
         
 //        NSLog(@"Child is a dictionary, creating dummy array");
         
         XmlDom * tempDom = [[XmlDom alloc] initWithXmlDictionary:(NSDictionary*)child];
-        
         return [NSArray arrayWithObject:tempDom];
-        
     }
-    else if ( ![child isKindOfClass:[NSArray class]] )
-    {
+    else if ( ![child isKindOfClass:[NSArray class]] ) {
         
 //        NSLog(@"Child is not an array");
-        
         return nil;
-        
     }
     
     NSMutableArray * domArray = [[NSMutableArray alloc] init];
     
-    for ( NSDictionary * dict in child )
-    {
-        
+    for ( NSDictionary * dict in child ) {
         XmlDom * dom = [[XmlDom alloc] initWithXmlDictionary:dict];
-        
         [domArray addObject:dom];
-        
-        
     }
 
     return domArray;
-
 }
 
 #pragma mark - Accessors
 
-- (NSString*)getTextFromChildWithName:(NSString*)childName
-{
-    
+- (NSString*)getTextFromChildWithName:(NSString*)childName {
     if ( childName == nil )
-    {
         return nil;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
-
     NSString * text = [childDom getText];
     
     return text;
-    
 }
 
-- (NSInteger)getIntegerFromChildWithName:(NSString*)childName
-{
-    
+- (NSInteger)getIntegerFromChildWithName:(NSString*)childName {
     if ( childName == nil )
-    {
         return 0;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
-    
     NSInteger integer = [childDom getInteger];
     
     return integer;
-
 }
 
-- (NSNumber*)getNumberFromChildWithName:(NSString*)childName
-{
-    
+- (NSNumber*)getNumberFromChildWithName:(NSString*)childName {
     if ( childName == nil )
-    {
         return nil;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
-    
     NSNumber * number = [childDom getNumber];
     
     return number;
-
 }
 
-- (NSInteger)getDateFromChildWithName:(id)childName
-{
-    
+- (NSInteger)getDateFromChildWithName:(id)childName {
     if ( childName == nil )
-    {
         return 0;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
-    
     NSInteger date = [childDom getDate];
     
     return date;
-
 }
 
-- (NSString *)getValueFromChildWithName:(id)childName
-{
-    if(childName == nil){
+- (NSString *)getValueFromChildWithName:(id)childName {
+    if(childName == nil)
         return nil;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
-    
     NSString * value = [childDom getValue];
     
     return value;
 }
 
-- (NSString *)getAttribute:(NSString *)attribute fromChildWithName:(id)childName
-{
-    if(childName == nil){
+- (NSString *)getAttribute:(NSString *)attribute fromChildWithName:(id)childName {
+    if(childName == nil)
         return nil;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
-    
     NSString * attrValue = [childDom getAttribute:attribute];
     
     return attrValue;
 }
 
-- (NSArray*)getChildrenFromChildWithName:(NSString*)childName
-{
-    
+- (NSArray*)getChildrenFromChildWithName:(NSString*)childName {
     if ( childName == nil )
-    {
         return nil;
-    }
     
     XmlDom * childDom = [self getChildWithName:childName];
 
     return [childDom getChildren];
-    
 }
 
 
 #pragma mark - Helpers
-- (NSString*)getValue
-{
+- (NSString*)getValue {
     return [m_backingDictionary objectForKey:@"value"];
 }
 
-- (NSString*)getText
-{
+- (NSString*)getText {
     return [m_backingDictionary objectForKey:XML_DICTIONARY_TEXT_NODE];
 }
 
-- (NSInteger)getInteger
-{
+- (NSInteger)getInteger {
     NSString * intString = [self getText];
     return [intString integerValue];
 }
 
-- (NSNumber*)getNumber
-{
+- (NSNumber*)getNumber {
     NSString * numString = [self getText];
     return [NSNumber numberWithFloat:[numString floatValue]];
 }
 
-- (NSInteger)getDate
-{
-
+- (NSInteger)getDate {
     NSString * dateString = [self getText];
 
     NSDateFormatter * dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 
     return [[dateFormat dateFromString:dateString] timeIntervalSince1970];
-
 }
 
-- (NSString *)getAttribute:(NSString *)attribute
-{
+- (NSString *)getAttribute:(NSString *)attribute {
     return [m_backingDictionary objectForKey:attribute];
 }
 
-- (NSArray*)getChildren
-{
-    
+- (NSArray*)getChildren {
     NSArray * dictArray = [m_backingDictionary allValues];
 //    NSArray * keyArray = [m_backingDictionary allKeys];
     
     NSMutableArray * domArray = [[NSMutableArray alloc] init];
     
     // we want to convert all the dictionaries to XmlDoms
-    for ( NSDictionary * dict in dictArray )
-    {
-        
+    for ( NSDictionary * dict in dictArray ) {
         XmlDom * dom = [[XmlDom alloc] initWithXmlDictionary:dict];
         
-        if(dom != nil){
+        if(dom != nil)
             [domArray addObject:dom];
-        }
-        
     }
     
     return domArray;
-
 }
 
 #pragma mark - NSCoding
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:m_backingDictionary forKey:@"BackingDictionary"];
-    
 }
 
 // Decode an object from an archive
-- (id)initWithCoder:(NSCoder *)coder
-{
+- (id)initWithCoder:(NSCoder *)coder {
     //self = [super initWithCoder:coder];
     NSDictionary * backingDictionary = [coder decodeObjectForKey:@"BackingDictionary"];
 
     self = [self initWithXmlDictionary:backingDictionary];
 
 	return self;
-    
 }
 
 

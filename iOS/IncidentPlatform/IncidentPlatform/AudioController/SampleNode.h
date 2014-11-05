@@ -17,7 +17,7 @@
 class SampleBuffer {
 public:
     SampleBuffer(char *pszFilename);
-    SampleBuffer(const void *sampleBuffer, unsigned long int bufferLength);
+    SampleBuffer(void *buffer, unsigned long int bufferLength);
     ~SampleBuffer();
     
     RESULT LoadSampleBufferFromPath(char *pszPath);
@@ -75,8 +75,9 @@ public:
 // A sample node consists of a sample buffer and manipulation functions to play back
 class SampleNode : public GeneratorNode {
 public:
+    SampleNode(int xmpid);
     SampleNode(char *pszFilename);
-    SampleNode(const void *pszBuffer, unsigned long int bufferLength);
+    SampleNode(void *buffer, unsigned long int bufferLength);
     ~SampleNode();
     
     float GetNextSample(unsigned long int timestamp);
