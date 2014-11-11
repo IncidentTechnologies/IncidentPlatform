@@ -115,9 +115,12 @@ typedef enum
 
 // Opho
 @property (nonatomic, strong) NSArray * m_xmpList;
+@property (nonatomic, strong) NSArray * m_folderList;
 @property (nonatomic, strong) XmlDom * m_xmpDom;
 @property (nonatomic, assign) NSInteger m_id;
+@property (nonatomic, assign) NSInteger m_folderId;
 @property (nonatomic, strong) NSString * m_xmpName;
+@property (nonatomic, assign) NSInteger m_xmpType;
 
 - (id)initWithCloudRequest:(CloudRequest*)cloudRequest;
 

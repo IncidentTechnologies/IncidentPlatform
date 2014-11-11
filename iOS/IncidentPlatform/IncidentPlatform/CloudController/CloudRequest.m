@@ -44,6 +44,7 @@
 @synthesize m_folderId;
 @synthesize m_xmpFile;
 @synthesize m_xmpType;
+@synthesize m_xmpExcludeType;
 @synthesize m_xmpData;
 @synthesize m_xmpOnly;
 @synthesize m_xmpName;

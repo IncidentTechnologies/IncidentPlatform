@@ -34,8 +34,8 @@ typedef enum
 
 
 //#define OPHO_DEV_SERVER
-//#define OPHO_SERVER
-#define OPHO_LOCAL_SERVER
+#define OPHO_SERVER
+//#define OPHO_LOCAL_SERVER
 
 #ifdef OPHO_DEV_SERVER
     #define kServerAddress @"http://api-dev.opho.com/"
@@ -55,7 +55,6 @@ typedef enum
     BOOL m_loggedIn;
     
     NSString * m_username;
-    NSString * m_facebookAccessToken;
     
 	// Request->Response mapping
 	NSMutableDictionary * m_requestResponseDictionary;
@@ -73,7 +72,6 @@ typedef enum
 
 @property (nonatomic, readonly) BOOL m_loggedIn;
 @property (nonatomic, readonly) NSString * m_username;
-@property (nonatomic, readonly) NSString * m_facebookAccessToken;
 
 - (id)initWithServer:(NSString*)serverName;
 + (OphoCloudController*)sharedSingleton;
@@ -105,23 +103,27 @@ typedef enum
 
 - (CloudRequest*)requestDeleteXmpWithId:(NSInteger)xmpId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
-<<<<<<< HEAD
-- (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFile:(NSData *)file andXmpData:(NSString *)data andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+- (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFileData:(NSData *)file andXmpDataString:(NSString *)datastring andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 - (CloudRequest*)requestSaveXmpWithSampleNode:(SampleNode *)sampleNode andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
-=======
-- (CloudRequest*)requestSaveXmpWithId:(NSInteger)xmpId andXmpFileData:(NSData *)filedata andXmpDataString:(NSString *)datastring andName:(NSString*)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
->>>>>>> e327a3b290e8294e9f2e322f57329a851e7a8a3f
 
 - (CloudRequest*)requestGetXmpWithId:(NSInteger)xmpId isXmpOnly:(BOOL)xmpOnly andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestGetXmpListWithType:(NSInteger)type andUserId:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
-- (CloudRequest*)requestSetXmpFolderWithId:(NSInteger)xmpId andFolderId:(NSInteger)folderId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
-
 - (CloudRequest*)requestSetXmpPermissionWithId:(NSInteger)xmpId andUserId:(NSInteger)userId andPermission:(NSString *)permission andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 - (CloudRequest*)requestSetXmpNameWithId:(NSInteger)xmpId andName:(NSString *)name andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
+- (CloudRequest*)requestSetXmpRenderWithId:(NSInteger)xmpId andName:(NSString *)name andRenderBlob:(NSData *)file andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
+- (CloudRequest*)requestNewXmpFolderWithName:(NSString *)name andParentFolderId:(NSInteger)parentFolderId andXmpType:(NSInteger)type andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
+- (CloudRequest*)requestSetXmpFolderWithId:(NSInteger)xmpId andFolderId:(NSInteger)folderId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
+- (CloudRequest*)requestGetXmpFolderContentList:(NSInteger)folderId andXmpType:(NSInteger)type andExcludeType:(NSInteger)excludeType andUserId:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
+- (CloudRequest*)requestGetXmpFolderPublicContentList:(NSInteger)folderId andXmpType:(NSInteger)type andExcludeType:(NSInteger)excludeType andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 // Deprecated or converting //----------------------------------------------
 
