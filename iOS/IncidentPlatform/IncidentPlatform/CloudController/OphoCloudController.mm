@@ -34,6 +34,7 @@
 #define CloudRequestTypeActivateUrl @"user/activate/"
 #define CloudRequestTypeLoginUrl @"user/login/"
 #define CloudRequestTypeLogoutUrl @"user/logout/"
+#define CloudRequestTypeUserProfileImageUrl @"user/image/"
 
 // Opho XMP
 #define CloudRequestTypeNewXmpUrl @"xmp/new/"
@@ -287,6 +288,18 @@
     
     return cloudRequest;
 	
+}
+
+- (CloudRequest*)requestUserProfileImage:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeUserProfileImage andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_userId = userId;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
 }
 
 
@@ -977,6 +990,18 @@
             
         } break;
             
+        case CloudRequestTypeUserProfileImage:
+        {
+            url = CloudRequestTypeUserProfileImageUrl;
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"userid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, nil];
+            
+        } break;
+            
         case CloudRequestTypeNewXmp:
         {
             url = CloudRequestTypeNewXmpUrl;
@@ -1378,6 +1403,14 @@
             
         case CloudRequestTypeLogout: {
             m_loggedIn = NO;
+        } break;
+            
+        case CloudRequestTypeUserProfileImage: {
+            
+            NSLog(@"Cloud Response: User Profile Image");
+            
+            NSLog(@"Cloud response is %@",cloudResponse);
+            
         } break;
             
         case CloudRequestTypeNewXmp: {

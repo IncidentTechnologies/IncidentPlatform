@@ -94,6 +94,8 @@ typedef enum
 
 - (CloudRequest*)requestLoginUsername:(NSString*)username andPassword:(NSString*)password andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
+- (CloudRequest*)requestUserProfileImage:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel;
+
 - (CloudRequest*)requestLogoutCallbackObj:(id)obj andCallbackSel:(SEL)sel;
 
 

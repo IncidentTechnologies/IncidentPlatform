@@ -35,6 +35,7 @@ typedef enum {
     CloudRequestTypeLogin,              //opho
     //CloudRequestTypeLoginCookie,
     CloudRequestTypeLogout,             //opho
+    CloudRequestTypeUserProfileImage,   //opho
     
     CloudRequestTypeNewXmp,             //opho
     CloudRequestTypeDeleteXmp,          //opho
