@@ -990,7 +990,7 @@
                                      @"name", @"Name",
                                      cloudRequest.m_xmpName, @"Value", nil];
             
-            params = [NSArray arrayWithObjects:param2, nil];
+            params = [NSArray arrayWithObjects:param1,param2, nil];
             
         } break;
             
@@ -1073,7 +1073,7 @@
             
             NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"userid", @"Name",
-                                     [NSNumber numberWithInt:1], @"Value", nil];
+                                     [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
             
             params = [NSArray arrayWithObjects:param1, param2, nil];
             
@@ -1215,7 +1215,7 @@
             
             params = [NSArray arrayWithArray:tempParams];
             
-        }
+        } break;
             
         case CloudRequestTypeGetXmpFolderPublicContentList:
         {
@@ -1245,7 +1245,7 @@
             
             params = [NSArray arrayWithArray:tempParams];
             
-        }
+        } break;
             
         default: break;
     }
