@@ -14,6 +14,8 @@
 #define DEFAULT_NORMAL_MAX 0.3f
 #define DEFAULT_NORMAL_MIN -0.3f
 
+std::mutex m_pBuffer_mutex;
+
 SampleBuffer::SampleBuffer(char *pszFilenamePath) :
 m_pBuffer_c(0),
 m_pBuffer(NULL),
@@ -51,11 +53,23 @@ inline bool SampleBuffer::SampleDone() {
 }
 
 RESULT SampleBuffer::ResetSampleCounter() {
-    m_pBuffer_c = m_pBuffer_start;
+    
+    // Lock to avoid race conditions
+    while(m_pBuffer_c > m_pBuffer_start){
+        if(m_pBuffer_mutex.try_lock()){
+            m_pBuffer_c = m_pBuffer_start;
+            m_pBuffer_mutex.unlock();
+        }
+    }
+    
     return R_SUCCESS;
 }
 
 inline float SampleBuffer::GetNextSample(unsigned long int timestamp) {
+    
+    // Lock to avoid race conditions
+    m_pBuffer_mutex.lock();
+    
     float retVal = 0.0f;
     
     if(m_pBuffer != NULL && m_pBuffer_n > 0 && m_pBuffer_end > 0 && m_pBuffer_c < m_pBuffer_end) {
@@ -64,6 +78,8 @@ inline float SampleBuffer::GetNextSample(unsigned long int timestamp) {
     }
     
     retVal *= m_normalScale;
+    
+    m_pBuffer_mutex.unlock();
     
     return retVal;
 }
@@ -196,6 +212,8 @@ RESULT SampleBuffer::SetSample(unsigned long sample) {
     CBRM((sample < m_pBuffer_n), "SampleBuffer: Sample cannot be more than buffer length");
     CBRM((sample > m_pBuffer_start), "SampleBuffer: Sample before sample start");
     CBRM((sample < m_pBuffer_end), "SampleBuffer: Sample after sample section end");
+    
+    printf("set sample");
     
     m_pBuffer_c = sample;
     
@@ -551,6 +569,7 @@ SampleNode::~SampleNode() {
 }
 
 RESULT SampleNode::Stop() {
+    
     m_pSampleBuffer->ResetSampleCounter();
     m_fPlaying = false;
     return R_SUCCESS;
@@ -563,8 +582,10 @@ RESULT SampleNode::Resume() {
 }
 
 RESULT SampleNode::Trigger() {
+
     m_pSampleBuffer->ResetSampleCounter();
     m_fPlaying = true;
+    
     return R_SUCCESS;
 }
 

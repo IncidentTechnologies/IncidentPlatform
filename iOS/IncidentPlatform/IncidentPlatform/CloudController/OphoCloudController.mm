@@ -860,8 +860,6 @@
         // Some params might be optional
         if ( name != nil && filename != nil && [data length] > 0 )
         {
-            NSLog(@"Name is %@, filename is %@, data is %@",name,filename,data);
-            
             [postBodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", name, filename] dataUsingEncoding:NSUTF8StringEncoding]];
             [postBodyData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
             [postBodyData appendData:[NSData dataWithData:data]];
@@ -876,8 +874,8 @@
 //#if TARGET_IPHONE_SIMULATOR
     NSString * postString = [[NSString alloc] initWithData:postBodyData encoding:NSUTF8StringEncoding];
     
-    NSLog(@"POST STRING");
-    NSLog(@"%@",postString);
+    //NSLog(@"POST STRING");
+    //NSLog(@"%@",postString);
 //#endif
     
     
@@ -1581,9 +1579,9 @@
 //    [self cloudReceiveResponse:cloudResponse];
     [self performSelectorInBackground:@selector(cloudReceiveResponse:) withObject:cloudResponse];
     
-#if TARGET_IPHONE_SIMULATOR
-    NSLog(@"%@",cloudResponse.m_receivedDataString);
-#endif
+//#if TARGET_IPHONE_SIMULATOR
+//    NSLog(@"%@",cloudResponse.m_receivedDataString);
+//#endif
 }
 
 @end

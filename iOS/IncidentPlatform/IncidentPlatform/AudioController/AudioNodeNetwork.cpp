@@ -40,5 +40,8 @@ AudioNodeNetwork::~AudioNodeNetwork() {
 
 // Ping output node to get the next sample
 float AudioNodeNetwork::GetNextSample(unsigned long int timestamp) {
+    if(m_outputNode == NULL){
+        return 0.0;
+    }
     return m_outputNode->GetNextSample(timestamp);
 }
