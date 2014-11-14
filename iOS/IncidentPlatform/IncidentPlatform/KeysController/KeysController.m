@@ -754,9 +754,9 @@ static bool AmIBeingDebugged(void) {
     {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
-        if ( [observer respondsToSelector:@selector(keyDown:)] == YES )
+        if ( [observer respondsToSelector:@selector(keysDown:)] == YES )
         {
-            [observer keyDown:keysPosition];
+            [observer keysDown:keysPosition];
         }
     }
 }
@@ -772,9 +772,9 @@ static bool AmIBeingDebugged(void) {
     {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
-        if ( [observer respondsToSelector:@selector(keyUp:)] == YES )
+        if ( [observer respondsToSelector:@selector(keysUp:)] == YES )
         {
-            [observer keyUp:keysPosition];
+            [observer keysUp:keysPosition];
         }
     }
 }

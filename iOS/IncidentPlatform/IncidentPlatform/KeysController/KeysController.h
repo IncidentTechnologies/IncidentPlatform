@@ -109,14 +109,14 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @param position The position where the key was pressed.
  @discussion This function is called when a user presses down a key with their finger.
  */
-- (void)keyDown:(KeyPosition)position;
+- (void)keysDown:(KeyPosition)position;
 
 /*!
  @abstract Key released notification.
  @param position The position where the key was released.
  @discussion This function is called when a user releases a key.
  */
-- (void)keyUp:(KeyPosition)position;
+- (void)keysUp:(KeyPosition)position;
 
 /*!
  @abstract Note on notifications.
