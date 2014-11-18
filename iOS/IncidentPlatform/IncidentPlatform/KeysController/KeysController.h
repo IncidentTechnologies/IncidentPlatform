@@ -15,6 +15,8 @@
 //#define KEYS_ALERT_LOG
 
 #define WAIT_INT 0.25f
+#define DEFAULT_KEY_MIN 48
+#define DEFAULT_KEY_MAX 71
 
 /*!
  @abstract The result status code used by the KeysController.
@@ -158,6 +160,7 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @discussion This function is called when an additional Keys board has been added/removed.
  */
 - (void)keysRangeChange:(KeysRange)range;
+
 @end
 
 /*!
@@ -195,6 +198,12 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  device. This property is set to 'YES' when 'debugSpoofConnected' is called, and 'NO' when 'debugSpoofDisconnected' is called.
  */
 @property (nonatomic, readonly) BOOL spoofed;
+
+/*!
+ @abstract Current range of the Keys device.
+ @discussion When the Keys device has been connected, query the range. This property will be set when the 'keysRangeChange:' selector is announced to observers.
+ */
+@property (nonatomic, readonly) KeysRange range;
 
 /*!
  @abstract Set the thread that 'KeysControllerObserver' objects are notified on.
@@ -247,6 +256,13 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @discussion This function disconnects the GuitarController that is in a spoofed 'connected' state.
  */
 - (KeysControllerStatus)debugSpoofDisconnected;
+
+/*!
+ @abstract Simulate a key range change on a spoofed connection.
+ @result Return KeysControllerStatusOk on success. Returns new range?
+ @discussion This function spoofs a Keys range change, observers will receive the 'keysRangeChange' notification.
+ */
+- (KeysControllerStatus)debugSpoofRangeChange:(NSTimer *)timer;
 
 /*!
  @abstract Register to receive Keys device messages.

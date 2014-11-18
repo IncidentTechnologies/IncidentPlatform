@@ -51,6 +51,7 @@ static bool AmIBeingDebugged(void) {
 @synthesize info = m_info;
 @synthesize connected = m_connected;
 @synthesize spoofed = m_spoofed;
+@synthesize range = m_range;
 @synthesize responseThread = m_responseThread;
 @synthesize logLevel = m_logLevel;
 @synthesize minimumInterarrivalTime = m_minimumInterarrivalTime;
@@ -83,6 +84,9 @@ static bool AmIBeingDebugged(void) {
         
         m_spoofed = NO;
         m_connected = NO;
+        
+        m_range.keyMin = DEFAULT_KEY_MIN;
+        m_range.keyMax = DEFAULT_KEY_MAX;
         
         m_logLevel = KeysControllerLogLevelAll;
         
@@ -267,6 +271,30 @@ static bool AmIBeingDebugged(void) {
 }
 
 #pragma mark - External debug functions
+
+- (KeysControllerStatus)debugSpoofRangeChange:(NSTimer *)timer
+{
+    NSValue * rangeValue = (NSValue *)[timer userInfo];
+    
+    KeysRange newRange;
+    [rangeValue getValue:&newRange];
+    
+    [self logMessage:[NSString stringWithFormat:@"Debug spoof range change %i to %i",newRange.keyMin,newRange.keyMax] atLogLevel:KeysControllerLogLevelInfo];
+    
+    m_range = newRange;
+    
+    NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
+    
+    [responseDictionary setValue:@"notifyObserversKeysRangeChange:" forKey:@"Selector"];
+    [responseDictionary setValue:[[NSNumber alloc] initWithChar:newRange.keyMin] forKey:@"KeyMin"];
+    [responseDictionary setValue:[[NSNumber alloc] initWithChar:newRange.keyMax] forKey:@"KeyMax"];
+    
+    
+    
+    [self midiCallbackDispatch:responseDictionary];
+    
+    return KeysControllerStatusOk;
+}
 
 - (KeysControllerStatus)debugSpoofConnected {
     
@@ -599,10 +627,12 @@ static bool AmIBeingDebugged(void) {
                 case RX_KEY_RANGE_CHANGE:
                 case KEYS_RANGE_ACK:
                 {
-                    
                     // Key Down
                     unsigned char keyMin = (data[0] & 0xF);
                     unsigned char keyMax = data[2];
+                    
+                    m_range.keyMin = keyMin;
+                    m_range.keyMax = keyMax;
                     
                     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
                     
@@ -867,8 +897,8 @@ static bool AmIBeingDebugged(void) {
     NSNumber * keyMax = [dictionary objectForKey:@"KeyMax"];
     
     KeysRange keysRange;
-    keysRange.keyMin = (KeyPosition)keyMin;
-    keysRange.keyMax = (KeyPosition)keyMax;
+    keysRange.keyMin = (KeyPosition)[keyMin intValue];
+    keysRange.keyMax = (KeyPosition)[keyMax intValue];
     
     for ( NSValue * nonretainedObserver in m_observerList )
     {
