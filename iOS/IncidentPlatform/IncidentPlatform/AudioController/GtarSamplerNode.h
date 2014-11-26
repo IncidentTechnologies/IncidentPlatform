@@ -16,7 +16,7 @@
 #include "Parameter.h"
 
 #define MAX_BANKS 2
-#define MAX_SAMPLES 102
+#define MAX_SAMPLES 127
 
 class SampleNode;
 

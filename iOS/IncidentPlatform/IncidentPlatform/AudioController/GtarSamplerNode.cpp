@@ -280,6 +280,7 @@ inline float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
                         m_sampleTransitionIndex[b][i] = -1;
                         
                     }
+                                        
                     retVal += m_buffers[b][s]->GtarGetNextSample(timestamp);
                     
                     if(m_buffers[b][s]->GtarSampleDone()) {
