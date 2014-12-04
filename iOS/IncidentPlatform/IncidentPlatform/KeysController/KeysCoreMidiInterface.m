@@ -194,6 +194,8 @@
     
     int sourceCount = MIDIGetNumberOfSources();
     
+    NSLog(@"%i sources",sourceCount);
+    
     [m_midiSources removeAllObjects];
     
     m_sourceConnected = NO;
@@ -213,10 +215,21 @@
                 [m_keysController logMessage:[NSString stringWithFormat:@"Found Source: %@", (__bridge NSString*)sourceName]
                                   atLogLevel:KeysControllerLogLevelInfo];
                 
+                /*
+                UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Source"
+                                                                      message:[NSString stringWithFormat:@"s=%@",((__bridge NSString*)sourceName)]
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                [_alertView show];
+                */
+                
                 // Only connect the 'Keys' device for now
-                if ( [((__bridge NSString*)sourceName) isEqualToString:@"Keys"] == YES )
+                // nanoKEY KEYBOARD
+                // Akai MPK25 Port 1
+                if ( [((__bridge NSString*)sourceName) isEqualToString:@"Akai MPK25 Port 1"] == YES )
                 {
-                    
+                
                     // connect source
                     OSStatus oss = MIDIPortConnectSource(m_pMidiInputPort, sourceEndpoint, (__bridge void *)(self));
                     
@@ -244,7 +257,6 @@
 
 - (int)updateDestinations
 {
-    
     int destinationCount = MIDIGetNumberOfDestinations();
     
     [m_midiDestinations removeAllObjects];
@@ -266,8 +278,19 @@
                 [m_keysController logMessage:[NSString stringWithFormat:@"Found Destination: %@", (__bridge NSString*)destinationName]
                                   atLogLevel:KeysControllerLogLevelInfo];
                 
+                /*
+                UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Destination"
+                                                                      message:[NSString stringWithFormat:@"s=%@",((__bridge NSString*)destinationName)]
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                [_alertView show];
+                */
+                
                 // Only connect the 'Keys' destination for now
-                if ( [((__bridge NSString*)destinationName) isEqualToString:@"Keys"] == YES )
+                // nanoKEY CTRL
+                // Akai MPK25 Port 2
+                if ( [((__bridge NSString*)destinationName) isEqualToString:@"Akai MPK25 Port 2"] == YES )
                 {
                     [m_midiDestinations addObject:[NSValue valueWithPointer:destinationEndpoint]];
                     

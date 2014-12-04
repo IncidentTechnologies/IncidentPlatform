@@ -87,6 +87,7 @@ public:
     int CreateNewBank(int bank, int numSamples);
     
     RESULT TriggerSample(int bank, int sample);
+    RESULT RetriggerSample(int bank, int sample);
     RESULT TriggerMutedSample(int bank, int sample);
     unsigned long int TriggerContinuousSample(int bank, int sampleLead, int sampleTrail);
     
@@ -94,6 +95,7 @@ public:
     RESULT NoteOff(int bank, int sample);
     RESULT StopNote(int bank, int sample);
     bool IsNoteOn(int bank, int sample);
+    bool IsDoubleTrigger(int bank, int sample);
     
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
     RESULT LoadSampleIntoBankAtIndex(int bank, int index, char *pszFilepath);
