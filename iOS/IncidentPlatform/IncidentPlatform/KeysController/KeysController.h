@@ -185,12 +185,20 @@ typedef enum KeysControllerEffect KeysControllerEffect;
 @property (nonatomic, readonly) NSString * info;
 
 /*!
+ @abstract Connection status of a keyboard device.
+ @discussion Query the state of the keyboard device. When the keyboard device has been detected and gone through the handshake
+ process, this propery is set to 'YES'. Changes to the connection state are simultaneously announced to observers via
+ the 'keysConnected' and 'keysDisconnected' selectors.
+ */
+@property (nonatomic, readonly) BOOL connected;
+
+/*!
  @abstract Connection status of the Keys device.
  @discussion Query the state of the Keys device. When the Keys device has been detected and gone through the handshake
  process, this propery is set to 'YES'. Changes to the connection state are simultaneously announced to observers via
  the 'keysConnected' and 'keysDisconnected' selectors.
  */
-@property (nonatomic, readonly) BOOL connected;
+@property (nonatomic, readonly) BOOL isKeysDeviceConnected;
 
 /*!
  @abstract Whether the KeysController connection is spoofed.

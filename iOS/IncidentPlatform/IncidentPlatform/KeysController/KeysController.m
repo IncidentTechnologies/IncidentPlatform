@@ -50,6 +50,7 @@ static bool AmIBeingDebugged(void) {
 
 @synthesize info = m_info;
 @synthesize connected = m_connected;
+@synthesize isKeysDeviceConnected = m_isKeysDeviceConnected;
 @synthesize spoofed = m_spoofed;
 @synthesize range = m_range;
 @synthesize responseThread = m_responseThread;
@@ -84,6 +85,7 @@ static bool AmIBeingDebugged(void) {
         
         m_spoofed = NO;
         m_connected = NO;
+        m_isKeysDeviceConnected = NO;
         
         m_range.keyMin = DEFAULT_KEY_MIN;
         m_range.keyMax = DEFAULT_KEY_MAX;
@@ -166,6 +168,7 @@ static bool AmIBeingDebugged(void) {
                   atLogLevel:KeysControllerLogLevelError];
             
             m_connected = NO;
+            m_isKeysDeviceConnected = NO;
         }
         
         m_firmwareUpdating = NO;
@@ -304,6 +307,7 @@ static bool AmIBeingDebugged(void) {
           atLogLevel:KeysControllerLogLevelInfo];
     
     m_connected = YES;
+    m_isKeysDeviceConnected = YES;
     m_spoofed = YES;
     
     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
@@ -325,6 +329,7 @@ static bool AmIBeingDebugged(void) {
           atLogLevel:KeysControllerLogLevelInfo];
     
     m_connected = NO;
+    m_isKeysDeviceConnected = NO;
     m_spoofed = NO;
     
     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
@@ -418,6 +423,10 @@ static bool AmIBeingDebugged(void) {
         m_connected = YES;
         m_spoofed = NO;
         
+        if(m_coreMidiInterface.m_keysConnected){
+            m_isKeysDeviceConnected = YES;
+        }
+        
         [responseDictionary setValue:@"notifyObserversKeysConnected:" forKey:@"Selector"];
     }
     else
@@ -426,6 +435,7 @@ static bool AmIBeingDebugged(void) {
               atLogLevel:KeysControllerLogLevelInfo];
         
         m_connected = NO;
+        m_isKeysDeviceConnected = NO;
         m_spoofed = NO;
         
         if ( m_firmwareUpdating == YES )
@@ -1099,6 +1109,11 @@ static bool AmIBeingDebugged(void) {
 }
 
 - (NSString *) GetSerialNumber {
+    
+    if(!m_isKeysDeviceConnected){
+        return nil;
+    }
+    
     NSString * hexString = @"";
     BOOL isAllZero = YES;
     
@@ -1222,11 +1237,18 @@ static bool AmIBeingDebugged(void) {
 
 - (KeysControllerStatus)turnOffAllLeds
 {
+    KeysControllerStatus status = KeysControllerStatusOk;
+    
+    if(!m_isKeysDeviceConnected){
+        
+        [self logMessage:@"Cannot turn off LEDs: using foreign keyboard"
+              atLogLevel:KeysControllerLogLevelInfo];
+        
+        return status;
+    }
     
     [self logMessage:@"Turning off all LEDs"
           atLogLevel:KeysControllerLogLevelInfo];
-    
-    KeysControllerStatus status = KeysControllerStatusOk;
     
     if ( m_spoofed == YES )
     {
@@ -1277,6 +1299,14 @@ static bool AmIBeingDebugged(void) {
 - (KeysControllerStatus)turnOffLedAtPosition:(KeyPosition)position
 {
     KeysControllerStatus status = KeysControllerStatusOk;
+    
+    if(!m_isKeysDeviceConnected){
+        
+        [self logMessage:@"Cannot Turn on LED: using foreign keyboard"
+              atLogLevel:KeysControllerLogLevelInfo];
+        
+        return status;
+    }
     
     if ( m_spoofed == YES )
     {
@@ -1332,6 +1362,14 @@ static bool AmIBeingDebugged(void) {
     
     KeysControllerStatus status = KeysControllerStatusOk;
     
+    if(!m_isKeysDeviceConnected){
+        
+        [self logMessage:@"Cannot Turn on LED: using foreign keyboard"
+              atLogLevel:KeysControllerLogLevelInfo];
+        
+        return status;
+    }
+    
     if ( m_spoofed == YES ) {
         [self logMessage:@"turnOnLedAtKey: Connection spoofed, no-op"
               atLogLevel:KeysControllerLogLevelInfo];
@@ -1368,6 +1406,14 @@ static bool AmIBeingDebugged(void) {
 - (KeysControllerStatus)turnOnLedAtPositionWithColorMap:(KeyPosition)position
 {
     KeysControllerStatus status = KeysControllerStatusOk;
+    
+    if(!m_isKeysDeviceConnected){
+        
+        [self logMessage:@"Cannot Turn on LED: using foreign keyboard"
+              atLogLevel:KeysControllerLogLevelInfo];
+        
+        return status;
+    }
     
     if ( m_spoofed == YES )
     {

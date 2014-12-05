@@ -109,6 +109,7 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 @interface KeysCoreMidiInterface : NSObject {
     
     BOOL m_connected;
+    BOOL m_keysConnected;
     
     BOOL m_sourceConnected;
     BOOL m_destinationConnected;
@@ -132,6 +133,8 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 @property (nonatomic, assign) KeysController * m_keysController;
 
 @property (nonatomic, readonly) BOOL m_connected;
+
+@property (nonatomic, readonly) BOOL m_keysConnected;
 
 // Send related functions
 - (id)initWithKeysController:(KeysController*)keysController;

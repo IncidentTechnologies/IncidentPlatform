@@ -39,6 +39,7 @@
         m_sendQueue = [[NSMutableArray alloc] init];
         
         m_connected = NO;
+        m_keysConnected = NO;
         
         // Create the midi client
         OSStatus oss = MIDIClientCreate(CFSTR("AE Midi Client"), KeysMIDIStateChangedHandler, (__bridge void *)(self), &m_pMidiClient);
@@ -215,21 +216,24 @@
                 [m_keysController logMessage:[NSString stringWithFormat:@"Found Source: %@", (__bridge NSString*)sourceName]
                                   atLogLevel:KeysControllerLogLevelInfo];
                 
-                /*
-                UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Source"
+                /*UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Source"
                                                                       message:[NSString stringWithFormat:@"s=%@",((__bridge NSString*)sourceName)]
                                                                      delegate:self
                                                             cancelButtonTitle:@"OK"
                                                             otherButtonTitles:nil];
-                [_alertView show];
-                */
+                [_alertView show];*/
                 
                 // Only connect the 'Keys' device for now
                 // nanoKEY KEYBOARD
                 // Akai MPK25 Port 1
-                if ( [((__bridge NSString*)sourceName) isEqualToString:@"Akai MPK25 Port 1"] == YES )
+                if ( [((__bridge NSString*)sourceName) rangeOfString:@"Network Session"].location == NSNotFound )
                 {
-                
+                    
+                    if ( [((__bridge NSString*)sourceName) isEqualToString:@"Keys"] == YES )
+                    {
+                        m_keysConnected = YES;
+                    }
+                    
                     // connect source
                     OSStatus oss = MIDIPortConnectSource(m_pMidiInputPort, sourceEndpoint, (__bridge void *)(self));
                     
@@ -278,20 +282,25 @@
                 [m_keysController logMessage:[NSString stringWithFormat:@"Found Destination: %@", (__bridge NSString*)destinationName]
                                   atLogLevel:KeysControllerLogLevelInfo];
                 
-                /*
-                UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Destination"
+                /*UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Destination"
                                                                       message:[NSString stringWithFormat:@"s=%@",((__bridge NSString*)destinationName)]
                                                                      delegate:self
                                                             cancelButtonTitle:@"OK"
                                                             otherButtonTitles:nil];
-                [_alertView show];
-                */
+                [_alertView show];*/
+                
                 
                 // Only connect the 'Keys' destination for now
                 // nanoKEY CTRL
                 // Akai MPK25 Port 2
-                if ( [((__bridge NSString*)destinationName) isEqualToString:@"Akai MPK25 Port 2"] == YES )
+                if ( [((__bridge NSString*)destinationName) rangeOfString:@"Network Session"].location == NSNotFound )
                 {
+                    
+                    if ( [((__bridge NSString*)destinationName) isEqualToString:@"Keys"] == YES )
+                    {
+                        m_keysConnected = YES;
+                    }
+                    
                     [m_midiDestinations addObject:[NSValue valueWithPointer:destinationEndpoint]];
                     
                     [m_keysController logMessage:[NSString stringWithFormat:@"Keys destination connected"]
