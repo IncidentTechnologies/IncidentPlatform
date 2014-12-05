@@ -567,15 +567,18 @@ Error:
 
 bool GtarSamplerNode::IsNoteOn(int bank, int sample) {
     
-    return m_buffers[bank][sample]->IsNoteOn();
-    
+    if(m_buffers[bank][sample] != NULL){
+        return m_buffers[bank][sample]->IsNoteOn();
+    }else{
+        return true;
+    }
 }
 
 bool GtarSamplerNode::IsDoubleTrigger(int bank, int sample){
     
-    double threshold = 0.2;
+    double threshold = 0.02;
     
-    if(m_buffers[bank][sample]->m_pBuffer_c < threshold*m_buffers[bank][sample]->m_pBuffer_n+m_buffers[bank][sample]->m_pBuffer_start){
+    if(m_buffers[bank][sample]->m_pBuffer_c > m_buffers[bank][sample]->m_pBuffer_start && m_buffers[bank][sample]->m_pBuffer_c < threshold*m_buffers[bank][sample]->m_pBuffer_n+m_buffers[bank][sample]->m_pBuffer_start){
         return true;
     }else{
         return false;
