@@ -211,7 +211,7 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @abstract Current range of the Keys device.
  @discussion When the Keys device has been connected, query the range. This property will be set when the 'keysRangeChange:' selector is announced to observers.
  */
-@property (nonatomic, readonly) KeysRange range;
+@property (nonatomic, assign) KeysRange range;
 
 /*!
  @abstract Set the thread that 'KeysControllerObserver' objects are notified on.

@@ -34,7 +34,7 @@ typedef enum {
     KEYS_FIRMWARE_ACK = 0x35,
     KEYS_BATTERY_STATUS_ACK = 0x36,
     KEYS_BATTERY_CHARGE_ACK = 0x37,
-    KEYS_RANGE_ACK = 0x40,
+    //KEYS_RANGE_ACK = 0x40, // TODO: SET
     
     // Piezo stuff
     KEYS_GET_PIEZO_CT_MATRIX_ACK = 0x38,
@@ -175,7 +175,7 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 - (BOOL)sendFirmwarePackagePage:(unsigned char*)page andPageSize:(int)pageSize andFirmwareSize:(int)firmwareSize andPageCount:(int)pageCount andCurrentPage:(int)currentPage andChecksum:(unsigned char)checksum;
 
 
-- (BOOL)sendCCSetLedStatusKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
+//- (BOOL)sendCCSetLedStatusKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
 - (BOOL)sendSetLedStateKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
 - (BOOL)sendNoteMessageOnChannel:(unsigned char)channel andMidiValue:(unsigned char)midiVal andMidiVel:(unsigned char)velocity andType:(const char*)type;
 

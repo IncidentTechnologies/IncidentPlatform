@@ -409,7 +409,7 @@ static bool AmIBeingDebugged(void) {
 
 #pragma mark - Internal MIDI functions
 
-- (void)midiConnectionHandler:(BOOL)connected
+- (void)midiConnectionHandler:(BOOL)connected keysDeviceConnected:(BOOL)keysDeviceConnected
 {
     
     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
@@ -423,9 +423,7 @@ static bool AmIBeingDebugged(void) {
         m_connected = YES;
         m_spoofed = NO;
         
-        if(m_coreMidiInterface.m_keysConnected){
-            m_isKeysDeviceConnected = YES;
-        }
+        m_isKeysDeviceConnected = keysDeviceConnected;
         
         [responseDictionary setValue:@"notifyObserversKeysConnected:" forKey:@"Selector"];
     }
@@ -634,7 +632,7 @@ static bool AmIBeingDebugged(void) {
                     }
                 } break;
                     
-                case RX_KEY_RANGE_CHANGE:
+                /*case RX_KEY_RANGE_CHANGE:
                 case KEYS_RANGE_ACK:
                 {
                     // Key Down
@@ -643,7 +641,7 @@ static bool AmIBeingDebugged(void) {
                     
                     m_range.keyMin = keyMin;
                     m_range.keyMax = keyMax;
-                    
+                 
                     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
                     
                     [responseDictionary setValue:@"notifyObserversKeysRangeChange:" forKey:@"Selector"];
@@ -655,6 +653,7 @@ static bool AmIBeingDebugged(void) {
                     //[responseDictionary release];
                     
                 } break;
+                 */
                     
                 case KEYS_SERIAL_NUMBER_ACK: {
                     unsigned char number = data[2];
@@ -799,6 +798,7 @@ static bool AmIBeingDebugged(void) {
             [observer keysDown:keysPosition];
         }
     }
+    
 }
 
 - (void)notifyObserversKeyUp:(NSDictionary*)dictionary
@@ -848,6 +848,25 @@ static bool AmIBeingDebugged(void) {
         {
             [observer keysNoteOn:keysPress];
         }
+    }
+    
+    // Update the known keyboard range if it's
+    // been expanded
+    if(keysPress.position > 0 && (keysPress.position < m_range.keyMin || keysPress.position > m_range.keyMax)){
+        
+        m_range.keyMin = MIN(m_range.keyMin,keysPress.position); //DEFAULT_KEY_MIN;
+        m_range.keyMax = MAX(m_range.keyMax,keysPress.position); // DEFAULT_KEY_MAX; //
+        
+        // Consider range change
+        
+        NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
+        
+        [responseDictionary setValue:@"notifyObserversKeysRangeChange:" forKey:@"Selector"];
+        [responseDictionary setValue:[[NSNumber alloc] initWithChar:m_range.keyMin] forKey:@"KeyMin"];
+        [responseDictionary setValue:[[NSNumber alloc] initWithChar:m_range.keyMax] forKey:@"KeyMax"];
+        
+        [self midiCallbackDispatch:responseDictionary];
+        
     }
 }
 
@@ -1407,17 +1426,23 @@ static bool AmIBeingDebugged(void) {
 {
     KeysControllerStatus status = KeysControllerStatusOk;
     
-    if(!m_isKeysDeviceConnected){
+    /*if(!m_isKeysDeviceConnected){
+        
+        UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Turn on LED at position with color map"
+                                                              message:@"Cannot turn on LED: using foreign keyboard"
+                                                             delegate:self
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+        [_alertView show];
         
         [self logMessage:@"Cannot Turn on LED: using foreign keyboard"
               atLogLevel:KeysControllerLogLevelInfo];
         
         return status;
-    }
+    }*/
     
     if ( m_spoofed == YES )
     {
-        
         [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Connection spoofed, no-op"
               atLogLevel:KeysControllerLogLevelInfo];
         
@@ -1426,7 +1451,6 @@ static bool AmIBeingDebugged(void) {
     }
     else if ( m_connected == NO )
     {
-        
         [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Not connected"
               atLogLevel:KeysControllerLogLevelWarn];
         
@@ -1444,54 +1468,22 @@ static bool AmIBeingDebugged(void) {
     }
     else
     {
-        
-       /* if( oct == 0 )
-        {
+        KeyPosition key = position % KeysPerOctaveCount;
             
-            // TODO: how does this apply to Keys?
-            
-            // turn on all strings using their specified color mapping
-            
-            [self logMessage:@"Turn on all strings using their specified color mapping - sendSetLedStateKey:andOctave:andRed..." atLogLevel:KeysControllerLogLevelAll];
-            
-            for( int oct = KeysMinOctave; oct < KeysMaxOctave; oct++ )
-            {
-                
-                BOOL result = [m_coreMidiInterface sendSetLedStateKey:key andOctave:(oct+1)
-                                                                andRed:m_colorMap.keyColor[key].red
-                                                              andGreen:m_colorMap.keyColor[key].green
-                                                               andBlue:m_colorMap.keyColor[key].blue
-                                                            andMessage:0];
-                
-                if ( result == NO )
-                {
-                    [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Setting LED state failed"
-                          atLogLevel:KeysControllerLogLevelError];
-                    
-                    status = KeysControllerStatusError;
-                    break;
-                }
-            }
-        }
-        else
-        {*/
-            KeyPosition key = position % KeysPerOctaveCount;
-            
-            // subtract one to zero-base the string
-            BOOL result = [m_coreMidiInterface sendSetLedStateKey:position
+        // subtract one to zero-base the string
+        BOOL result = [m_coreMidiInterface sendSetLedStateKey:position
                                                             andRed:m_colorMap.keyColor[key].red
                                                           andGreen:m_colorMap.keyColor[key].green
                                                            andBlue:m_colorMap.keyColor[key].blue
                                                         andMessage:0];
+    
+        if ( result == NO )
+        {
+            [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Setting LED state failed"
+                  atLogLevel:KeysControllerLogLevelError];
             
-            if ( result == NO )
-            {
-                [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Setting LED state failed"
-                      atLogLevel:KeysControllerLogLevelError];
-                
-                status = KeysControllerStatusError;
-            }
-        //}
+            status = KeysControllerStatusError;
+        }
         
     }
     

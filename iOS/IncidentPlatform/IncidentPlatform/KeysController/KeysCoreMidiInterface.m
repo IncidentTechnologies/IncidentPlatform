@@ -174,7 +174,7 @@
             //            [m_keysController logMessage:[NSString stringWithFormat:@"Keys Disconnected"]
             //                              atLogLevel:KeysControllerLogLevelInfo];
             
-            [m_keysController midiConnectionHandler:NO];
+            [m_keysController midiConnectionHandler:NO keysDeviceConnected:NO];
         }
     }
     else
@@ -184,7 +184,7 @@
             //            [m_keysController logMessage:[NSString stringWithFormat:@"Keys Connected"]
             //                              atLogLevel:KeysControllerLogLevelInfo];
             
-            [m_keysController midiConnectionHandler:YES];
+            [m_keysController midiConnectionHandler:YES keysDeviceConnected:m_keysConnected];
         }
     }
     
@@ -1013,7 +1013,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
 */
 
 #pragma mark - Set LED State
-
+/*
 - (BOOL)sendCCSetLedStatusKey:(unsigned char)key
                         andRed:(unsigned char)red
                       andGreen:(unsigned char)green
@@ -1051,7 +1051,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     }
     
     return result;
-}
+}*/
 
 - (BOOL)sendSetLedStateKey:(unsigned char)key
                      andRed:(unsigned char)red
@@ -1060,16 +1060,18 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
                  andMessage:(unsigned char)message
 {
     
-    int sendBufferLength = 7;
+    int sendBufferLength = 9;
     unsigned char sendBuffer[sendBufferLength];
-    
+ 
     sendBuffer[0] = 0xF0; // SysEx Message
-    sendBuffer[1] = KEYS_DEVICE_ID;
+    sendBuffer[1] = 0x42; // KEYS_DEVICE_ID
     sendBuffer[2] = (unsigned char)KEYS_MSG_SET_LED;
-    sendBuffer[3] = (unsigned char)key;
-//    sendBuffer[4] = (unsigned char)fret;
-    sendBuffer[5] = [self encodeValueWithRed:red andGreen:green andBlue:blue andMessage:message];
-    sendBuffer[6] = 0xF7; // End SysEx Message
+    sendBuffer[3] = (unsigned char)key; //0x3E; // Key
+    sendBuffer[4] = 0x7F * (red) / 3.0; // R
+    sendBuffer[5] = 0x7F * (green) / 3.0; // G
+    sendBuffer[6] = 0x7F * (blue) / 3.0; // B
+    sendBuffer[7] = 0x7F; // A
+    sendBuffer[8] = 0xF7; // End SysEx Message
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
