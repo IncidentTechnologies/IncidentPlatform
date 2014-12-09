@@ -1070,9 +1070,9 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     
     // Colors 0-127, or multiply by 0x7F / 3.0 to convert from
     // LED RGB values
-    sendBuffer[4] = 0x7F * MAX(red*COLOR_RED_SHIFT,3.0) / 3.0; // R
-    sendBuffer[5] = 0x7F * MAX(green*COLOR_GREEN_SHIFT,3.0) / 3.0; // G
-    sendBuffer[6] = 0x7F * MAX(blue*COLOR_BLUE_SHIFT,3.0) / 3.0; // B
+    sendBuffer[4] = 0x7F * MIN(red*COLOR_RED_SHIFT,3.0) / 3.0; // R
+    sendBuffer[5] = 0x7F * MIN(green*COLOR_GREEN_SHIFT,3.0) / 3.0; // G
+    sendBuffer[6] = 0x7F * MIN(blue*COLOR_BLUE_SHIFT,3.0) / 3.0; // B
     sendBuffer[7] = 0x7F * alpha; // A
     sendBuffer[8] = 0xF7; // End SysEx Message
     
