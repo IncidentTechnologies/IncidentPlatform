@@ -176,7 +176,7 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 
 
 //- (BOOL)sendCCSetLedStatusKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
-- (BOOL)sendSetLedStateKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
+- (BOOL)sendSetLedStateKey:(unsigned char)key andRed:(float)red andGreen:(float)green andBlue:(float)blue andAlpha:(float)alpha;
 - (BOOL)sendNoteMessageOnChannel:(unsigned char)channel andMidiValue:(unsigned char)midiVal andMidiVel:(unsigned char)velocity andType:(const char*)type;
 
 // Helpers

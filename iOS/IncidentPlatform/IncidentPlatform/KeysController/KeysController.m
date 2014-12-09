@@ -98,53 +98,65 @@ static bool AmIBeingDebugged(void) {
         KeysLedColorMap colorMap;
         
         // Define all the LED Colors
-        colorMap.keyColor[0].red = 3;
-        colorMap.keyColor[0].green = 0;
-        colorMap.keyColor[0].blue = 0;
+        // C
+        colorMap.keyColor[0].red = 3.0 * 253/255.0;
+        colorMap.keyColor[0].green = 3.0 * 179/255.0;
+        colorMap.keyColor[0].blue = 3.0 * 44/255.0;
         
-        colorMap.keyColor[1].red = 2;
-        colorMap.keyColor[1].green = 1;
-        colorMap.keyColor[1].blue = 0;
+        // C#
+        colorMap.keyColor[1].red = 3.0 * 226/255.0;
+        colorMap.keyColor[1].green = 3.0 * 88/255.0;
+        colorMap.keyColor[1].blue = 3.0 * 60/255.0;
         
-        colorMap.keyColor[2].red = 3;
-        colorMap.keyColor[2].green = 3;
+        // D
+        colorMap.keyColor[2].red = 3.0 * 255/255.0;
+        colorMap.keyColor[2].green = 3.0 * 221/255.0;
         colorMap.keyColor[2].blue = 0;
         
-        colorMap.keyColor[3].red = 0;
-        colorMap.keyColor[3].green = 3;
-        colorMap.keyColor[3].blue = 0;
+        // D#
+        colorMap.keyColor[3].red = 3.0 * 253/255.0;
+        colorMap.keyColor[3].green = 3.0 * 138/255.0;
+        colorMap.keyColor[3].blue = 3.0 * 27/255.0;
         
-        colorMap.keyColor[4].red = 0;
-        colorMap.keyColor[4].green = 0;
-        colorMap.keyColor[4].blue = 3;
+        // E
+        colorMap.keyColor[4].red = 3.0 * 146/255.0;
+        colorMap.keyColor[4].green = 3.0 * 221/255.0;
+        colorMap.keyColor[4].blue = 0;
         
-        colorMap.keyColor[5].red = 2;
-        colorMap.keyColor[5].green = 0;
-        colorMap.keyColor[5].blue = 2;
+        // F
+        colorMap.keyColor[5].red = 3.0 * 25/255.0;
+        colorMap.keyColor[5].green = 3.0 * 204/255.0;
+        colorMap.keyColor[5].blue = 3.0 * 166/255.0;
         
-        colorMap.keyColor[6].red = 3;
-        colorMap.keyColor[6].green = 0;
-        colorMap.keyColor[6].blue = 0;
+        // F#
+        colorMap.keyColor[6].red = 3.0 * 28/255.0;
+        colorMap.keyColor[6].green = 3.0 * 163/255.0;
+        colorMap.keyColor[6].blue = 3.0 * 161/255.0;
         
-        colorMap.keyColor[7].red = 2;
-        colorMap.keyColor[7].green = 1;
-        colorMap.keyColor[7].blue = 0;
+        // G
+        colorMap.keyColor[7].red = 0;
+        colorMap.keyColor[7].green = 3.0 * 194/255.0;
+        colorMap.keyColor[7].blue = 3.0 * 241/255.0;
         
-        colorMap.keyColor[8].red = 3;
-        colorMap.keyColor[8].green = 3;
-        colorMap.keyColor[8].blue = 0;
+        // G#
+        colorMap.keyColor[8].red = 3.0 * 26/255.0;
+        colorMap.keyColor[8].green = 3.0 * 118/255.0;
+        colorMap.keyColor[8].blue = 3.0 * 215/255.0;
         
-        colorMap.keyColor[9].red = 0;
-        colorMap.keyColor[9].green = 3;
-        colorMap.keyColor[9].blue = 0;
+        // A
+        colorMap.keyColor[9].red = 3.0 * 100/255.0;
+        colorMap.keyColor[9].green = 3.0 * 140/255.0;
+        colorMap.keyColor[9].blue = 3.0 * 251/255.0;
         
-        colorMap.keyColor[10].red = 0;
-        colorMap.keyColor[10].green = 0;
-        colorMap.keyColor[10].blue = 3;
+        // A#
+        colorMap.keyColor[10].red = 3.0 * 150/255.0;
+        colorMap.keyColor[10].green = 3.0 * 43/255.0;
+        colorMap.keyColor[10].blue = 3.0 * 164/255.0;
         
-        colorMap.keyColor[11].red = 2;
-        colorMap.keyColor[11].green = 0;
-        colorMap.keyColor[11].blue = 2;
+        // B
+        colorMap.keyColor[11].red = 3.0 * 210/255.0;
+        colorMap.keyColor[11].green = 3.0 * 110/255.0;
+        colorMap.keyColor[11].blue = 3.0 * 221/255.0;
         
         
         self.colorMap = colorMap;
@@ -1299,7 +1311,7 @@ static bool AmIBeingDebugged(void) {
     else
     {
         
-        BOOL result = [m_coreMidiInterface sendSetLedStateKey:0 andRed:0 andGreen:0 andBlue:0 andMessage:0];
+        BOOL result = [m_coreMidiInterface sendSetLedStateKey:0 andRed:0 andGreen:0 andBlue:0 andAlpha:1.0];
         
         if ( result == NO )
         {
@@ -1357,7 +1369,7 @@ static bool AmIBeingDebugged(void) {
     else
     {
         
-        BOOL result = [m_coreMidiInterface sendSetLedStateKey:position andRed:0 andGreen:0 andBlue:0 andMessage:0];
+        BOOL result = [m_coreMidiInterface sendSetLedStateKey:position andRed:0 andGreen:0 andBlue:0 andAlpha:1.0];
         
         if ( result == NO )
         {
@@ -1392,7 +1404,7 @@ static bool AmIBeingDebugged(void) {
     if ( m_spoofed == YES ) {
         [self logMessage:@"turnOnLedAtKey: Connection spoofed, no-op"
               atLogLevel:KeysControllerLogLevelInfo];
-        
+
         status = KeysControllerStatusOk;
     }
     else if ( m_connected == NO ){
@@ -1408,7 +1420,7 @@ static bool AmIBeingDebugged(void) {
         status = KeysControllerStatusError;
     }
     else {
-        BOOL result = [m_coreMidiInterface sendSetLedStateKey:position andRed:red andGreen:green andBlue:blue andMessage:0];
+        BOOL result = [m_coreMidiInterface sendSetLedStateKey:position andRed:red andGreen:green andBlue:blue andAlpha:1.0];
         
         if ( result == NO ) {
             [self logMessage:@"turnOnLedAtKey: Setting LED state failed"
@@ -1475,7 +1487,7 @@ static bool AmIBeingDebugged(void) {
                                                             andRed:m_colorMap.keyColor[key].red
                                                           andGreen:m_colorMap.keyColor[key].green
                                                            andBlue:m_colorMap.keyColor[key].blue
-                                                        andMessage:0];
+                                                        andAlpha:1.0];
     
         if ( result == NO )
         {

@@ -1054,10 +1054,10 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
 }*/
 
 - (BOOL)sendSetLedStateKey:(unsigned char)key
-                     andRed:(unsigned char)red
-                   andGreen:(unsigned char)green
-                    andBlue:(unsigned char)blue
-                 andMessage:(unsigned char)message
+                     andRed:(float)red
+                   andGreen:(float)green
+                    andBlue:(float)blue
+                 andAlpha:(float)alpha
 {
     
     int sendBufferLength = 9;
@@ -1067,10 +1067,13 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     sendBuffer[1] = 0x42; // KEYS_DEVICE_ID
     sendBuffer[2] = (unsigned char)KEYS_MSG_SET_LED;
     sendBuffer[3] = (unsigned char)key; //0x3E; // Key
-    sendBuffer[4] = 0x7F * (red) / 3.0; // R
-    sendBuffer[5] = 0x7F * (green) / 3.0; // G
-    sendBuffer[6] = 0x7F * (blue) / 3.0; // B
-    sendBuffer[7] = 0x7F; // A
+    
+    // Colors 0-127, or multiply by 0x7F / 3.0 to convert from
+    // LED RGB values
+    sendBuffer[4] = 0x7F * MAX(red*COLOR_RED_SHIFT,3.0) / 3.0; // R
+    sendBuffer[5] = 0x7F * MAX(green*COLOR_GREEN_SHIFT,3.0) / 3.0; // G
+    sendBuffer[6] = 0x7F * MAX(blue*COLOR_BLUE_SHIFT,3.0) / 3.0; // B
+    sendBuffer[7] = 0x7F * alpha; // A
     sendBuffer[8] = 0xF7; // End SysEx Message
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];

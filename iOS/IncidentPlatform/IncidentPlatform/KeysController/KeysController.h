@@ -18,6 +18,10 @@
 #define DEFAULT_KEY_MIN 48
 #define DEFAULT_KEY_MAX 71
 
+#define COLOR_RED_SHIFT 1.2
+#define COLOR_GREEN_SHIFT 0.8
+#define COLOR_BLUE_SHIFT 0.8
+
 /*!
  @abstract The result status code used by the KeysController.
  @discussion These are the values that are returned by the KeysController. A status of 'KeysControllerStatusOk' means

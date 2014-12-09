@@ -50,7 +50,7 @@ typedef unsigned char KeyPosition;
  @abstract An LED intensity value.
  @discussion A data type representing the intensity of a single LED color on the Keys. Acceptable values are in the range [0..KeysMaxLedIntensity].
  */
-typedef unsigned char KeysLedIntensity;
+typedef float KeysLedIntensity;
 
 /*!
  @abstract A press velocity.
