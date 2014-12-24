@@ -38,15 +38,15 @@ typedef enum
 //#define OPHO_LOCAL_SERVER
 
 #ifdef OPHO_DEV_SERVER
-    #define kServerAddress @"http://api-dev.opho.com/"
+    #define ophoServerAddress @"http://api-dev.opho.com/"
 #endif
 
 #ifdef OPHO_SERVER
-    #define kServerAddress @"http://api.opho.com/"
+    #define ophoServerAddress @"http://api.opho.com/"
 #endif
 
 #ifdef OPHO_LOCAL_SERVER
-    #define kServerAddress @"http://api.opho.dev/"
+    #define ophoServerAddress @"http://api.opho.dev/"
 #endif
 
 

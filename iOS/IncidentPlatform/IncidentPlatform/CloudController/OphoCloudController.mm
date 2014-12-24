@@ -106,7 +106,7 @@
     {
         if (!sharedSingleton)
         {
-            NSString* server = kServerAddress;
+            NSString* server = ophoServerAddress;
             sharedSingleton = [[OphoCloudController alloc] initWithServer:server];
         }
         
@@ -267,8 +267,6 @@
     cloudRequest.m_password = password;
     cloudRequest.m_rememberLogin = [NSNumber numberWithBool:YES];
 
-    //[cloudRequest setM_rememberLogin:[NSNumber numberWithBool:YES]];
-    
     [self cloudSendRequest:cloudRequest];
     
     return cloudRequest;
