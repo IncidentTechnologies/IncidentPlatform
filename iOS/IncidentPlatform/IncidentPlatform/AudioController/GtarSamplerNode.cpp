@@ -53,6 +53,24 @@ m_releaseCLK(0.0f)
     NormalizeSample();
 }
 
+GtarSampleBuffer::GtarSampleBuffer(void *buffer, unsigned long int bufferLength) :
+SampleBuffer(buffer, bufferLength),
+m_msAttack(DEFAULT_MSATTACK),
+m_AttackLevel(DEFAULT_ATTACKLEVEL),
+m_msDecay(DEFAULT_MSDECAY),
+m_SustainLevel(DEFAULT_SUSTAINLEVEL),
+m_msRelease(DEFAULT_MSRELEASE),
+m_CLK(0.0f),
+m_releaseCLK(0.0f)
+{
+    m_fNoteOn = false;
+    m_msCLKIncrement = 1000.0f / DEFAULT_SAMPLE_RATE;
+    m_normalScale = DEFAULT_NORMALSCALE;
+    
+    NormalizeSample();
+}
+
+
 GtarSampleBuffer::~GtarSampleBuffer() {
     if(m_pBuffer != NULL) {
         free(m_pBuffer);
@@ -358,6 +376,22 @@ RESULT GtarSamplerNode::LoadSampleIntoBankAtIndex(int bank, int index, char *psz
 Error:
     return r;
 }
+
+
+RESULT GtarSamplerNode::LoadSampleStringIntoBank(int bank, const void *sampleBuffer, unsigned long int bufferLength) {
+    RESULT r = R_SUCCESS;
+    
+    m_buffers[bank][m_nextSampleCounter[bank]] = new GtarSampleBuffer((void *)sampleBuffer,bufferLength);
+    
+    m_nextSampleCounter[bank]++;
+    m_nextSampleCounter[bank] %= m_numSamples[bank];
+    
+    return r;
+    
+Error:
+    return r;
+}
+
 
 RESULT GtarSamplerNode::TriggerSample(int bank, int sample) {
     RESULT r = R_SUCCESS;

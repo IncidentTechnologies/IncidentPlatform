@@ -12,6 +12,7 @@
 #import "CloudRequest.h"
 #import "UserProfile.h"
 #import "UserProfiles.h"
+#import "UserSongs.h"
 
 #import "XmlDictionary.h"
 #import "XmlDom.h"
@@ -1442,10 +1443,20 @@
         } break;
             
         case CloudRequestTypeGetXmpList: {
-            NSLog(@"Cloud Response: Get Xmp List");
+            
+            NSLog(@"Cloud Response: Get Xmp List for %i",cloudResponse.m_cloudRequest.m_userId);
             
             NSArray * xmpList = [[dom getChildWithName:@"xmplist"] getChildArrayWithName:@"xmp"];
             cloudResponse.m_xmpList = xmpList;
+            
+            // If the return entries are songs, create UserSongs object
+            if([[[xmpList firstObject] getTextFromChildWithName:@"xmp_type"] intValue] == OphoXmpTypeSong){
+                
+                UserSongs * userSongs = [[UserSongs alloc] initWithXmpList:xmpList];
+                
+                cloudResponse.m_responseUserSongs = userSongs;
+            }
+            
         } break;
             
         case CloudRequestTypeSetXmpPermission: {
