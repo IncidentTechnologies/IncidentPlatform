@@ -1176,12 +1176,7 @@
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
             UserProfile * userProfile = [[UserProfile alloc] initWithXmlDom:profileDom];
             cloudResponse.m_responseUserProfile = userProfile;
-<<<<<<< HEAD:iOS/IncidentPlatform/IncidentPlatform/CloudController/OphoCloudController.mm
-=======
             */
-            
-            
->>>>>>> e327a3b290e8294e9f2e322f57329a851e7a8a3f:iOS/IncidentPlatform/IncidentPlatform/CloudController/OphoCloudController.m
         } break;
             
         case CloudRequestTypeLogout: {
