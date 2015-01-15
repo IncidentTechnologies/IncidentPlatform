@@ -39,6 +39,7 @@
         m_sendQueue = [[NSMutableArray alloc] init];
         
         m_connected = NO;
+        m_keysConnected = NO;
         
         // Create the midi client
         OSStatus oss = MIDIClientCreate(CFSTR("AE Midi Client"), KeysMIDIStateChangedHandler, (__bridge void *)(self), &m_pMidiClient);
@@ -173,7 +174,7 @@
             //            [m_keysController logMessage:[NSString stringWithFormat:@"Keys Disconnected"]
             //                              atLogLevel:KeysControllerLogLevelInfo];
             
-            [m_keysController midiConnectionHandler:NO];
+            [m_keysController midiConnectionHandler:NO keysDeviceConnected:NO];
         }
     }
     else
@@ -183,7 +184,7 @@
             //            [m_keysController logMessage:[NSString stringWithFormat:@"Keys Connected"]
             //                              atLogLevel:KeysControllerLogLevelInfo];
             
-            [m_keysController midiConnectionHandler:YES];
+            [m_keysController midiConnectionHandler:YES keysDeviceConnected:m_keysConnected];
         }
     }
     
@@ -193,6 +194,8 @@
 {
     
     int sourceCount = MIDIGetNumberOfSources();
+    
+    NSLog(@"%i sources",sourceCount);
     
     [m_midiSources removeAllObjects];
     
@@ -213,9 +216,23 @@
                 [m_keysController logMessage:[NSString stringWithFormat:@"Found Source: %@", (__bridge NSString*)sourceName]
                                   atLogLevel:KeysControllerLogLevelInfo];
                 
+                /*UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Source"
+                                                                      message:[NSString stringWithFormat:@"s=%@",((__bridge NSString*)sourceName)]
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                [_alertView show];*/
+                
                 // Only connect the 'Keys' device for now
-                if ( [((__bridge NSString*)sourceName) isEqualToString:@"Keys"] == YES )
+                // nanoKEY KEYBOARD
+                // Akai MPK25 Port 1
+                if ( [((__bridge NSString*)sourceName) rangeOfString:@"Network Session"].location == NSNotFound )
                 {
+                    
+                    if ( [((__bridge NSString*)sourceName) isEqualToString:@"Keys"] == YES )
+                    {
+                        m_keysConnected = YES;
+                    }
                     
                     // connect source
                     OSStatus oss = MIDIPortConnectSource(m_pMidiInputPort, sourceEndpoint, (__bridge void *)(self));
@@ -244,7 +261,6 @@
 
 - (int)updateDestinations
 {
-    
     int destinationCount = MIDIGetNumberOfDestinations();
     
     [m_midiDestinations removeAllObjects];
@@ -266,9 +282,25 @@
                 [m_keysController logMessage:[NSString stringWithFormat:@"Found Destination: %@", (__bridge NSString*)destinationName]
                                   atLogLevel:KeysControllerLogLevelInfo];
                 
+                /*UIAlertView * _alertView = [[UIAlertView alloc] initWithTitle:@"Destination"
+                                                                      message:[NSString stringWithFormat:@"s=%@",((__bridge NSString*)destinationName)]
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                [_alertView show];*/
+                
+                
                 // Only connect the 'Keys' destination for now
-                if ( [((__bridge NSString*)destinationName) isEqualToString:@"Keys"] == YES )
+                // nanoKEY CTRL
+                // Akai MPK25 Port 2
+                if ( [((__bridge NSString*)destinationName) rangeOfString:@"Network Session"].location == NSNotFound )
                 {
+                    
+                    if ( [((__bridge NSString*)destinationName) isEqualToString:@"Keys"] == YES )
+                    {
+                        m_keysConnected = YES;
+                    }
+                    
                     [m_midiDestinations addObject:[NSValue valueWithPointer:destinationEndpoint]];
                     
                     [m_keysController logMessage:[NSString stringWithFormat:@"Keys destination connected"]
@@ -981,7 +1013,7 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
 */
 
 #pragma mark - Set LED State
-
+/*
 - (BOOL)sendCCSetLedStatusKey:(unsigned char)key
                         andRed:(unsigned char)red
                       andGreen:(unsigned char)green
@@ -1019,25 +1051,30 @@ void KeysMIDICompletionHander(MIDISysexSendRequest *request)
     }
     
     return result;
-}
+}*/
 
 - (BOOL)sendSetLedStateKey:(unsigned char)key
-                     andRed:(unsigned char)red
-                   andGreen:(unsigned char)green
-                    andBlue:(unsigned char)blue
-                 andMessage:(unsigned char)message
+                     andRed:(float)red
+                   andGreen:(float)green
+                    andBlue:(float)blue
+                 andAlpha:(float)alpha
 {
     
-    int sendBufferLength = 7;
+    int sendBufferLength = 9;
     unsigned char sendBuffer[sendBufferLength];
-    
+ 
     sendBuffer[0] = 0xF0; // SysEx Message
-    sendBuffer[1] = KEYS_DEVICE_ID;
+    sendBuffer[1] = 0x42; // KEYS_DEVICE_ID
     sendBuffer[2] = (unsigned char)KEYS_MSG_SET_LED;
-    sendBuffer[3] = (unsigned char)key;
-//    sendBuffer[4] = (unsigned char)fret;
-    sendBuffer[5] = [self encodeValueWithRed:red andGreen:green andBlue:blue andMessage:message];
-    sendBuffer[6] = 0xF7; // End SysEx Message
+    sendBuffer[3] = (unsigned char)key; //0x3E; // Key
+    
+    // Colors 0-127, or multiply by 0x7F / 3.0 to convert from
+    // LED RGB values
+    sendBuffer[4] = 0x7F * MIN(red*COLOR_RED_SHIFT,3.0) / 3.0; // R
+    sendBuffer[5] = 0x7F * MIN(green*COLOR_GREEN_SHIFT,3.0) / 3.0; // G
+    sendBuffer[6] = 0x7F * MIN(blue*COLOR_BLUE_SHIFT,3.0) / 3.0; // B
+    sendBuffer[7] = 0x7F * alpha; // A
+    sendBuffer[8] = 0xF7; // End SysEx Message
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     

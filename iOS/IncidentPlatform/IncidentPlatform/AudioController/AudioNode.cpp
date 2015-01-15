@@ -99,7 +99,9 @@ float AudioNode::GetNextSample(unsigned long int timestamp) {
     float retVal = 0.0f;
     
     for(int i = 0; i < m_channel_in_n; i++) {
-        retVal += (m_inputs[i]->GetNextSample(timestamp));
+        if(m_inputs != NULL && m_inputs[i] != NULL){
+            retVal += (m_inputs[i]->GetNextSample(timestamp));
+        }
     }
     
     return retVal;

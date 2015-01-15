@@ -31,6 +31,7 @@
 - (id)initWithXmlBlob:(NSString*)xmlBlob;
 - (id)initWithXml:(NSDictionary*)xmlDictionary;
 - (id)initWithXmlDom:(XmlDom*)xmlDom;
+- (id)initWithXmpList:(NSArray *)xmpList;
 
 - (void)addSongsFromXmlDom:(XmlDom*)xmlDom;
 

@@ -46,7 +46,7 @@ typedef enum KEYS_RX_MSG_TYPE
     RX_FW_UPDATE_ACK = 0x35,
     RX_BATTERY_STATUS = 0x36,
     RX_BATTERY_CHARGE = 0x37,
-    RX_KEY_RANGE_CHANGE = 0x38,
+    //RX_KEY_RANGE_CHANGE = 0x38, // TODO: set
     
     // Piezo stuff
     //RX_GET_PIEZO_CT_MATRIX_ACK = 0x38,
@@ -131,6 +131,7 @@ typedef enum KEYS_RX_MSG_TYPE
 - (int)getFretFromMidiNote:(int)midiNote andString:(int)str;
 
 - (void)midiConnectionHandler:(BOOL)connected;
+- (void)midiConnectionHandler:(BOOL)connected keysDeviceConnected:(BOOL)keysDeviceConnected;
 - (void)midiCallbackHandler:(char*)data;
 - (void)midiCallbackDispatch:(NSDictionary*)dictionary;
 - (void)midiCallbackWorkerThread:(NSDictionary*)dictionary;

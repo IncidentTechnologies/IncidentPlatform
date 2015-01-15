@@ -53,6 +53,24 @@ m_releaseCLK(0.0f)
     NormalizeSample();
 }
 
+GtarSampleBuffer::GtarSampleBuffer(void *buffer, unsigned long int bufferLength) :
+SampleBuffer(buffer, bufferLength),
+m_msAttack(DEFAULT_MSATTACK),
+m_AttackLevel(DEFAULT_ATTACKLEVEL),
+m_msDecay(DEFAULT_MSDECAY),
+m_SustainLevel(DEFAULT_SUSTAINLEVEL),
+m_msRelease(DEFAULT_MSRELEASE),
+m_CLK(0.0f),
+m_releaseCLK(0.0f)
+{
+    m_fNoteOn = false;
+    m_msCLKIncrement = 1000.0f / DEFAULT_SAMPLE_RATE;
+    m_normalScale = DEFAULT_NORMALSCALE;
+    
+    NormalizeSample();
+}
+
+
 GtarSampleBuffer::~GtarSampleBuffer() {
     if(m_pBuffer != NULL) {
         free(m_pBuffer);
@@ -280,6 +298,7 @@ inline float GtarSamplerNode::GetNextSample(unsigned long int timestamp) {
                         m_sampleTransitionIndex[b][i] = -1;
                         
                     }
+                                        
                     retVal += m_buffers[b][s]->GtarGetNextSample(timestamp);
                     
                     if(m_buffers[b][s]->GtarSampleDone()) {
@@ -358,12 +377,96 @@ Error:
     return r;
 }
 
+
+RESULT GtarSamplerNode::LoadSampleStringIntoBank(int bank, const void *sampleBuffer, unsigned long int bufferLength) {
+    RESULT r = R_SUCCESS;
+    
+    m_buffers[bank][m_nextSampleCounter[bank]] = new GtarSampleBuffer((void *)sampleBuffer,bufferLength);
+    
+    m_nextSampleCounter[bank]++;
+    m_nextSampleCounter[bank] %= m_numSamples[bank];
+    
+    return r;
+    
+Error:
+    return r;
+}
+
+
 RESULT GtarSamplerNode::TriggerSample(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
     m_buffers[bank][sample]->ResetSampleCounter();
     m_buffers[bank][sample]->GtarStartPlaying();
     m_buffers[bank][sample]->NoteOn();
+    m_fPlaying = TRUE;
+    
+    return r;
+    
+Error:
+    return r;
+    
+}
+
+RESULT GtarSamplerNode::RetriggerSample(int bank, int sample) {
+    RESULT r = R_SUCCESS;
+    
+    // Find a start that matches where the note leaves off
+    
+    unsigned long int currentSampleIndex = m_buffers[bank][sample]->m_pBuffer_c;
+    unsigned long int prevSampleIndex = (currentSampleIndex > m_buffers[bank][sample]->m_pBuffer_start) ? currentSampleIndex-1 : m_buffers[bank][sample]->m_pBuffer_start;
+    unsigned long int nextSampleIndex = (currentSampleIndex < m_buffers[bank][sample]->m_pBuffer_end-1) ? currentSampleIndex+1 : m_buffers[bank][sample]->m_pBuffer_end;
+    
+    float prevSample = m_buffers[bank][sample]->m_pBuffer[prevSampleIndex];
+    float currentSample = m_buffers[bank][sample]->m_pBuffer[currentSampleIndex];
+    float nextSample = m_buffers[bank][sample]->m_pBuffer[nextSampleIndex];
+    
+    // TODO: consider other logic cases
+    bool isUp = (prevSample < currentSample && nextSample > currentSample);
+    
+    unsigned long int newSampleIndex = m_buffers[bank][sample]->m_pBuffer_start;
+    
+    unsigned long int sampleDiff = 0;
+    
+    // Search the first part of the sample to try to find a match
+    
+    bool foundNewSampleIndex = false;
+    
+    for(unsigned long int k = 1; k < 3; k++){
+        for(unsigned long int i = m_buffers[bank][sample]->m_pBuffer_start+k; i < (m_buffers[bank][sample]->m_pBuffer_start + 0.5 * m_buffers[bank][sample]->m_pBuffer_n)-k; i++){
+            
+            if(isUp && m_buffers[bank][sample]->m_pBuffer[i-k] < currentSample && m_buffers[bank][sample]->m_pBuffer[i+k] > currentSample){
+                
+                foundNewSampleIndex = true;
+                newSampleIndex = i-1;
+                sampleDiff = k;
+                break;
+           
+            }else if(!isUp && m_buffers[bank][sample]->m_pBuffer[i-k] > currentSample && m_buffers[bank][sample]->m_pBuffer[i+k] < currentSample){
+                
+                foundNewSampleIndex = true;
+                newSampleIndex = i-1;
+                sampleDiff = k;
+                break;
+                
+            }
+        }
+        
+        if(foundNewSampleIndex){
+            break;
+        }
+    }
+    
+    if(!foundNewSampleIndex){
+        printf("retrigger sample not found");
+    }
+    
+    //printf("\nretrigger sample val %f at index %lu=%f | k is %lu | isUp is %i\n",currentSample,newSampleIndex,m_buffers[bank][sample]->m_pBuffer[newSampleIndex],sampleDiff,isUp);
+    
+    m_buffers[bank][sample]->m_pBuffer_c = newSampleIndex;
+    
+    m_buffers[bank][sample]->GtarStartPlaying();
+    //m_buffers[bank][sample]->NoteOn();
     m_fPlaying = TRUE;
     
     return r;
@@ -451,6 +554,9 @@ RESULT GtarSamplerNode::StopSample(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
     if(m_buffers[bank][sample] != NULL){
+        
+        //m_buffers[bank][sample]->GtarSampleInterrupt();
+        
         m_buffers[bank][sample]->NoteOff();
         m_buffers[bank][sample]->ResetSampleCounter();
     }
@@ -465,6 +571,9 @@ RESULT GtarSamplerNode::NoteOff(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
     if(m_buffers[bank][sample] != NULL){
+        
+        //m_buffers[bank][sample]->GtarSampleInterrupt();
+        
         m_buffers[bank][sample]->NoteOff();
     }
     
@@ -478,6 +587,9 @@ RESULT GtarSamplerNode::StopNote(int bank, int sample) {
     RESULT r = R_SUCCESS;
     
     if(m_buffers[bank][sample] != NULL){
+        
+        //m_buffers[bank][sample]->GtarSampleInterrupt();
+        
         m_buffers[bank][sample]->StopNote();
     }
     
@@ -489,7 +601,22 @@ Error:
 
 bool GtarSamplerNode::IsNoteOn(int bank, int sample) {
     
-    return m_buffers[bank][sample]->IsNoteOn();
+    if(m_buffers[bank][sample] != NULL){
+        return m_buffers[bank][sample]->IsNoteOn();
+    }else{
+        return true;
+    }
+}
+
+bool GtarSamplerNode::IsDoubleTrigger(int bank, int sample){
+    
+    double threshold = 0.02;
+    
+    if(m_buffers[bank][sample]->m_pBuffer_c > m_buffers[bank][sample]->m_pBuffer_start && m_buffers[bank][sample]->m_pBuffer_c < threshold*m_buffers[bank][sample]->m_pBuffer_n+m_buffers[bank][sample]->m_pBuffer_start){
+        return true;
+    }else{
+        return false;
+    }
     
 }
 

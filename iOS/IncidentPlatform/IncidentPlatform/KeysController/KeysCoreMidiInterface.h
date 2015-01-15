@@ -34,7 +34,7 @@ typedef enum {
     KEYS_FIRMWARE_ACK = 0x35,
     KEYS_BATTERY_STATUS_ACK = 0x36,
     KEYS_BATTERY_CHARGE_ACK = 0x37,
-    KEYS_RANGE_ACK = 0x40,
+    //KEYS_RANGE_ACK = 0x40, // TODO: SET
     
     // Piezo stuff
     KEYS_GET_PIEZO_CT_MATRIX_ACK = 0x38,
@@ -109,6 +109,7 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 @interface KeysCoreMidiInterface : NSObject {
     
     BOOL m_connected;
+    BOOL m_keysConnected;
     
     BOOL m_sourceConnected;
     BOOL m_destinationConnected;
@@ -132,6 +133,8 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 @property (nonatomic, assign) KeysController * m_keysController;
 
 @property (nonatomic, readonly) BOOL m_connected;
+
+@property (nonatomic, readonly) BOOL m_keysConnected;
 
 // Send related functions
 - (id)initWithKeysController:(KeysController*)keysController;
@@ -172,8 +175,8 @@ void KeysMIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, 
 - (BOOL)sendFirmwarePackagePage:(unsigned char*)page andPageSize:(int)pageSize andFirmwareSize:(int)firmwareSize andPageCount:(int)pageCount andCurrentPage:(int)currentPage andChecksum:(unsigned char)checksum;
 
 
-- (BOOL)sendCCSetLedStatusKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
-- (BOOL)sendSetLedStateKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
+//- (BOOL)sendCCSetLedStatusKey:(unsigned char)key andRed:(unsigned char)red andGreen:(unsigned char)green andBlue:(unsigned char)blue andMessage:(unsigned char)message;
+- (BOOL)sendSetLedStateKey:(unsigned char)key andRed:(float)red andGreen:(float)green andBlue:(float)blue andAlpha:(float)alpha;
 - (BOOL)sendNoteMessageOnChannel:(unsigned char)channel andMidiValue:(unsigned char)midiVal andMidiVel:(unsigned char)velocity andType:(const char*)type;
 
 // Helpers

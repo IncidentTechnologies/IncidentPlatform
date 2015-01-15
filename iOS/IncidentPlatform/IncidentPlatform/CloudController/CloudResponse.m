@@ -18,7 +18,6 @@
 
 @implementation CloudResponse
 
-
 @synthesize m_cloudRequest;
 @synthesize m_status;
 @synthesize m_opho_status;
@@ -47,9 +46,12 @@
 @synthesize m_responseFirmwareMinorVersion;
 
 @synthesize m_xmpList;
+@synthesize m_folderList;
 @synthesize m_xmpDom;
 @synthesize m_id;
+@synthesize m_folderId;
 @synthesize m_xmpName;
+@synthesize m_xmpType;
 
 - (id)initWithCloudRequest:(CloudRequest*)cloudRequest
 {

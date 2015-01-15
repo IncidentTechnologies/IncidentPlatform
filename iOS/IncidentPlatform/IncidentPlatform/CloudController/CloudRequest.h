@@ -35,15 +35,20 @@ typedef enum {
     CloudRequestTypeLogin,              //opho
     //CloudRequestTypeLoginCookie,
     CloudRequestTypeLogout,             //opho
+    CloudRequestTypeUserProfileImage,   //opho
     
     CloudRequestTypeNewXmp,             //opho
     CloudRequestTypeDeleteXmp,          //opho
     CloudRequestTypeSaveXmp,            //opho
     CloudRequestTypeGetXmp,             //opho
     CloudRequestTypeGetXmpList,         //opho
-    CloudRequestTypeSetXmpFolder,       //opho
     CloudRequestTypeSetXmpPermission,   //opho
     CloudRequestTypeSetXmpName,         //opho
+    CloudRequestTypeSetXmpRender,       //opho
+    CloudRequestTypeSetXmpFolder,       //opho
+    CloudRequestTypeNewXmpFolder,       //opho
+    CloudRequestTypeGetXmpFolderContentList, //opho
+    CloudRequestTypeGetXmpFolderPublicContentList, //opho
     
     CloudRequestTypeGetUserProfile,
     CloudRequestTypeEditUserProfile,
@@ -177,6 +182,7 @@ typedef enum {
 @property (nonatomic, assign) NSInteger m_xmpId;
 @property (nonatomic, assign) NSInteger m_folderId;
 @property (nonatomic, assign) NSInteger m_xmpType;
+@property (nonatomic, assign) NSInteger m_xmpExcludeType;
 @property (nonatomic, strong) NSData * m_xmpFile;
 @property (nonatomic, strong) NSString * m_xmpData;
 @property (nonatomic, strong) NSNumber * m_xmpOnly;

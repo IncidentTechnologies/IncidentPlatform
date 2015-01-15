@@ -90,6 +90,27 @@
     return self;
 }
 
+- (id)initWithXmpList:(NSArray *)xmpList
+{
+    if(xmpList == nil)
+    {
+        return nil;
+    }
+    
+    self = [super init];
+    
+    if ( self )
+    {
+        m_songsArray = [[NSMutableArray alloc] init];
+        
+        [self addSongsFromXmpList:xmpList];
+        
+    }
+    
+    return self;
+    
+}
+
 - (id)initWithXmlDom:(XmlDom*)xmlDom
 {
  
@@ -138,6 +159,15 @@
     
 }
 
+- (void)addSongsFromXmpList:(NSArray*)xmpList
+{
+    for(XmlDom * userSongDom in xmpList)
+    {
+        UserSong * userSong = [[UserSong alloc] initWithMultitrackXmp:userSongDom];
+        
+        [m_songsArray addObject:userSong];
+    }
+}
 
 - (void)addSongsFromXmlDom:(XmlDom*)xmlDom
 {

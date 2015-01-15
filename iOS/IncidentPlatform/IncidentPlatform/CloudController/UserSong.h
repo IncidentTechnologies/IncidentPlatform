@@ -33,6 +33,7 @@
     //        <cost>0.99</cost>
 
     XmlDom * m_xmlDom;
+    XmlDom * m_ophoXmlDom;
     
 	NSInteger m_songId;
 	NSInteger m_authorId;
@@ -71,6 +72,7 @@
 }
 
 @property (nonatomic, strong) XmlDom * m_xmlDom;
+@property (nonatomic, strong) XmlDom * m_ophoXmlDom;
 
 @property (nonatomic, assign) NSInteger m_songId;
 @property (nonatomic, assign) NSInteger m_authorId;
@@ -107,9 +109,12 @@
 @property (nonatomic, assign) BOOL m_userOwned;
 
 - (id)initWithXmlDom:(XmlDom*)xmlDom;
+- (id)initWithMultitrackXmp:(XmlDom*)xmlDom;
 
 - (NSComparisonResult)compareCreated:(id)anObject;
 - (NSComparisonResult)comparePlayScore:(id)anObject;
 - (NSComparisonResult)compareDifficulty:(id)anObject;
+
+- (void)setOphoXmlDom:(XmlDom *)xmlDom;
 
 @end

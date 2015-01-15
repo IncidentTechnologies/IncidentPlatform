@@ -15,8 +15,8 @@
 #include "SamplerNode.h"
 #include "Parameter.h"
 
-#define MAX_BANKS 2
-#define MAX_SAMPLES 102
+#define MAX_BANKS 3
+#define MAX_SAMPLES 127
 
 class SampleNode;
 
@@ -29,6 +29,7 @@ class GtarSampleBuffer : public SampleBuffer {
 public:
     
     GtarSampleBuffer(char *pszFilename);
+    GtarSampleBuffer(void *buffer, unsigned long int bufferLength);
     ~GtarSampleBuffer();
     
     inline float GtarGetNextSample(unsigned long int timestamp);
@@ -87,6 +88,7 @@ public:
     int CreateNewBank(int bank, int numSamples);
     
     RESULT TriggerSample(int bank, int sample);
+    RESULT RetriggerSample(int bank, int sample);
     RESULT TriggerMutedSample(int bank, int sample);
     unsigned long int TriggerContinuousSample(int bank, int sampleLead, int sampleTrail);
     
@@ -94,9 +96,11 @@ public:
     RESULT NoteOff(int bank, int sample);
     RESULT StopNote(int bank, int sample);
     bool IsNoteOn(int bank, int sample);
+    bool IsDoubleTrigger(int bank, int sample);
     
     RESULT LoadSampleIntoBank(int bank, char *pszFilepath);
     RESULT LoadSampleIntoBankAtIndex(int bank, int index, char *pszFilepath);
+    RESULT LoadSampleStringIntoBank(int bank, const void *sampleBuffer, unsigned long int bufferLength);
     
     virtual bool setPrimaryParam(float value);
     virtual bool setSecondaryParam(float value);

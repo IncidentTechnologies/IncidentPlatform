@@ -40,4 +40,6 @@
 - (NSInteger)getDate;
 - (NSArray*)getChildren;
 
+- (void)logBackingDictionary;
+
 @end

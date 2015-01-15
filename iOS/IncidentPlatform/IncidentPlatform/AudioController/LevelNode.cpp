@@ -83,6 +83,10 @@ RESULT LevelNode::NotifySubscribers() {
     for(list<LevelSubscriber*>::iterator it = m_susbscribers.First(); it != NULL; it++) {
         float value;
         
+        if((*it) == NULL){
+            return R_FAIL;
+        }
+        
         switch((*it)->type) {
             case LEVEL_RMS: {
                 if(rmsValue < 0)

@@ -246,6 +246,11 @@
     return domArray;
 }
 
+- (void)logBackingDictionary
+{
+    NSLog(@"%@",m_backingDictionary);
+}
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder {

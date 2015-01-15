@@ -15,6 +15,12 @@
 //#define KEYS_ALERT_LOG
 
 #define WAIT_INT 0.25f
+#define DEFAULT_KEY_MIN 48
+#define DEFAULT_KEY_MAX 71
+
+#define COLOR_RED_SHIFT 1.2
+#define COLOR_GREEN_SHIFT 0.8
+#define COLOR_BLUE_SHIFT 0.8
 
 /*!
  @abstract The result status code used by the KeysController.
@@ -109,14 +115,14 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @param position The position where the key was pressed.
  @discussion This function is called when a user presses down a key with their finger.
  */
-- (void)keyDown:(KeyPosition)position;
+- (void)keysDown:(KeyPosition)position;
 
 /*!
  @abstract Key released notification.
  @param position The position where the key was released.
  @discussion This function is called when a user releases a key.
  */
-- (void)keyUp:(KeyPosition)position;
+- (void)keysUp:(KeyPosition)position;
 
 /*!
  @abstract Note on notifications.
@@ -158,6 +164,7 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @discussion This function is called when an additional Keys board has been added/removed.
  */
 - (void)keysRangeChange:(KeysRange)range;
+
 @end
 
 /*!
@@ -182,12 +189,20 @@ typedef enum KeysControllerEffect KeysControllerEffect;
 @property (nonatomic, readonly) NSString * info;
 
 /*!
+ @abstract Connection status of a keyboard device.
+ @discussion Query the state of the keyboard device. When the keyboard device has been detected and gone through the handshake
+ process, this propery is set to 'YES'. Changes to the connection state are simultaneously announced to observers via
+ the 'keysConnected' and 'keysDisconnected' selectors.
+ */
+@property (nonatomic, readonly) BOOL connected;
+
+/*!
  @abstract Connection status of the Keys device.
  @discussion Query the state of the Keys device. When the Keys device has been detected and gone through the handshake
  process, this propery is set to 'YES'. Changes to the connection state are simultaneously announced to observers via
  the 'keysConnected' and 'keysDisconnected' selectors.
  */
-@property (nonatomic, readonly) BOOL connected;
+@property (nonatomic, readonly) BOOL isKeysDeviceConnected;
 
 /*!
  @abstract Whether the KeysController connection is spoofed.
@@ -195,6 +210,12 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  device. This property is set to 'YES' when 'debugSpoofConnected' is called, and 'NO' when 'debugSpoofDisconnected' is called.
  */
 @property (nonatomic, readonly) BOOL spoofed;
+
+/*!
+ @abstract Current range of the Keys device.
+ @discussion When the Keys device has been connected, query the range. This property will be set when the 'keysRangeChange:' selector is announced to observers.
+ */
+@property (nonatomic, assign) KeysRange range;
 
 /*!
  @abstract Set the thread that 'KeysControllerObserver' objects are notified on.
@@ -247,6 +268,13 @@ typedef enum KeysControllerEffect KeysControllerEffect;
  @discussion This function disconnects the GuitarController that is in a spoofed 'connected' state.
  */
 - (KeysControllerStatus)debugSpoofDisconnected;
+
+/*!
+ @abstract Simulate a key range change on a spoofed connection.
+ @result Return KeysControllerStatusOk on success. Returns new range?
+ @discussion This function spoofs a Keys range change, observers will receive the 'keysRangeChange' notification.
+ */
+- (KeysControllerStatus)debugSpoofRangeChange:(NSTimer *)timer;
 
 /*!
  @abstract Register to receive Keys device messages.

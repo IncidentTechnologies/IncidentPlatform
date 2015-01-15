@@ -15,6 +15,7 @@
 @implementation UserSong
 
 @synthesize m_xmlDom;
+@synthesize m_ophoXmlDom;
 @synthesize m_songId, m_authorId, m_tempo, m_title, m_author, m_genre, m_description, m_licenseInfo, m_xmpFileId, m_timeCreated, m_timeModified;
 @synthesize m_imgFileId;
 @synthesize m_playScore, m_playStars;
@@ -24,6 +25,61 @@
 @synthesize m_viewCount, m_rating, m_permissions, m_score;
 @synthesize m_albumArtImage;
 @synthesize m_userLeased, m_userOwned;
+
+- (id)initWithMultitrackXmp:(XmlDom *)xmlDom
+{
+    
+    if ( xmlDom == nil )
+    {
+        return nil;
+    }
+    
+    self = [super init];
+    
+    if ( self )
+    {
+        
+        self.m_xmlDom = xmlDom;
+        self.m_ophoXmlDom = nil;
+        
+        NSDateFormatter * dateFormat = [[NSDateFormatter alloc] init];
+        
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+        self.m_songId = [xmlDom getIntegerFromChildWithName:@"xmp_id"];
+        self.m_authorId = [xmlDom getIntegerFromChildWithName:@"user_id"];
+        self.m_viewCount = [xmlDom getIntegerFromChildWithName:@"xmp_play_count"];
+        self.m_rating = 0;
+        self.m_permissions = [xmlDom getIntegerFromChildWithName:@"permissions"];
+        self.m_score = 0;
+        
+        self.m_title = [xmlDom getTextFromChildWithName:@"xmp_name"];
+        self.m_author = [xmlDom getTextFromChildWithName:@"username"];
+        
+        if(self.m_author == nil || [self.m_author isEqualToString:@""]){
+            self.m_author = @"Anonymous";
+        }
+        
+       // self.m_tempo = [[header getAttribute:@"value" fromChildWithName:@"tempo"] intValue];
+       // self.m_description = [header getTextFromChildWithName:@"description"];
+        
+        //self.m_genre = [xmlDom getTextFromChildWithName:@"genre"];
+        //self.m_licenseInfo = [xmlDom getTextFromChildWithName:@"license_info"];
+        self.m_xmpFileId = [xmlDom getIntegerFromChildWithName:@"xmp_file_id"];
+        self.m_imgFileId = [xmlDom getIntegerFromChildWithName:@"xmp_image_file_id"];
+        self.m_timeCreated = [xmlDom getDateFromChildWithName:@"xmp_create_date"];
+        self.m_timeModified = [xmlDom getDateFromChildWithName:@"xmp_modified_date"];
+        self.m_cost = 0; // [xmlDom getNumberFromChildWithName:@"cost"];
+        //self.m_productId = [xmlDom getTextFromChildWithName:@"product_id"];
+        self.m_difficulty = 0; //[xmlDom getIntegerFromChildWithName:@"difficulty"];
+        
+        self.m_userLeased = FALSE;
+        self.m_userOwned = TRUE;
+        
+    }
+    
+    return self;
+}
 
 - (id)initWithXmlDom:(XmlDom*)xmlDom;
 {
@@ -55,11 +111,11 @@
 //        <cost>0.99</cost>
         
         self.m_xmlDom = xmlDom;
-    
+        self.m_ophoXmlDom = nil;
+        
         NSDateFormatter * dateFormat = [[NSDateFormatter alloc] init];
         
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        
         
         self.m_songId = [xmlDom getIntegerFromChildWithName:@"id"];
         self.m_authorId = [xmlDom getIntegerFromChildWithName:@"user_id"];
@@ -115,6 +171,7 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeObject:m_xmlDom forKey:@"XmlDom"];
+    [coder encodeObject:m_ophoXmlDom forKey:@"OphoXmlDom"];
     
 	[coder encodeInteger:m_songId forKey:@"SongId"];
 	[coder encodeInteger:m_authorId forKey:@"AuthorId"];
@@ -162,6 +219,7 @@
 	self = [super init];
 	
     self.m_xmlDom = [coder decodeObjectForKey:@"XmlDom"];
+    self.m_ophoXmlDom = [coder decodeObjectForKey:@"OphoXmlDom"];
     
     self.m_songId = [coder decodeIntegerForKey:@"SongId"];
 	self.m_authorId = [coder decodeIntegerForKey:@"AuthorId"];
@@ -336,6 +394,11 @@
     
     return userSong;
     
+}
+
+- (void)setOphoXmlDom:(XmlDom *)xmlDom
+{
+    m_ophoXmlDom = xmlDom;
 }
 
 @end

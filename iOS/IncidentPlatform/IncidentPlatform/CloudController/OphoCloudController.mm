@@ -12,6 +12,7 @@
 #import "CloudRequest.h"
 #import "UserProfile.h"
 #import "UserProfiles.h"
+#import "UserSongs.h"
 
 #import "XmlDictionary.h"
 #import "XmlDom.h"
@@ -34,6 +35,7 @@
 #define CloudRequestTypeActivateUrl @"user/activate/"
 #define CloudRequestTypeLoginUrl @"user/login/"
 #define CloudRequestTypeLogoutUrl @"user/logout/"
+#define CloudRequestTypeUserProfileImageUrl @"user/image/"
 
 // Opho XMP
 #define CloudRequestTypeNewXmpUrl @"xmp/new/"
@@ -41,9 +43,13 @@
 #define CloudRequestTypeSaveXmpUrl @"xmp/save/"
 #define CloudRequestTypeGetXmpUrl @"xmp/get/"
 #define CloudRequestTypeGetXmpListUrl @"xmp/list/"
-#define CloudRequestTypeSetXmpFolderUrl @"xmp/setfolder/"
 #define CloudRequestTypeSetXmpPermissionUrl @"xmp/setpermission/"
 #define CloudRequestTypeSetXmpNameUrl @"xmp/setname/"
+#define CloudRequestTypeSetXmpRenderUrl @"xmp/setrender/"
+#define CloudRequestTypeSetXmpFolderUrl @"xmp/setfolder/"
+#define CloudRequestTypeNewXmpFolderUrl @"xmpfolder/new/"
+#define CloudRequestTypeGetXmpFolderContentListUrl @"xmpfolder/list/"
+#define CloudRequestTypeGetXmpFolderPublicContentListUrl @"xmpfolder/publiclist/"
 
 // maybe append a clock() or tick() to this thing
 #define POST_BOUNDARY @"------gTarPlayFormBoundary0123456789"
@@ -60,7 +66,6 @@
 
 @synthesize m_loggedIn;
 @synthesize m_username;
-@synthesize m_facebookAccessToken;
 
 - (id)init {
     self = [super init];
@@ -102,7 +107,7 @@
     {
         if (!sharedSingleton)
         {
-            NSString* server = kServerAddress;
+            NSString* server = ophoServerAddress;
             sharedSingleton = [[OphoCloudController alloc] initWithServer:server];
         }
         
@@ -263,8 +268,6 @@
     cloudRequest.m_password = password;
     cloudRequest.m_rememberLogin = [NSNumber numberWithBool:YES];
 
-    //[cloudRequest setM_rememberLogin:[NSNumber numberWithBool:YES]];
-    
     [self cloudSendRequest:cloudRequest];
     
     return cloudRequest;
@@ -284,6 +287,18 @@
     
     return cloudRequest;
 	
+}
+
+- (CloudRequest*)requestUserProfileImage:(NSInteger)userId andCallbackObj:(id)obj andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeUserProfileImage andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_userId = userId;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
 }
 
 
@@ -397,22 +412,6 @@
     return cloudRequest;
 }
 
-- (CloudRequest*)requestSetXmpFolderWithId:(NSInteger)xmpId
-                               andFolderId:(NSInteger)folderId
-                            andCallbackObj:(id)obj
-                            andCallbackSel:(SEL)sel
-{
-    // Create async request
-    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeSetXmpFolder andCallbackObject:obj andCallbackSelector:sel];
-    
-    cloudRequest.m_xmpId = xmpId;
-    cloudRequest.m_folderId = folderId;
-    
-    [self cloudSendRequest:cloudRequest];
-    
-    return cloudRequest;
-}
-
 - (CloudRequest*)requestSetXmpPermissionWithId:(NSInteger)xmpId
                                      andUserId:(NSInteger)userId
                                  andPermission:(NSString *)permission
@@ -447,6 +446,95 @@
     return cloudRequest;
 }
 
+- (CloudRequest*)requestSetXmpRenderWithId:(NSInteger)xmpId
+                             andName:(NSString *)name
+                             andRenderBlob:(NSData *)file
+                            andCallbackObj:(id)obj
+                            andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeSetXmpRender andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_xmpId = xmpId;
+    cloudRequest.m_xmpName = name;
+    cloudRequest.m_xmpFile = [[NSData alloc] initWithData:file];
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
+}
+
+
+- (CloudRequest*)requestSetXmpFolderWithId:(NSInteger)xmpId
+                               andFolderId:(NSInteger)folderId
+                            andCallbackObj:(id)obj
+                            andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeSetXmpFolder andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_xmpId = xmpId;
+    cloudRequest.m_folderId = folderId;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
+}
+
+- (CloudRequest*)requestNewXmpFolderWithName:(NSString *)name
+                           andParentFolderId:(NSInteger)parentFolderId
+                                  andXmpType:(NSInteger)type andCallbackObj:(id)obj
+                              andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeNewXmpFolder andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_xmpName = name;
+    cloudRequest.m_xmpType = type;
+    cloudRequest.m_folderId = parentFolderId;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
+}
+
+- (CloudRequest*)requestGetXmpFolderContentList:(NSInteger)folderId
+                                     andXmpType:(NSInteger)type
+                                 andExcludeType:(NSInteger)excludeType
+                                      andUserId:(NSInteger)userId
+                                 andCallbackObj:(id)obj
+                                 andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeGetXmpFolderContentList andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_folderId = folderId;
+    cloudRequest.m_xmpType = type;
+    cloudRequest.m_xmpExcludeType = excludeType;
+    cloudRequest.m_userId = userId;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
+}
+
+- (CloudRequest*)requestGetXmpFolderPublicContentList:(NSInteger)folderId
+                                           andXmpType:(NSInteger)type
+                                       andExcludeType:(NSInteger)excludeType
+                                       andCallbackObj:(id)obj
+                                       andCallbackSel:(SEL)sel
+{
+    // Create async request
+    CloudRequest * cloudRequest = [[CloudRequest alloc] initWithType:CloudRequestTypeGetXmpFolderPublicContentList andCallbackObject:obj andCallbackSelector:sel];
+    
+    cloudRequest.m_folderId = folderId;
+    cloudRequest.m_xmpType = type;
+    cloudRequest.m_xmpExcludeType = excludeType;
+    
+    [self cloudSendRequest:cloudRequest];
+    
+    return cloudRequest;
+}
 
 #pragma mark -
 #pragma mark Connection registration
@@ -771,8 +859,6 @@
         // Some params might be optional
         if ( name != nil && filename != nil && [data length] > 0 )
         {
-            NSLog(@"Name is %@, filename is %@, data is %@",name,filename,data);
-            
             [postBodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", name, filename] dataUsingEncoding:NSUTF8StringEncoding]];
             [postBodyData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
             [postBodyData appendData:[NSData dataWithData:data]];
@@ -787,8 +873,8 @@
 //#if TARGET_IPHONE_SIMULATOR
     NSString * postString = [[NSString alloc] initWithData:postBodyData encoding:NSUTF8StringEncoding];
     
-    NSLog(@"POST STRING");
-    NSLog(@"%@",postString);
+    //NSLog(@"POST STRING");
+    //NSLog(@"%@",postString);
 //#endif
     
     
@@ -901,6 +987,18 @@
             
         } break;
             
+        case CloudRequestTypeUserProfileImage:
+        {
+            url = CloudRequestTypeUserProfileImageUrl;
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"userid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, nil];
+            
+        } break;
+            
         case CloudRequestTypeNewXmp:
         {
             url = CloudRequestTypeNewXmpUrl;
@@ -914,7 +1012,7 @@
                                      @"name", @"Name",
                                      cloudRequest.m_xmpName, @"Value", nil];
             
-            params = [NSArray arrayWithObjects:param2, nil];
+            params = [NSArray arrayWithObjects:param1,param2, nil];
             
         } break;
             
@@ -1003,22 +1101,6 @@
             
         } break;
             
-        case CloudRequestTypeSetXmpFolder:
-        {
-            url = CloudRequestTypeSetXmpFolderUrl;
-            
-            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"xmpid", @"Name",
-                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
-            
-            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     @"xmpfolderid", @"Name",
-                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
-            
-            params = [NSArray arrayWithObjects:param1, param2, nil];
-            
-        } break;
-            
         case CloudRequestTypeSetXmpPermission:
         {
             url = CloudRequestTypeSetXmpPermissionUrl;
@@ -1053,7 +1135,139 @@
             
             params = [NSArray arrayWithObjects:param1, param2, nil];
             
-        }
+        } break;
+            
+        case CloudRequestTypeSetXmpRender:
+        {
+            
+            url = CloudRequestTypeSetXmpRenderUrl;
+            
+            NSMutableArray * tempParams = [[NSMutableArray alloc] init];
+            NSMutableArray * tempFiles = [[NSMutableArray alloc] init];
+            
+            if(cloudRequest.m_xmpId > 0){
+                NSDictionary * param = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        @"xmpid", @"Name",
+                                        [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+                
+                [tempParams addObject:param];
+            }
+            
+            if(cloudRequest.m_xmpFile != nil){
+                
+                NSDictionary * fileDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           @"rendermp3blob", @"Name",
+                                           cloudRequest.m_xmpName, @"Filename",
+                                           cloudRequest.m_xmpFile, @"Data", nil];
+                
+                [tempFiles addObject:fileDict];
+            }
+            
+            files = [NSArray arrayWithArray:tempFiles];
+            params = [NSArray arrayWithArray:tempParams];
+            
+        } break;
+            
+        case CloudRequestTypeSetXmpFolder:
+        {
+            url = CloudRequestTypeSetXmpFolderUrl;
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpId], @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpfolderid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, nil];
+            
+        } break;
+            
+        case CloudRequestTypeNewXmpFolder:
+        {
+            url = CloudRequestTypeNewXmpFolderUrl;
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"name", @"Name",
+                                     cloudRequest.m_xmpName, @"Value", nil];
+            
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"parentfolderid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
+            
+            NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmptype", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpType], @"Value", nil];
+            
+            params = [NSArray arrayWithObjects:param1, param2, param3, nil];
+            
+        } break;
+            
+        case CloudRequestTypeGetXmpFolderContentList:
+        {
+            url = CloudRequestTypeGetXmpFolderContentListUrl;
+            
+            NSMutableArray * tempParams = [[NSMutableArray alloc] init];
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpfolderid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
+            [tempParams addObject:param1];
+        
+            NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"userid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_userId], @"Value", nil];
+            [tempParams addObject:param2];
+            
+            if(cloudRequest.m_xmpExcludeType > 0){
+                NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"excludetype", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpExcludeType], @"Value", nil];
+                
+                [tempParams addObject:param3];
+            }
+            
+            if(cloudRequest.m_xmpType > 0){
+                NSDictionary * param4 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmptype", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_xmpType], @"Value", nil];
+                [tempParams addObject:param4];
+            }
+            
+            params = [NSArray arrayWithArray:tempParams];
+            
+        } break;
+            
+        case CloudRequestTypeGetXmpFolderPublicContentList:
+        {
+            url = CloudRequestTypeGetXmpFolderPublicContentListUrl;
+            
+            NSMutableArray * tempParams = [[NSMutableArray alloc] init];
+            
+            NSDictionary * param1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"xmpfolderid", @"Name",
+                                     [NSNumber numberWithInt:cloudRequest.m_folderId], @"Value", nil];
+            [tempParams addObject:param1];
+            
+            if(cloudRequest.m_xmpExcludeType > 0){
+                NSDictionary * param2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         @"excludetype", @"Name",
+                                         [NSNumber numberWithInt:cloudRequest.m_xmpExcludeType], @"Value", nil];
+                
+                [tempParams addObject:param2];
+            }
+            
+            if(cloudRequest.m_xmpType > 0){
+                NSDictionary * param3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         @"xmptype", @"Name",
+                                         [NSNumber numberWithInt:cloudRequest.m_xmpType], @"Value", nil];
+                [tempParams addObject:param3];
+            }
+            
+            params = [NSArray arrayWithArray:tempParams];
+            
+        } break;
             
         default: break;
     }
@@ -1130,10 +1344,11 @@
     
     NSString * result = [dom getTextFromChildWithName:@"StatusText"];
     
-    if ( [result isEqualToString:@"Ok"] == YES )
+    if ( [result isEqualToString:@"Ok"] == YES ){
         m_loggedIn = YES;
-    else
+    }else{
         m_loggedIn = NO;
+    }
     
     switch ( cloudResponse.m_cloudRequest.m_type ) {
             
@@ -1171,6 +1386,7 @@
             
             cloudResponse.m_responseUserId = [statusArray[1] intValue];
             
+            cloudResponse.m_loggedIn = YES;
             /*
             m_username = [cloudResponse.m_responseXmlDom getTextFromChildWithName:@"Username"];
             XmlDom * profileDom = [dom getChildWithName:@"UserProfile"];
@@ -1181,7 +1397,14 @@
             
         case CloudRequestTypeLogout: {
             m_loggedIn = NO;
-            m_facebookAccessToken = nil;
+        } break;
+            
+        case CloudRequestTypeUserProfileImage: {
+            
+            NSLog(@"Cloud Response: User Profile Image");
+            
+            NSLog(@"Cloud response is %@",cloudResponse);
+            
         } break;
             
         case CloudRequestTypeNewXmp: {
@@ -1217,14 +1440,20 @@
         } break;
             
         case CloudRequestTypeGetXmpList: {
-            NSLog(@"Cloud Response: Get Xmp List");
+            
+            NSLog(@"Cloud Response: Get Xmp List for %i",cloudResponse.m_cloudRequest.m_userId);
             
             NSArray * xmpList = [[dom getChildWithName:@"xmplist"] getChildArrayWithName:@"xmp"];
             cloudResponse.m_xmpList = xmpList;
-        } break;
             
-        case CloudRequestTypeSetXmpFolder: {
-            NSLog(@"Cloud Response: Set Xmp Folder");
+            // If the return entries are songs, create UserSongs object
+            if([[[xmpList firstObject] getTextFromChildWithName:@"xmp_type"] intValue] == OphoXmpTypeSong){
+                
+                UserSongs * userSongs = [[UserSongs alloc] initWithXmpList:xmpList];
+                
+                cloudResponse.m_responseUserSongs = userSongs;
+            }
+            
         } break;
             
         case CloudRequestTypeSetXmpPermission: {
@@ -1234,7 +1463,48 @@
         case CloudRequestTypeSetXmpName: {
             NSLog(@"Cloud Response: Set Xmp Name");
         } break;
-        
+            
+        case CloudRequestTypeSetXmpRender: {
+            NSLog(@"Cloud Response: Set Xmp Render");
+        } break;
+            
+        case CloudRequestTypeSetXmpFolder: {
+            NSLog(@"Cloud Response: Set Xmp Folder");
+        } break;
+            
+        case CloudRequestTypeNewXmpFolder: {
+            NSLog(@"Cloud Response: New Xmp Folder");
+            
+            XmlDom *xml = [dom getChildWithName:@"xmpfolder"];
+            
+            if(xml != NULL) {
+                cloudResponse.m_folderId = [[xml getTextFromChildWithName:@"xmp_folder_id"] intValue];
+                cloudResponse.m_xmpType = [[xml getTextFromChildWithName:@"xmp_folder_type"] intValue];
+            }
+        } break;
+            
+        case CloudRequestTypeGetXmpFolderContentList: {
+            NSLog(@"Cloud Response: Get Xmp Folder Content List");
+            
+            NSArray * xmpList = [[dom getChildWithName:@"list"] getChildArrayWithName:@"xmp"];
+            NSArray * folderList = [[dom getChildWithName:@"list"] getChildArrayWithName:@"folder"];
+            
+            cloudResponse.m_xmpList = xmpList;
+            cloudResponse.m_folderList = folderList;
+            
+        } break;
+            
+        case CloudRequestTypeGetXmpFolderPublicContentList: {
+            NSLog(@"Cloud Response: Get Xmp Folder Public Content List");
+            
+            NSArray * xmpList = [[dom getChildWithName:@"list"] getChildArrayWithName:@"xmp"];
+            NSArray * folderList = [[dom getChildWithName:@"list"] getChildArrayWithName:@"folder"];
+            
+            cloudResponse.m_xmpList = xmpList;
+            cloudResponse.m_folderList = folderList;
+            
+        } break;
+            
         default: {
             NSLog(@"Cloud request type DEFAULT");
         } break;
@@ -1315,9 +1585,9 @@
 //    [self cloudReceiveResponse:cloudResponse];
     [self performSelectorInBackground:@selector(cloudReceiveResponse:) withObject:cloudResponse];
     
-#if TARGET_IPHONE_SIMULATOR
-    NSLog(@"%@",cloudResponse.m_receivedDataString);
-#endif
+//#if TARGET_IPHONE_SIMULATOR
+//    NSLog(@"%@",cloudResponse.m_receivedDataString);
+//#endif
 }
 
 @end

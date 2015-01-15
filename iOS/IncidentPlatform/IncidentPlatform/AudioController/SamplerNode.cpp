@@ -60,7 +60,9 @@ RESULT SamplerBankNode::StopAllSamples()
     RESULT r = R_SUCCESS;
     
     for(int s = 0; s < m_samples.length(); s++){
-        m_samples[s]->Stop();
+        if(m_samples[s] != NULL){
+            m_samples[s]->Stop();
+        }
     }
     
 Error:
