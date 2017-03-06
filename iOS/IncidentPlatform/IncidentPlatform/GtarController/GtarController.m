@@ -344,20 +344,15 @@ static bool AmIBeingDebugged(void) {
 #endif
 }
 
-- (int)getFretFromMidiNote:(int)midiNote andString:(int)str
-{
+- (int)getFretFromMidiNote:(int)midiNote andString:(int)str {
     
     if ( str < 0 || str > 5 )
-    {
         return -1;
-    }
     
     int fret = midiNote - (40 + 5 * str);
     
     if (str > 3 )
-    {
         fret += 1;
-    }
     
     return fret;
 }
@@ -370,8 +365,7 @@ static bool AmIBeingDebugged(void) {
     NSMutableDictionary * responseDictionary = [[NSMutableDictionary alloc] init];
     
     // update the delegate as to what has happened
-    if ( connected == true )
-    {
+    if ( connected == true ) {
         [self logMessage:@"Gtar Midi device connected"
               atLogLevel:GtarControllerLogLevelInfo];
         
@@ -380,8 +374,7 @@ static bool AmIBeingDebugged(void) {
         
         [responseDictionary setValue:@"notifyObserversGtarConnected:" forKey:@"Selector"];
     }
-    else
-    {
+    else {
         [self logMessage:@"Gtar Midi device disconnected"
               atLogLevel:GtarControllerLogLevelInfo];
         
@@ -433,19 +426,18 @@ static bool AmIBeingDebugged(void) {
     //[responseDictionary release];
 }
 
-- (void)midiCallbackHandler:(char*)data
-{
+- (void)midiCallbackHandler:(char*)data {
     
     unsigned char msgType = (data[0] & 0xF0) >> 4;
     unsigned char str = (data[0] & 0xF);
-    
     double currentTime = [NSDate timeIntervalSinceReferenceDate];
     
-    switch ( msgType )
-    {
+    // For debugging
+    //NSLog(@"rx 0x%x msg", msgType);
+    
+    switch (msgType) {
+        case 0x8: {
             // This is the Note Off event.
-        case 0x8:
-        {
             
             unsigned char fret = [self getFretFromMidiNote:data[1] andString:(str-1)];
             
@@ -461,9 +453,8 @@ static bool AmIBeingDebugged(void) {
             
         } break;
             
-            // This is the Note On event.
-        case 0x9:
-        {
+        // This is the Note On event.
+        case 0x9: {
             
             unsigned char fret = [self getFretFromMidiNote:data[1] andString:(str-1)];
             unsigned char velocity = data[2];
@@ -486,15 +477,11 @@ static bool AmIBeingDebugged(void) {
         } break;
             
             // Control Channel Message
-        case 0xB:
-        {
-            
+        case 0xB: {
             unsigned char gTarMsgType = data[1];
             
-            switch ( gTarMsgType )
-            {
-                case RX_FRET_UP:
-                {
+            switch (gTarMsgType) {
+                case RX_FRET_UP: {
                     // Fret Up
                     unsigned char fret = data[2];
                     
@@ -510,8 +497,7 @@ static bool AmIBeingDebugged(void) {
                     
                 } break;
                     
-                case RX_FRET_DOWN:
-                {
+                case RX_FRET_DOWN: {
                     // Fret Down
                     unsigned char fret = data[2];
                     
@@ -527,8 +513,7 @@ static bool AmIBeingDebugged(void) {
                     
                 } break;
                     
-                case RX_FW_VERSION:
-                {
+                case RX_FW_VERSION: {
                     // Current Version Number
                     unsigned char majorVersion = (data[2] & 0xF0) >> 4;
                     unsigned char minorVersion = (data[2] & 0x0F);
@@ -536,12 +521,10 @@ static bool AmIBeingDebugged(void) {
                     m_firmwareMajorVersion = majorVersion;
                     m_firmwareMinorVersion = minorVersion;
                     
-                    if ( [m_delegate respondsToSelector:@selector(receivedFirmwareMajorVersion:andMinorVersion:)] == YES )
-                    {
+                    if ( [m_delegate respondsToSelector:@selector(receivedFirmwareMajorVersion:andMinorVersion:)] == YES ) {
                         [m_delegate receivedFirmwareMajorVersion:(int)majorVersion andMinorVersion:(int)minorVersion];
                     }
-                    else
-                    {
+                    else {
                         [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to receivedFirmwareMajorVersion:andMinorVersion: %@", m_delegate]
                               atLogLevel:GtarControllerLogLevelWarn];
                         
@@ -561,17 +544,14 @@ static bool AmIBeingDebugged(void) {
                     [self piezoFirmwareResponseHandler:status];
                 } break;
                     
-                case RX_BATTERY_STATUS:
-                {
+                case RX_BATTERY_STATUS: {
                     // Battery status Ack
                     unsigned char battery = data[2];
                     
-                    if ( [m_delegate respondsToSelector:@selector(receivedBatteryStatus:)] == YES )
-                    {
+                    if ( [m_delegate respondsToSelector:@selector(receivedBatteryStatus:)] == YES ) {
                         [m_delegate receivedBatteryStatus:(BOOL)battery];
                     }
-                    else
-                    {
+                    else {
                         [self logMessage:[NSString stringWithFormat:@"Delegate doesn't respond to RxBatteryStatus %@", m_delegate]
                               atLogLevel:GtarControllerLogLevelWarn];
                         
@@ -727,26 +707,22 @@ static bool AmIBeingDebugged(void) {
     return m_ctmatrix[row][col];
 }
 
-- (void)midiCallbackDispatch:(NSDictionary*)dictionary
-{
+- (void)midiCallbackDispatch:(NSDictionary*)dictionary {
     
     // Hold onto the dictionary before we queue up a worker thread.
     // This is primarily important for the async case.
     //[dictionary retain];
 
-    if ( m_responseThread == GtarControllerThreadMain )
-    {
+    if ( m_responseThread == GtarControllerThreadMain ) {
         // This queues up request asynchronously
         [self performSelectorOnMainThread:@selector(midiCallbackWorkerThread:) withObject:dictionary waitUntilDone:NO];
     }
-    else
-    {
+    else {
         [self performSelector:@selector(midiCallbackWorkerThread:) withObject:dictionary];
     }
 }
 
-- (void)midiCallbackWorkerThread:(NSDictionary*)dictionary
-{
+- (void)midiCallbackWorkerThread:(NSDictionary*)dictionary {
     
     NSString * selectorString = [dictionary objectForKey:@"Selector"];
     
@@ -765,8 +741,7 @@ static bool AmIBeingDebugged(void) {
 
 #pragma Internal notification functions
 // Notifying observers
-- (void)notifyObserversGtarFretDown:(NSDictionary*)dictionary
-{
+- (void)notifyObserversGtarFretDown:(NSDictionary*)dictionary {
     
     NSNumber * fretNumber = [dictionary objectForKey:@"Fret"];
     NSNumber * stringNumber = [dictionary objectForKey:@"String"];
@@ -779,19 +754,15 @@ static bool AmIBeingDebugged(void) {
     //[fretNumber release];
     //[stringNumber release];
     
-    for ( NSValue * nonretainedObserver in m_observerList )
-    {
+    for ( NSValue * nonretainedObserver in m_observerList ) {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
         if ( [observer respondsToSelector:@selector(gtarFretDown:)] == YES )
-        {
             [observer gtarFretDown:gtarPosition];
-        }
     }
 }
 
-- (void)notifyObserversGtarFretUp:(NSDictionary*)dictionary
-{
+- (void)notifyObserversGtarFretUp:(NSDictionary*)dictionary {
     
     NSNumber * fretNumber = [dictionary objectForKey:@"Fret"];
     NSNumber * stringNumber = [dictionary objectForKey:@"String"];
@@ -815,8 +786,7 @@ static bool AmIBeingDebugged(void) {
     }
 }
 
-- (void)notifyObserversGtarNoteOn:(NSDictionary*)dictionary
-{
+- (void)notifyObserversGtarNoteOn:(NSDictionary*)dictionary {
     
     NSNumber * fretNumber = [dictionary objectForKey:@"Fret"];
     NSNumber * stringNumber = [dictionary objectForKey:@"String"];
@@ -842,19 +812,15 @@ static bool AmIBeingDebugged(void) {
     //[stringNumber release];
     //[velocityNumber release];
     
-    for ( NSValue * nonretainedObserver in m_observerList )
-    {
+    for ( NSValue * nonretainedObserver in m_observerList ) {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
         if ( [observer respondsToSelector:@selector(gtarNoteOn:)] == YES )
-        {
             [observer gtarNoteOn:gtarPluck];
-        }
     }
 }
 
-- (void)notifyObserversGtarNoteOff:(NSDictionary*)dictionary
-{
+- (void)notifyObserversGtarNoteOff:(NSDictionary*)dictionary {
     
     NSNumber * fretNumber = [dictionary objectForKey:@"Fret"];
     NSNumber * stringNumber = [dictionary objectForKey:@"String"];
@@ -867,30 +833,23 @@ static bool AmIBeingDebugged(void) {
     //[fretNumber release];
     //[stringNumber release];
     
-    for ( NSValue * nonretainedObserver in m_observerList )
-    {
+    for ( NSValue * nonretainedObserver in m_observerList ) {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
         if ( [observer respondsToSelector:@selector(gtarNoteOff:)] == YES )
-        {
             [observer gtarNoteOff:gtarPosition];
-        }
     }
 }
 
-- (void)notifyObserversGtarConnected:(NSDictionary*)dictionary
-{
+- (void)notifyObserversGtarConnected:(NSDictionary*)dictionary {
     
     // The dictionary will be nil and unused
     
-    for ( NSValue * nonretainedObserver in m_observerList )
-    {
+    for ( NSValue * nonretainedObserver in m_observerList ) {
         id observer = [nonretainedObserver nonretainedObjectValue];
         
         if ( [observer respondsToSelector:@selector(gtarConnected)] == YES )
-        {
             [observer gtarConnected];
-        }
     }
 }
 
@@ -1134,8 +1093,9 @@ static bool AmIBeingDebugged(void) {
         
         return TRUE;
     }
-    else
+    else {
         return FALSE;
+    }
 }
 
 - (BOOL) InterruptSerialNumberRequest {
@@ -1189,26 +1149,21 @@ static bool AmIBeingDebugged(void) {
 // Observers should ultimately replace the delegate paradigm we have going.
 // I didn't want to rip out the delegate functionality since we use it all
 // over the place, but new stuff will need to use the observer model.
-- (GtarControllerStatus)addObserver:(id<GtarControllerObserver>)observer
-{
+- (GtarControllerStatus)addObserver:(id<GtarControllerObserver>)observer {
     
     // We don't want the observers to be retained to prevent circular dependendcies.
     // We need to make sure we dont retain the object.
     NSValue * nonretainedObserver = [NSValue valueWithNonretainedObject:observer];
     
-    if ( observer == nil )
-    {
+    if ( observer == nil ) {
         [self logMessage:@"Added observer is nil"
               atLogLevel:GtarControllerLogLevelWarn];
 
         return GtarControllerStatusOk;
     }
     
-    //
     // We don't want to add the same observer twice.
-    //
-    if ( [m_observerList containsObject:nonretainedObserver] == NO )
-    {
+    if ( [m_observerList containsObject:nonretainedObserver] == NO ) {
         
         [self logMessage:@"Added observer"
               atLogLevel:GtarControllerLogLevelInfo];
@@ -1216,60 +1171,49 @@ static bool AmIBeingDebugged(void) {
         [m_observerList addObject:nonretainedObserver];
         
         // If the guitar is already connected, we should let this new guy know.
-        if ( m_connected == YES && [observer respondsToSelector:@selector(gtarConnected)] == YES )
-        {
+        if ( m_connected == YES && [observer respondsToSelector:@selector(gtarConnected)] == YES ) {
             [observer gtarConnected];
         }
         
     }
-    else
-    {
+    else {
         [self logMessage:@"Added observer is already observing"
               atLogLevel:GtarControllerLogLevelWarn];
         
     }
     
     return GtarControllerStatusOk;
-    
 }
 
-- (GtarControllerStatus)removeObserver:(id<GtarControllerObserver>)observer
-{
-    
+- (GtarControllerStatus)removeObserver:(id<GtarControllerObserver>)observer {
     // We don't want the observers to be retained to prevent circular dependendcies.
     // We need to make sure we dont retain the object.
     NSValue * nonretainedObserver = [NSValue valueWithNonretainedObject:observer];
     
-    if ( nonretainedObserver == nil )
-    {
+    if ( nonretainedObserver == nil ) {
         [self logMessage:@"Removed observer is nil"
               atLogLevel:GtarControllerLogLevelWarn];
         
         return GtarControllerStatusOk;
     }
     
-    if ( [m_observerList containsObject:nonretainedObserver] == YES )
-    {
-        
+    if ( [m_observerList containsObject:nonretainedObserver] == YES ) {
         [self logMessage:@"Removed observer"
               atLogLevel:GtarControllerLogLevelInfo];
 
         [m_observerList removeObject:nonretainedObserver];
     }
-    else
-    {
+    else {
         [self logMessage:@"Removed observer is not observing"
               atLogLevel:GtarControllerLogLevelWarn];
     }
     
     return GtarControllerStatusOk;
-    
 }
 
 #pragma mark - LED manipulation
 
-- (GtarControllerStatus)turnOffAllLeds
-{
+- (GtarControllerStatus)turnOffAllLeds {
     
     [self logMessage:@"Turning off all LEDs"
           atLogLevel:GtarControllerLogLevelInfo];

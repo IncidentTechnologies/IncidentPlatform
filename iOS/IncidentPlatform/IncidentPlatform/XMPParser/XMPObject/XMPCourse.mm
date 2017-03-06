@@ -29,8 +29,7 @@ Error:
     return NULL;
 }
 
--(id)initWithCourseTitle:(NSString *)title author:(NSString *)author description:(NSString *)description shortdescription:(NSString *)shortdescription
-{
+-(id)initWithCourseTitle:(NSString *)title author:(NSString *)author description:(NSString *)description shortdescription:(NSString *)shortdescription {
     RESULT r = R_SUCCESS;
     
     m_Title = [[NSString alloc] initWithString:title];
@@ -72,11 +71,10 @@ Error:
         if((unlockObj = [headerObj GetChildWithName:@"Unlock"]) != NULL ){
             XMPValue unlockVal = [unlockObj GetAttributeValueWithName:@"value"];
             
-            if(unlockVal.m_ValueType == XMP_VALUE_INTEGER){
+            if(unlockVal.m_ValueType == XMP_VALUE_INTEGER)
                 unlockVal.GetValueInt((long int *)(&m_unlock));
-            }else if(unlockVal.m_ValueType == XMP_VALUE_DOUBLE){
+            else if(unlockVal.m_ValueType == XMP_VALUE_DOUBLE)
                 unlockVal.GetValueDouble(&m_unlock);
-            }
         }
     }
     

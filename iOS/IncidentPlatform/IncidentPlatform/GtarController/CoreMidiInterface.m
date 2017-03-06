@@ -43,8 +43,7 @@
         // Create the midi client
         OSStatus oss = MIDIClientCreate(CFSTR("AE Midi Client"), MIDIStateChangedHandler, (__bridge void *)(self), &m_pMidiClient);
         
-        if( oss != 0 )
-        {
+        if( oss != 0 ) {
             [m_gtarController logMessage:[NSString stringWithFormat:@"Failed to create AE Midi Client: Error %ld", oss]
                               atLogLevel:GtarControllerLogLevelError];
 
@@ -53,8 +52,7 @@
         // Set up the Input Port
         oss = MIDIInputPortCreate(m_pMidiClient, (CFStringRef)@"Midi Client Input Port", MIDIReadHandler, (__bridge void *)(self), &m_pMidiInputPort);
         
-        if( oss != 0 )
-        {
+        if( oss != 0 ) {
             [m_gtarController logMessage:[NSString stringWithFormat:@"Failed to create input port: Error %ld", oss]
                               atLogLevel:GtarControllerLogLevelError];
         }
@@ -62,8 +60,7 @@
         // Set up the Output Port
         oss = MIDIOutputPortCreate(m_pMidiClient, (CFStringRef)@"MidiClient Output Port", &m_pMidiOutputPort);
         
-        if( oss != 0 )
-        {
+        if( oss != 0 ) {
             [m_gtarController logMessage:[NSString stringWithFormat:@"Failed to create output port: Error %ld", oss]
                               atLogLevel:GtarControllerLogLevelError];
         }
@@ -78,15 +75,12 @@
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     
-    if ( m_pMidiClient != NULL )
-    {
+    if ( m_pMidiClient != NULL ) {
         OSStatus oss = MIDIClientDispose(m_pMidiClient);
         
-        if ( oss != 0 )
-        {
+        if ( oss != 0 ) {
             [m_gtarController logMessage:[NSString stringWithFormat:@"Failed to dispose client: Error code %ld", oss]
                               atLogLevel:GtarControllerLogLevelError];
         }
@@ -99,12 +93,9 @@
     //[m_midiDestinations release];
     
     // We have to nullify the requests that have already been sent out.
-    @synchronized( m_sendQueue )
-    {
-        for ( NSValue * sendPtr in m_sendQueue )
-        {
+    @synchronized( m_sendQueue ) {
+        for ( NSValue * sendPtr in m_sendQueue ) {
             MIDISysexSendRequest * sendRequest = (MIDISysexSendRequest*)[sendPtr pointerValue];
-            
             sendRequest->completionRefCon = NULL;
         }
     }
@@ -115,11 +106,9 @@
 }
 
 #pragma mark - Send Queue Management
-- (void)processSendQueue
-{
+- (void)processSendQueue {
     
-    @synchronized( m_sendQueue )
-    {
+    @synchronized( m_sendQueue ) {
         
         NSValue * ptr = [m_sendQueue objectAtIndex:0];
         
@@ -132,14 +121,12 @@
         [m_sendQueue removeObject:ptr];
         
         // See if we have anything else queued up
-        if ( [m_sendQueue count] > 0 )
-        {
+        if ( [m_sendQueue count] > 0 ) {
             sendRequest = (MIDISysexSendRequest*)[[m_sendQueue objectAtIndex:0] pointerValue];
             
             OSStatus oss = MIDISendSysex(sendRequest);
             
-            if ( oss == -1 )
-            {
+            if ( oss == -1 ) {
                 [m_gtarController logMessage:[NSString stringWithFormat:@"SendSysExBuffer: MIDISend failed with status 0x%lx", oss]
                                                     atLogLevel:GtarControllerLogLevelError];
             }
@@ -189,8 +176,7 @@
     
 }
 
-- (int)updateSources
-{
+- (int)updateSources {
     
     int sourceCount = MIDIGetNumberOfSources();
     
@@ -198,39 +184,39 @@
     
     m_sourceConnected = NO;
     
-    for ( int i = 0; i < sourceCount; i++)
-    {
+    for ( int i = 0; i < sourceCount; i++) {
         
         MIDIEndpointRef sourceEndpoint = MIDIGetSource(i);
         
-        if ( sourceEndpoint != NULL )
-        {
+        if ( sourceEndpoint != NULL ) {
             
             CFStringRef sourceName = nil;
             
-            if ( MIDIObjectGetStringProperty( sourceEndpoint, kMIDIPropertyDisplayName, &sourceName) == noErr )
-            {
+            if ( MIDIObjectGetStringProperty( sourceEndpoint, kMIDIPropertyDisplayName, &sourceName) == noErr ) {
                 [m_gtarController logMessage:[NSString stringWithFormat:@"Found Source: %@", (__bridge NSString*)sourceName]
                                   atLogLevel:GtarControllerLogLevelInfo];
                 
                 // Only connect the 'gTar' device for now
-                if ( [((__bridge NSString*)sourceName) isEqualToString:@"gTar"] == YES )
-                {
+                //if ( [((__bridge NSString*)sourceName) isEqualToString:@"gTar"] == YES ) {
+                if( [((__bridge NSString *)sourceName) rangeOfString:@"gTar"].location != NSNotFound) {
                     
                     // connect source
                     OSStatus oss = MIDIPortConnectSource(m_pMidiInputPort, sourceEndpoint, (__bridge void *)(self));
                     
-                    if ( oss != 0 )
-                    {
+                    if ( oss != 0 ) {
                         [m_gtarController logMessage:[NSString stringWithFormat:@"Failed to connect gTar source: Error code %ld", oss]
                                           atLogLevel:GtarControllerLogLevelError];
                     }
-                    else
-                    {
+                    else {
                         [m_midiSources addObject:[NSValue valueWithPointer:sourceEndpoint]];
-                        
+
                         [m_gtarController logMessage:[NSString stringWithFormat:@"Gtar source connected"]
                                           atLogLevel:GtarControllerLogLevelInfo];
+                        
+                        if( [((__bridge NSString *)sourceName) rangeOfString:@"Bluetooth"].location != NSNotFound)
+                            m_ble = TRUE;
+                        else
+                            m_ble = FALSE;
                         
                         m_sourceConnected = YES;
                     }                    
@@ -242,8 +228,7 @@
     return sourceCount;
 }
 
-- (int)updateDestinations
-{
+- (int)updateDestinations {
     
     int destinationCount = MIDIGetNumberOfDestinations();
     
@@ -267,8 +252,8 @@
                                   atLogLevel:GtarControllerLogLevelInfo];
                 
                 // Only connect the 'gTar' destination for now
-                if ( [((__bridge NSString*)destinationName) isEqualToString:@"gTar"] == YES )
-                {
+                //if ( [((__bridge NSString*)destinationName) isEqualToString:@"gTar"] == YES )
+                if( [((__bridge NSString *)destinationName) rangeOfString:@"gTar"].location != NSNotFound) {
                     [m_midiDestinations addObject:[NSValue valueWithPointer:destinationEndpoint]];
                     
                     [m_gtarController logMessage:[NSString stringWithFormat:@"Gtar destination connected"]
@@ -290,70 +275,58 @@ void MIDIStateChangedHandler(const MIDINotification *message, void *refCon)
     
     CoreMidiInterface * coreMidiInterface = (__bridge CoreMidiInterface *)(refCon);
     
-    switch ( message->messageID )
-    {
-        case kMIDIMsgSetupChanged:
-        {
+    switch ( message->messageID ) {
+        case kMIDIMsgSetupChanged: {
             [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Setup Changed"]
                                                 atLogLevel:GtarControllerLogLevelInfo];
             
             [coreMidiInterface updateEndpoints];
         } break;
             
-        case kMIDIMsgObjectAdded:
-        {
+        case kMIDIMsgObjectAdded: {
             MIDIObjectAddRemoveNotification * messageAdd = (MIDIObjectAddRemoveNotification*)(message);
             
-            if ( messageAdd->childType == kMIDIObjectType_Source )
-            {
+            if ( messageAdd->childType == kMIDIObjectType_Source ) {
                 [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Source Object Added"]
                                                     atLogLevel:GtarControllerLogLevelInfo];
             }
-            else if ( messageAdd->childType == kMIDIObjectType_Destination )
-            {
+            else if ( messageAdd->childType == kMIDIObjectType_Destination ) {
                 [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Destination Object Added"]
                                                     atLogLevel:GtarControllerLogLevelInfo];
             }
             
         } break;
             
-        case kMIDIMsgObjectRemoved:
-        {
+        case kMIDIMsgObjectRemoved: {
             MIDIObjectAddRemoveNotification * messageRemove = (MIDIObjectAddRemoveNotification*)(message);
             
-            if ( messageRemove->childType == kMIDIObjectType_Source )
-            {
+            if ( messageRemove->childType == kMIDIObjectType_Source ) {
                 [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Source Object Removed"]
                                                     atLogLevel:GtarControllerLogLevelInfo];
             }
-            else if( messageRemove->childType == kMIDIObjectType_Destination )
-            {
+            else if( messageRemove->childType == kMIDIObjectType_Destination ) {
                 [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Destination Object Removed"]
                                                     atLogLevel:GtarControllerLogLevelInfo];
             }
             
         } break;
             
-        case kMIDIMsgPropertyChanged:
-        {
+        case kMIDIMsgPropertyChanged: {
             [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Property Changed"]
                                                 atLogLevel:GtarControllerLogLevelInfo];
         } break;
             
-        case kMIDIMsgThruConnectionsChanged:
-        {
+        case kMIDIMsgThruConnectionsChanged: {
             [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Thru Connections Changed"]
                                                 atLogLevel:GtarControllerLogLevelInfo];
         } break;
             
-        case kMIDIMsgSerialPortOwnerChanged:
-        {
+        case kMIDIMsgSerialPortOwnerChanged: {
             [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"Serial Port Owner Changed"]
                                                 atLogLevel:GtarControllerLogLevelInfo];
         } break;
             
-        case kMIDIMsgIOError:
-        {
+        case kMIDIMsgIOError: {
             [coreMidiInterface.m_gtarController logMessage:[NSString stringWithFormat:@"IO Error"]
                                                 atLogLevel:GtarControllerLogLevelError];
         } break;
@@ -383,15 +356,12 @@ void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void
 }
 
 // This is called when a Send has completed
-void MIDICompletionHander(MIDISysexSendRequest *request)
-{
+void MIDICompletionHander(MIDISysexSendRequest *request) {
     
     // If the interface gets torn down below us, this is set to null
-    if(request->completionRefCon == NULL)
-    {
+    if(request->completionRefCon == NULL) {
         // This will apply to the data buffer as well since they are alloc'd in one malloc
         free(request);
-        
         return;
     }
     
@@ -399,7 +369,6 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     
     // Send any pending packets
     [coreMidiInterface processSendQueue];
-    
 }
 
 #pragma mark - Send Primitives
@@ -412,9 +381,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     packet.length = bufferLength;
     
     for ( int i = 0; i < bufferLength; i++ )
-    {
         packet.data[i] = buffer[i];
-    }
     
     // Create the packet list
     MIDIPacketList packetList;
@@ -423,16 +390,14 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     packetList.packet[0] = packet;
     
     // Broadcast it on all endpoints for now
-    for ( NSValue * destPtr in m_midiDestinations )
-    {
+    for ( NSValue * destPtr in m_midiDestinations ) {
         
         MIDIEndpointRef endpoint = (MIDIEndpointRef)[destPtr pointerValue];
         
         // Send the packet list
         OSStatus oss = MIDISend(m_pMidiOutputPort, endpoint, &packetList);
         
-        if ( oss == -1 )
-        {
+        if ( oss == -1 ) {
             [m_gtarController logMessage:[NSString stringWithFormat:@"SendBuffer: MIDISend failed with status 0x%lx", oss]
                                                 atLogLevel:GtarControllerLogLevelError];
             
@@ -457,6 +422,13 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
         // in the current implementation. Also the copy is cheap and we need to alloc
         // the packet anyways.
         memcpy(sendBuffer, buffer, bufferLength);
+        
+        // Make sure that we don't send a most significant bit in the sysex
+        for(int i = 0; i < bufferLength; i++) {
+            if(i != 0 && i != (bufferLength - 1)) {
+                sendBuffer[i] &= 0x7F;
+            }
+        }
         
         sendRequest->destination = (MIDIEndpointRef)[destPtr pointerValue];
         sendRequest->data = sendBuffer;
@@ -503,6 +475,13 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
             // in the current implementation. Also the copy is cheap and we need to alloc
             // the packet anyways.
             memcpy(sendBuffer, buffer, bufferLength);
+            
+            // Make sure that we don't send a most significant bit in the sysex
+            for(int i = 0; i < bufferLength; i++) {
+                if(i != 0 && i != (bufferLength - 1)) {
+                    sendBuffer[i] &= 0x7F;
+                }
+            }
 
             sendRequest->destination = (MIDIEndpointRef)[destPtr pointerValue];
             sendRequest->data = sendBuffer;
@@ -539,8 +518,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
 #pragma mark - Set Hardware Effects
 
 // Hardware effects 
-- (BOOL)sendSetNoteActiveRed:(unsigned char)red andGreen:(unsigned char) green andBlue:(unsigned char)blue
-{
+- (BOOL)sendSetNoteActiveRed:(unsigned char)red andGreen:(unsigned char) green andBlue:(unsigned char)blue {
     
     int sendBufferLength = 5;
     unsigned char sendBuffer[sendBufferLength];
@@ -553,8 +531,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
-    if ( result == NO )
-    {
+    if ( result == NO ) {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendSetNoteActive: Failed to send SysEx Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
     }
@@ -603,8 +580,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     return result;
 }
 
-- (BOOL)sendRequestSerialNumber:(unsigned char)byte
-{
+- (BOOL)sendRequestSerialNumber:(unsigned char)byte {
     unsigned char SysExBuffer[] = {
         0xF0,
         GTAR_DEVICE_ID,
@@ -701,8 +677,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
 
 #pragma mark - Firmware and Certs
 
-- (BOOL)sendRequestCertDownload
-{
+- (BOOL)sendRequestCertDownload {
 
     int sendBufferLength = 4;
     unsigned char sendBuffer[sendBufferLength];
@@ -714,8 +689,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
-    if ( result == NO )
-    {
+    if ( result == NO ) {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendRequestCertDownload: Failed to send SysEx Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
     }
@@ -723,8 +697,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     return result;
 }
 
-- (BOOL)sendRequestFirmwareVersion
-{
+- (BOOL)sendRequestFirmwareVersion {
     
     int sendBufferLength = 4;
     unsigned char sendBuffer[sendBufferLength];
@@ -732,12 +705,11 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     sendBuffer[0] = 0xF0; // SysEx Message
     sendBuffer[1] = GTAR_DEVICE_ID;
     sendBuffer[2] = (unsigned char)GTAR_MSG_REQ_FW_VERSION;
-    //pSendBuffer[4] = 0xF7; // End SysEx Message
+    sendBuffer[3] = 0xF7; // End SysEx Message
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
-    if ( result == NO )
-    {
+    if ( result == NO ) {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendRequestFirmwareVersion: Failed to send SysEx Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
     }
@@ -1086,16 +1058,15 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     
     sendBuffer[0] = 0xF0; // SysEx Message
     sendBuffer[1] = GTAR_DEVICE_ID;
-    sendBuffer[2] = (unsigned char)GTAR_MSG_SET_LED;    
-    sendBuffer[3] = (unsigned char)str;
-    sendBuffer[4] = (unsigned char)fret;
-    sendBuffer[5] = [self encodeValueWithRed:red andGreen:green andBlue:blue andMessage:message];
+    sendBuffer[2] = ((unsigned char)GTAR_MSG_SET_LED) & 0x7F;
+    sendBuffer[3] = ((unsigned char)str) & 0x7F;
+    sendBuffer[4] = ((unsigned char)fret) & 0x7F;
+    sendBuffer[5] = ([self encodeValueWithRed:red andGreen:green andBlue:blue andMessage:message]) & 0x7F;
     sendBuffer[6] = 0xF7; // End SysEx Message
     
     BOOL result = [self sendSysExBuffer:sendBuffer withLength:sendBufferLength];
     
-    if( result == NO )
-    {
+    if( result == NO ) {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendSetLEDState: Failed to send SysEx Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
     }
@@ -1113,12 +1084,10 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     unsigned char sendBuffer[sendBufferLength];
     
     // Type is either "off" or "on"
-    if ( strcmp( type, "on") == 0 )
-    {
+    if ( strcmp( type, "on") == 0 ) {
         sendBuffer[0] = 0x90;
     }
-    else
-    {
+    else {
         sendBuffer[0] = 0x80;
     }
     
@@ -1128,8 +1097,7 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
     
     BOOL result = [self sendBuffer:sendBuffer withLength:sendBufferLength];
     
-    if( result == NO )
-    {
+    if( result == NO ) {
         [m_gtarController logMessage:[NSString stringWithFormat:@"SendNoteMsg: Failed to send Buffer"]
                           atLogLevel:GtarControllerLogLevelError];
     }
@@ -1146,10 +1114,10 @@ void MIDICompletionHander(MIDISysexSendRequest *request)
 {
     unsigned char retVal = 0;
     
-    retVal += ((red & 0x3) << 6);
-    retVal += ((green & 0x3) << 4);
-    retVal += ((blue & 0x3) << 2);
-    retVal += ((message & 0x3) << 0);
+    retVal += ((message & 0x3) << 6);
+    retVal += ((red & 0x3) << 4);
+    retVal += ((green & 0x3) << 2);
+    retVal += ((blue & 0x3) << 0);
     
     return retVal;
 }

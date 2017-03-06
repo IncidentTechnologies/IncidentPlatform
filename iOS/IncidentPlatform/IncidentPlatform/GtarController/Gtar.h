@@ -75,8 +75,7 @@ typedef unsigned char GtarPluckVelocity;
  @field fret The GtarFret for this note.
  @field string The GtarString for this note.
  */
-typedef struct
-{
+typedef struct {
     GtarFret fret;
     GtarString string;
 } GtarPosition;
@@ -124,8 +123,7 @@ typedef struct
  @field green The GtarLedIntensity for the green channel.
  @field blue The GtarLedIntensity for the blue channel.
  */
-typedef struct
-{
+typedef struct {
     GtarLedIntensity red;
     GtarLedIntensity green;
     GtarLedIntensity blue;

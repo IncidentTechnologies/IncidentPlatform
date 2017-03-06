@@ -17,7 +17,7 @@
     
     m_xmpNode = xmpNode;
     CPRM((self = [self init]), "initWithParentLesson: Failed to init");
-    m_type = XMP_OBJECT_INPUT;
+    m_type = XMP_OBJECT_NARRATIVE;
     
     return self;
 Error:

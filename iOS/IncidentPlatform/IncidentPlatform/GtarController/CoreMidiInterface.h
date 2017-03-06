@@ -116,6 +116,7 @@ void MIDIReadHandler(const MIDIPacketList *pPacketList, void *pReadProcCon, void
     
     BOOL m_sourceConnected;
     BOOL m_destinationConnected;
+    BOOL m_ble;
     
     MIDIClientRef m_pMidiClient;
     MIDIPortRef m_pMidiInputPort;

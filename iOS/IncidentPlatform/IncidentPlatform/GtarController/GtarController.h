@@ -28,8 +28,7 @@
  @const GtarControllerStatusInvalidParameter An error occurred because of an invalid parameter. Running with a 'logLevel'
   of 'GtarControllerLogLevelError' or greater will output specific information about the invalid parameter.
  */
-enum GtarControllerStatus
-{
+enum GtarControllerStatus {
     GtarControllerStatusOk = 0,
     GtarControllerStatusError,
     GtarControllerStatusNotConnected,
@@ -48,8 +47,7 @@ typedef enum GtarControllerStatus GtarControllerStatus;
  @const GtarControllerLogLevelInfo Log informational messages.
  @const GtarControllerLogLevelAll Log all messages.
  */
-enum GtarControllerLogLevel
-{
+enum GtarControllerLogLevel {
     GtarControllerLogLevelOff = 0,
     GtarControllerLogLevelError,
     GtarControllerLogLevelWarn,
@@ -70,8 +68,7 @@ typedef enum GtarControllerLogLevel GtarControllerLogLevel;
  @const GtarControllerThreadMidi Notify the observers immediately (asynchronously) from the MIDI background thread. 
     Note that many iOS Frameworks (e.g. UIKit) will not work properly when running on anything other than the main thread.
  */
-enum GtarControllerThread
-{
+enum GtarControllerThread {
     GtarControllerThreadMain = 0,
     GtarControllerThreadMidi
 };
@@ -86,8 +83,7 @@ typedef enum GtarControllerThread GtarControllerThread;
  @const GtarControllerEffectNoteActive When a note is plucked, the underlying LED is lit.
  @const GtarControllerEffectFretFollowNoteActive Both Fret Follow and Note Active effects are active.
  */
-enum GtarControllerEffect
-{
+enum GtarControllerEffect {
 	GtarControllerEffectNone = 0,
 	GtarControllerEffectFretFollow,
 	GtarControllerEffectNoteActive,

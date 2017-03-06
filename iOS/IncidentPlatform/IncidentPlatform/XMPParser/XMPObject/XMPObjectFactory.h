@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Incident Technologies, Inc. All rights reserved.
 //
 
+// This is the Objective-C Factory for XMP objects
+
 #import <Foundation/Foundation.h>
 #import "XMPNode.h"
 #import "XMPObject.h"

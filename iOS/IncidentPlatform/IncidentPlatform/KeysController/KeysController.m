@@ -1434,8 +1434,7 @@ static bool AmIBeingDebugged(void) {
     
 }
 
-- (KeysControllerStatus)turnOnLedAtPositionWithColorMap:(KeyPosition)position
-{
+- (KeysControllerStatus)turnOnLedAtPositionWithColorMap:(KeyPosition)position {
     KeysControllerStatus status = KeysControllerStatusOk;
     
     /*if(!m_isKeysDeviceConnected){
@@ -1453,33 +1452,19 @@ static bool AmIBeingDebugged(void) {
         return status;
     }*/
     
-    if ( m_spoofed == YES )
-    {
-        [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Connection spoofed, no-op"
-              atLogLevel:KeysControllerLogLevelInfo];
-        
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Connection spoofed, no-op" atLogLevel:KeysControllerLogLevelInfo];
         status = KeysControllerStatusOk;
-        
     }
-    else if ( m_connected == NO )
-    {
-        [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Not connected"
-              atLogLevel:KeysControllerLogLevelWarn];
-        
+    else if ( m_connected == NO ) {
+        [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Not connected" atLogLevel:KeysControllerLogLevelWarn];
         status = KeysControllerStatusNotConnected;
-        
     }
-    else if ( m_coreMidiInterface == nil )
-    {
-        
-        [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: KeysCoreMidiInterface is invalid"
-              atLogLevel:KeysControllerLogLevelError];
-        
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: KeysCoreMidiInterface is invalid" atLogLevel:KeysControllerLogLevelError];
         status = KeysControllerStatusError;
-        
     }
-    else
-    {
+    else {
         KeyPosition key = position % KeysPerOctaveCount;
             
         // subtract one to zero-base the string
@@ -1488,19 +1473,14 @@ static bool AmIBeingDebugged(void) {
                                                           andGreen:m_colorMap.keyColor[key].green
                                                            andBlue:m_colorMap.keyColor[key].blue
                                                         andAlpha:1.0];
-    
-        if ( result == NO )
-        {
-            [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Setting LED state failed"
-                  atLogLevel:KeysControllerLogLevelError];
-            
+        
+        if ( result == NO ) {
+            [self logMessage:@"turnOnLedWithColorMappingAtFret:andString: Setting LED state failed" atLogLevel:KeysControllerLogLevelError];
             status = KeysControllerStatusError;
         }
-        
     }
     
     return status;
-    
 }
 
 
@@ -1510,22 +1490,16 @@ static bool AmIBeingDebugged(void) {
                 andType:(const char *)type
 {
     
-    if ( m_spoofed == YES )
-    {
-        [self logMessage:@"sendNoteMsg: Connection spoofed, no-op"
-              atLogLevel:KeysControllerLogLevelInfo];
+    if ( m_spoofed == YES ) {
+        [self logMessage:@"sendNoteMsg: Connection spoofed, no-op" atLogLevel:KeysControllerLogLevelInfo];
         return NO;
     }
-    else if ( m_connected == NO )
-    {
-        [self logMessage:@"sendNoteMsg: Not connected"
-              atLogLevel:KeysControllerLogLevelWarn];
+    else if ( m_connected == NO ) {
+        [self logMessage:@"sendNoteMsg: Not connected" atLogLevel:KeysControllerLogLevelWarn];
         return NO;
     }
-    else if ( m_coreMidiInterface == nil )
-    {
-        [self logMessage:@"sendNoteMsg: KeysCoreMidiInterface is invalid"
-              atLogLevel:KeysControllerLogLevelError];
+    else if ( m_coreMidiInterface == nil ) {
+        [self logMessage:@"sendNoteMsg: KeysCoreMidiInterface is invalid" atLogLevel:KeysControllerLogLevelError];
         return NO;
     }
     
@@ -1535,10 +1509,7 @@ static bool AmIBeingDebugged(void) {
                                                         andType:type];
     
     if ( result == NO )
-    {
-        [self logMessage:@"sendNoteMsg: SendNoteMsg failed!"
-              atLogLevel:KeysControllerLogLevelError];
-    }
+        [self logMessage:@"sendNoteMsg: SendNoteMsg failed!" atLogLevel:KeysControllerLogLevelError];
     
     return result;
 }
